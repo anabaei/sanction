@@ -34,7 +34,7 @@ app.set('view engine', 'ejs');
     else{
     console.log("Connected!");
     }
-    con.query("CREATE DATABASE aml", function (err, result) {
+    con.query("use fe78334d2b9e30f", function (err, result) {
         if (err) { console.log("Not created!"); console.log(err.message); throw err;}
         console.log("Database aml created!");
       });
