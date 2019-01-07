@@ -3,12 +3,21 @@ const app = Express()
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "password"
-  });
+// var con = mysql.createConnection({
+//     host: "localhost",
+//     user: "root",
+//     password: "password"
+//   });
+
   
+  //mysql://b8fab95b485474:1d283d4f@us-cdbr-iron-east-01.cleardb.net/heroku_fe78334d2b9e30f?reconnect=true
+
+  var con = mysql.createConnection({
+    host: "us-cdbr-iron-east-01.cleardb.net",
+    user: "b8fab95b485474",
+    password: "1d283d4f"
+    //port: "3306"
+  });
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
@@ -23,7 +32,7 @@ app.set('view engine', 'ejs');
   con.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
-    con.query("use aml", function (err, result) {
+    con.query("CREATE DATABASE aml", function (err, result) {
         if (err) throw err;
         console.log("Database aml conneted!");
       });
