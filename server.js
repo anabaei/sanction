@@ -39,12 +39,13 @@ app.set('view engine', 'ejs');
         console.log("Database aml created!");
       });
   });
-  con.end();
+  
 
 ///////////////////////////////////////////////////
 ////////// Allow to parse bodies in json //////////
 ///////////////////////////////////////////////////
 app.get('/', (request, response) => { 
+    con.end();
     response.send(`Hello, World!`) 
 })
 
