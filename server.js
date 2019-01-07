@@ -25,10 +25,7 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: false})); // support encoded bodies
 // Configure our Express app to use ejs as our templating engine
 app.set('view engine', 'ejs'); 
-
-
-app.get('/', (request, response) => { 
-    ///////////////////////////////////////////////////
+///////////////////////////////////////////////////
 //////////////////////// DB  //////////////////////
 ///////////////////////////////////////////////////
 
@@ -42,7 +39,12 @@ app.get('/', (request, response) => {
         console.log("Database aml created!");
       });
   });
-    con.end();
+  con.end();
+
+///////////////////////////////////////////////////
+////////// Allow to parse bodies in json //////////
+///////////////////////////////////////////////////
+app.get('/', (request, response) => { 
     response.send(`Hello, World!`) 
 })
 
