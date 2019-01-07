@@ -78,7 +78,7 @@ var db_config = {
 ///////////////////////////////////////////////////
 app.get('/', (request, response) => { 
     
-    response.send(`Hello, World!`) 
+    response.send(`Hello`) 
 })
 
 
