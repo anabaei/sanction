@@ -15,8 +15,9 @@ const cookieParser = require('cookie-parser');
   var con = mysql.createConnection({
     host: "us-cdbr-iron-east-01.cleardb.net",
     user: "b8fab95b485474",
-    password: "1d283d4f"
-    //port: "3306"
+    password: "1d283d4f",
+    database: "heroku_fe78334d2b9e30f"
+    
   });
 
 app.use(bodyParser.urlencoded({extended: false}));
@@ -30,14 +31,14 @@ app.set('view engine', 'ejs');
 ///////////////////////////////////////////////////
 
   con.connect(function(err) {
-    if (err) { console.log("Not Connected!"); console.log(err.message); throw err;}
+    if (err) { console.log("Not Connected!"); console.log(err.message); handleDisconnect(con)}
     else{
     console.log("Connected!");
     }
-    con.query("use heroku_fe78334d2b9e30f", function (err, result) {
-        if (err) { console.log("Not created!"); console.log(err.message); throw err;}
-        console.log(" using");
-      });
+    // con.query("use heroku_fe78334d2b9e30f", function (err, result) {
+    //     if (err) { console.log("Not created!"); console.log(err.message); throw err;}
+    //     console.log(" using");
+    //   });
   });
   
 
@@ -52,3 +53,14 @@ app.get('/', (request, response) => {
 app.listen(
     process.env.PORT  || 3000, ()=>console.log('server is running')
 )
+
+
+function handleDisconnect(con) {
+    con.connect(function(err) {              // The server is either down
+        if(err.code === 'PROTOCOL_CONNECTION_LOST') {                                     // or restarting (takes a while sometimes).
+          console.log('error when connecting to db:', err);
+          setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+        }                                     // to avoid a hot loop, and to allow our node script to
+      });
+
+}
