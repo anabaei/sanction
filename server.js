@@ -34,10 +34,10 @@ app.set('view engine', 'ejs');
     else{
     console.log("Connected!");
     }
-    // con.query("CREATE DATABASE aml", function (err, result) {
-    //     if (err) throw err;
-    //     console.log("Database aml conneted!");
-    //   });
+    con.query("CREATE DATABASE aml", function (err, result) {
+        if (err) { console.log("Not created!"); console.log(err.message); throw err;}
+        console.log("Database aml created!");
+      });
   });
 
 ///////////////////////////////////////////////////
