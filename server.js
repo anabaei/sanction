@@ -29,14 +29,14 @@ app.set('view engine', 'ejs');
 //////////////////////// DB  //////////////////////
 ///////////////////////////////////////////////////
 
-  con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
-    con.query("CREATE DATABASE aml", function (err, result) {
-        if (err) throw err;
-        console.log("Database aml conneted!");
-      });
-  });
+//   con.connect(function(err) {
+//     if (err) throw err;
+//     console.log("Connected!");
+//     con.query("CREATE DATABASE aml", function (err, result) {
+//         if (err) throw err;
+//         console.log("Database aml conneted!");
+//       });
+//   });
 
 ///////////////////////////////////////////////////
 ////////// Allow to parse bodies in json //////////
