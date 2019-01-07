@@ -36,7 +36,7 @@ app.set('view engine', 'ejs');
     }
     con.query("use heroku_fe78334d2b9e30f", function (err, result) {
         if (err) { console.log("Not created!"); console.log(err.message); throw err;}
-        console.log("Database aml created!");
+        console.log(" using");
       });
   });
   
@@ -45,7 +45,7 @@ app.set('view engine', 'ejs');
 ////////// Allow to parse bodies in json //////////
 ///////////////////////////////////////////////////
 app.get('/', (request, response) => { 
-    con.end();
+    
     response.send(`Hello, World!`) 
 })
 
