@@ -56,8 +56,9 @@ app.listen(
 
 
 function handleDisconnect(con) {
+    console.log("handling connection")
     con.connect(function(err) {              // The server is either down
-        if(err.code === 'PROTOCOL_CONNECTION_LOST') {                                     // or restarting (takes a while sometimes).
+        if(err) {                                     // or restarting (takes a while sometimes).
           console.log('error when connecting to db:', err);
           setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
         }                                     // to avoid a hot loop, and to allow our node script to
