@@ -29,12 +29,19 @@ app.set('view engine', 'ejs');
 ///////////////////////////////////////////////////
 //////////////////////// DB  //////////////////////
 ///////////////////////////////////////////////////
-var db_config = {
-    host: "us-cdbr-iron-east-01.cleardb.net",
-    user: "b8fab95b485474",
-    password: "1d283d4f",
-    database: "heroku_fe78334d2b9e30f"
-  };
+// var db_config = {
+//     host: "us-cdbr-iron-east-01.cleardb.net",
+//     user: "b8fab95b485474",
+//     password: "1d283d4f",
+//     database: "heroku_fe78334d2b9e30f"
+//   };
+
+  var db_config = {
+    host: "localhost",
+    user: "root",
+    password: "password",
+    database: "aml"
+  }
   
   var connection;
   
@@ -80,6 +87,69 @@ app.get('/', (request, response) => {
     
     response.send(`Hello`) 
 })
+
+app.get('/seed', (request, response) => { 
+
+//   var sql = "DROP TABLE IF EXISTS sanction_list, "+ 
+//   +"CREATE TABLE sanction_list (name VARCHAR(255)) ";
+
+
+
+  var sql = "DROP TABLE IF EXISTS sanction_list, "+ 
+  +" DROP TABLE IF EXISTS address, "+ 
+  +" DROP TABLE IF EXISTS info_sanction, "+ 
+  +" DROP TABLE IF EXISTS info, "+ 
+  +" CREATE TABLE sanction_list (name VARCHAR(255)), "+
+  +" CREATE TABLE info (name VARCHAR(255) "+
+  +", firstName VARCHAR(255)"+
+  +", lastName VARCHAR(255)"+
+  +", birth_date VARCHAR(255)"+
+  +", place VARCHAR(255)"+
+  +", quality VARCHAR(255)"+
+  +", title VARCHAR(255)"+
+  +", source VARCHAR(255)"+
+  +", description VARCHAR(255)"+
+  +", issued_at VARCHAR(255)"+
+  +", number VARCHAR(255)"+
+  +", url VARCHAR(255)"+
+  +", second_name VARCHAR(255)"+
+  +", third_name VARCHAR(255)"+
+  +", listed_at VARCHAR(255)"+
+  +", function VARCHAR(255)"+
+  +", program VARCHAR(255)"+
+  +", summary VARCHAR(255)"+
+  +", text VARCHAR(255)"+
+  +", gender VARCHAR(255)"+
+  +", alias VARCHAR(255)"+
+  +", parent VARCHAR(255)"+
+  +") ";
+  
+ 
+
+
+  var sql2 = +"DROP TABLE IF EXISTS aml_pro.sanction_list "+ 
+  +", DROP TABLE IF EXISTS aml_pro.address "+ 
+  +", DROP TABLE IF EXISTS aml_pro.info_sanction "+ 
+  +", DROP TABLE IF EXISTS aml_pro.info "+ 
+  +", CREATE TABLE aml_pro.santion_list SELECT * FROM aml.sanction_list " +
+  +", CREATE TABLE aaml_pro.address SELECT * FROM aml.address " +
+  +", CREATE TABLE aml_pro.info_sanction SELECT * FROM aml.info_sanction " +
+  +", CREATE TABLE aml_pro.info SELECT * FROM aml.info ";
+  
+  connection.query(sql, function (err, result) {
+    if (err) console.log(err);
+    else {console.log("Table created");}
+  });
+  
+//   var sql = "CREATE TABLE sanction_list (name VARCHAR(255))";
+//   connect.query(sql, function (err, result) {
+//     if (err) throw err;
+//     console.log("Table created");
+//   });
+
+    response.send(`created`) 
+})
+
 
 
 
