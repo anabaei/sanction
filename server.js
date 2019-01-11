@@ -32,7 +32,7 @@ app.set('view engine', 'ejs');
 var db_config = {
     host: "us-cdbr-iron-east-01.cleardb.net",
     user: "b8fab95b485474",
-    password: "1d283d4f",
+    password: "1d283d4f", // "9303e8fdb9943f2"
     database: "heroku_fe78334d2b9e30f"
   };
 
@@ -66,7 +66,7 @@ var db_config = {
     });
   }
   
-  handleDisconnect();
+  //handleDisconnect();
 
 
   function doSql(table, message)
