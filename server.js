@@ -29,19 +29,19 @@ app.set('view engine', 'ejs');
 ///////////////////////////////////////////////////
 //////////////////////// DB  //////////////////////
 ///////////////////////////////////////////////////
-// var db_config = {
-//     host: "us-cdbr-iron-east-01.cleardb.net",
-//     user: "b8fab95b485474",
-//     password: "1d283d4f",
-//     database: "heroku_fe78334d2b9e30f"
-//   };
+var db_config = {
+    host: "us-cdbr-iron-east-01.cleardb.net",
+    user: "b8fab95b485474",
+    password: "1d283d4f",
+    database: "heroku_fe78334d2b9e30f"
+  };
 
-  var db_config = {
-    host: "localhost",
-    user: "root",
-    password: "password",
-    database: "aml"
-  }
+  // var db_config = {
+  //   host: "localhost",
+  //   user: "root",
+  //   password: "password",
+  //   database: "aml"
+  // }
   
   var connection;
   
@@ -124,12 +124,13 @@ app.get('/migrate', (request, response) => {
   +", issued_at VARCHAR(255)"
   +", number VARCHAR(255)"
   +", url VARCHAR(255)"
+  +", type VARCHAR(255)"
   +", second_name VARCHAR(255)"
   +", third_name VARCHAR(255)"
   +", listed_at VARCHAR(255)"
   +", action VARCHAR(255)"
   +", program VARCHAR(255)"
-  +", summary VARCHAR(255)"
+  +", summary Text"
   +", text VARCHAR(255)"
   +", gender VARCHAR(255)"
   +", alias VARCHAR(255)"
@@ -137,14 +138,14 @@ app.get('/migrate', (request, response) => {
   doSql(create_info, "created info");
   
    ///////// Address ///////////
-   var create_address = " CREATE TABLE address (info_id INT, "
+   var create_address = " CREATE TABLE address (source VARCHAR(255), info_id INT, "
    +"country VARCHAR(255), "
   +"city VARCHAR(255), "
   +"street VARCHAR(255), "
   +"postal_code VARCHAR(255), "
   +"country_code VARCHAR(255), "
   +"region VARCHAR(255), "
-  +"note VARCHAR(255), "
+  +"note Text, "
   +"street_2 VARCHAR(255))";
   doSql(create_address, "created address");
  
@@ -162,17 +163,45 @@ app.get('/migrate', (request, response) => {
   // +", DROP TABLE IF EXISTS aml_pro.address "+ 
   // +", DROP TABLE IF EXISTS aml_pro.info_sanction "+ 
   // +", DROP TABLE IF EXISTS aml_pro.info "+ 
-  // +", CREATE TABLE aml_pro.santion_list SELECT * FROM aml.sanction_list " +
-  // +", CREATE TABLE aaml_pro.address SELECT * FROM aml.address " +
-  // +", CREATE TABLE aml_pro.info_sanction SELECT * FROM aml.info_sanction " +
-  // +", CREATE TABLE aml_pro.info SELECT * FROM aml.info ";
+  // +", CREATE TABLE aml_pro.santion_list SELECT * FROM sanction_list " +
+  // +", CREATE TABLE aaml_pro.address SELECT * FROM address " +
+  // +", CREATE TABLE aml_pro.info_sanction SELECT * FROM info_sanction " +
+  // +", CREATE TABLE aml_pro.info SELECT * FROM info ";
   
     response.send(`created`) 
 })
 
+
+///// insert into info (name,  source) SELECT name, entity_id  FROM au_dfat_sanctions_aliases  //
+
 app.get('/info', (request, response) => { 
+ 
+  ////// insert from au_drat_sanction into INFO table ////////
+  let au_dfat_sanctions = " insert into info (name,  source, type, summary, program, url) "
+ + " SELECT name, id,  type,  summary, program, url  FROM au_dfat_sanctions";
+ doSql(au_dfat_sanctions, "insert from au_dfat_sanctions");
+ ///// insert from sanction address into address table ///////
+ let au_dfat_address = "  insert into address (source,  note )  "
+ + " SELECT entity_id, text  FROM au_dfat_sanctions_addresses ";
+ doSql(au_dfat_address, "insert from sanction address");
+ //// Just add to that then we specifies aliases ////
+ let au_dfat_sanctions_aliases  = "insert into info (name,  source)   "
+ + " SELECT name, entity_id  FROM au_dfat_sanctions_aliases";
+ doSql(au_dfat_sanctions_aliases , "au_dfat_sanctions_aliases");
+
+ /// UPDATE `table_name` SET `column_name` = `new_value' [WHERE condition];
+//  UPDATE tableA a
+// INNER JOIN tableB b ON a.name_a = b.name_b
+// SET validation_check = if(start_dts > end_dts, 'VALID', '')
+// -- where clause can go here
+
+let tt = "UPDATE info ,( SELECT entity_id, date FROM au_dfat_sanctions_birth_dates bd ) AS src"
++" SET info.birth_date = src.date"
++" WHERE info.source = src.entity_id"
+doSql(tt , "tt");
 
 
+ 
 });
 
 
