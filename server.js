@@ -1,40 +1,19 @@
-const Express= require('express')
-const app = Express()
-const mysql = require('mysql');
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-// var con = mysql.createConnection({
-//     host: "localhost",
-//     user: "root",
-//     password: "password"
-//   });
+  const Express= require('express')
+  const app = Express()
+  const mysql = require('mysql');
+  const bodyParser = require('body-parser');
+  const cookieParser = require('cookie-parser');
 
-  
-  //mysql://b8fab95b485474:1d283d4f@us-cdbr-iron-east-01.cleardb.net/heroku_fe78334d2b9e30f?reconnect=true
 
-//   var con = mysql.createConnection({
-//     host: "us-cdbr-iron-east-01.cleardb.net",
-//     user: "b8fab95b485474",
-//     password: "1d283d4f",
-//     database: "heroku_fe78334d2b9e30f"
-    
-//   });
-
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookieParser());
-app.use(bodyParser.json()); // support json encoded bodies
-app.use(bodyParser.urlencoded({ extended: false})); // support encoded bodies
-// Configure our Express app to use ejs as our templating engine
-app.set('view engine', 'ejs'); 
-///////////////////////////////////////////////////
-//////////////////////// DB  //////////////////////
-///////////////////////////////////////////////////
-// var db_config = {
-//     host: "us-cdbr-iron-east-01.cleardb.net",
-//     user: "bd5294a3a4f4ce",
-//     password: "650afed5", // "9303e8fdb9943f2"
-//     database: "heroku_8a9641ddd906877"
-//   };
+  app.use(bodyParser.urlencoded({extended: false}));
+  app.use(cookieParser());
+  app.use(bodyParser.json()); // support json encoded bodies
+  app.use(bodyParser.urlencoded({ extended: false})); // support encoded bodies
+  // Configure our Express app to use ejs as our templating engine
+  app.set('view engine', 'ejs'); 
+  ///////////////////////////////////////////////////
+  //////////////////////// DB  //////////////////////
+  ///////////////////////////////////////////////////
 
   var db_config = {
     host: "localhost",
@@ -44,18 +23,15 @@ app.set('view engine', 'ejs');
   }
   
   var connection;
-  
   function handleDisconnect() {
     connection = mysql.createConnection(db_config); // Recreate the connection, since
                                                     // the old one cannot be reused.
-  
     connection.connect(function(err) {              // The server is either down
       if(err) {                                     // or restarting (takes a while sometimes).
         console.log('error when connecting to db:', err);
         setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
       }                                     // to avoid a hot loop, and to allow our node script to
-    });                                     // process asynchronous requests in the meantime.
-                                            // If you're also serving http, display a 503 error.
+    });                                     // process asynchronous requests in the meantime.                                          // If you're also serving http, display a 503 error.
     connection.on('error', function(err) {
       console.log('db error', err);
       if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
@@ -67,8 +43,6 @@ app.set('view engine', 'ejs');
   }
   
   handleDisconnect();
-
-
   function doSql(table, message)
   {
     connection.query(table, function (err, result) 
@@ -78,190 +52,163 @@ app.set('view engine', 'ejs');
     });
   }
 
-//   con.connect(function(err) {
-//     if (err) { console.log("Not Connected!"); console.log(err.message); handleDisconnect(con)}
-//     else{
-//     console.log("Connected!");
-//     }
-//     // con.query("use heroku_fe78334d2b9e30f", function (err, result) {
-//     //     if (err) { console.log("Not created!"); console.log(err.message); throw err;}
-//     //     console.log(" using");
-//     //   });
-//   });
-  
-
-///////////////////////////////////////////////////
-////////// Allow to parse bodies in json //////////
-///////////////////////////////////////////////////
-app.get('/', (request, response) => { 
+  ///////////////////////////////////////////////////
+  ////////// Allow to parse bodies in json //////////
+  ///////////////////////////////////////////////////
+  app.get('/', (request, response) => { 
     
-    response.send(`Hello`) 
-})
+          response.send(`Hello`) 
+      })
 
-app.get('/migrate', (request, response) => { 
+      app.get('/migrate', (request, response) => { 
 
-  var drop_sanction = "DROP TABLE IF EXISTS sanction_list";
-  var drop_address = "DROP TABLE IF EXISTS address";
-  var drop_info_santion = "DROP TABLE IF EXISTS info_sanction";
-  var drop_info = "DROP TABLE IF EXISTS info";
+        var drop_sanction = "DROP TABLE IF EXISTS sanction_list";
+        var drop_address = "DROP TABLE IF EXISTS address";
+        var drop_info_santion = "DROP TABLE IF EXISTS info_sanction";
+        var drop_info = "DROP TABLE IF EXISTS info";
 
-  //doSql(drop_sanction, "drop sanction");
-  //doSql(drop_address, "drop address");
-  //doSql(drop_info_santion, "drop info santion");
-  doSql(drop_info, "drop info");
+        //doSql(drop_sanction, "drop sanction");
+        //doSql(drop_address, "drop address");
+        //doSql(drop_info_santion, "drop info santion");
+        doSql(drop_info, "drop info");
 
 
-  ///////// INFO ///////////
-  var create_info = " CREATE TABLE info (name VARCHAR(255), "
-  +"firstName VARCHAR(255), "
-  +"lastName VARCHAR(255), "
-  +"fatherName VARCHAR(255), "
-  +"birth_date VARCHAR(255)"
-  +", birth_place Text"
-  +", place VARCHAR(255)"
-  +", nationality Text"
-  +", nationality_code VARCHAR(255)"
-  +", quality VARCHAR(255)"
-  +", title VARCHAR(255)"
-  +", source VARCHAR(255)"
-  +", description VARCHAR(255)"
-  +", issued_at VARCHAR(255)"
-  +", number VARCHAR(255)"
-  +", url VARCHAR(255)"
-  +", type VARCHAR(255)"
-  +", second_name VARCHAR(255)"
-  +", third_name VARCHAR(255)"
-  +", listed_at VARCHAR(255)"
-  +", action VARCHAR(255)"
-  +", program Text"
-  +", summary Text"
-  +", text VARCHAR(255)"
-  +", gender VARCHAR(255)"
-  +", alias VARCHAR(255)"
-  +", parent VARCHAR(255))";
-  doSql(create_info, "created info");
-  
-   ///////// Address ///////////
-   var create_address = " CREATE TABLE address (source VARCHAR(255), info_id INT, "
-   +"country VARCHAR(255), "
-  +"city VARCHAR(255), "
-  +"street VARCHAR(255), "
-  +"postal_code VARCHAR(255), "
-  +"country_code VARCHAR(255), "
-  +"region VARCHAR(255), "
-  +"note Text, "
-  +"street_2 VARCHAR(255))";
-  //doSql(create_address, "created address");
- 
-   ///////// Info-Sanction ///////////
-   var create_info_sanction = " CREATE TABLE info_sanction (sanction_list_id INT, "
-   +"info_id INT)";
-   //doSql(create_info_sanction, "created info_sanction");
+        ///////// INFO ///////////
+        var create_info = " CREATE TABLE info (name VARCHAR(255), "
+        +"firstName VARCHAR(255), "
+        +"lastName VARCHAR(255), "
+        +"fatherName VARCHAR(255), "
+        +"birth_date VARCHAR(255)"
+        +", birth_place Text"
+        +", place VARCHAR(255)"
+        +", nationality Text"
+        +", nationality_code VARCHAR(255)"
+        +", quality VARCHAR(255)"
+        +", title VARCHAR(255)"
+        +", source VARCHAR(255)"
+        +", description VARCHAR(255)"
+        +", issued_at VARCHAR(255)"
+        +", number VARCHAR(255)"
+        +", url VARCHAR(255)"
+        +", type VARCHAR(255)"
+        +", second_name VARCHAR(255)"
+        +", third_name VARCHAR(255)"
+        +", listed_at VARCHAR(255)"
+        +", action VARCHAR(255)"
+        +", program Text"
+        +", summary Text"
+        +", text VARCHAR(255)"
+        +", gender VARCHAR(255)"
+        +", alias VARCHAR(255)"
+        +", parent VARCHAR(255))";
+        doSql(create_info, "created info");
+        
+        ///////// Address ///////////
+        var create_address = " CREATE TABLE address (source VARCHAR(255), info_id INT, "
+        +"country VARCHAR(255), "
+        +"city VARCHAR(255), "
+        +"street VARCHAR(255), "
+        +"postal_code VARCHAR(255), "
+        +"country_code VARCHAR(255), "
+        +"region VARCHAR(255), "
+        +"note Text, "
+        +"street_2 VARCHAR(255))";
+        //doSql(create_address, "created address");
+      
+        ///////// Info-Sanction ///////////
+        var create_info_sanction = " CREATE TABLE info_sanction (sanction_list_id INT, "
+        +"info_id INT)";
+        //doSql(create_info_sanction, "created info_sanction");
 
-    ///////// sanction_list ///////////
-    var sanction_list = " CREATE TABLE sanction_list (name VARCHAR(255)) ";
-    //doSql(sanction_list , "sanction_list");
-
-  /// CREATE INSIDE ANOTHER DATABASE ////
-  // var sql2 = +"DROP TABLE IF EXISTS aml_pro.sanction_list "+ 
-  // +", DROP TABLE IF EXISTS aml_pro.address "+ 
-  // +", DROP TABLE IF EXISTS aml_pro.info_sanction "+ 
-  // +", DROP TABLE IF EXISTS aml_pro.info "+ 
-  // +", CREATE TABLE aml_pro.santion_list SELECT * FROM sanction_list " +
-  // +", CREATE TABLE aaml_pro.address SELECT * FROM address " +
-  // +", CREATE TABLE aml_pro.info_sanction SELECT * FROM info_sanction " +
-  // +", CREATE TABLE aml_pro.info SELECT * FROM info ";
-  
-    response.send(`created`) 
-})
+          ///////// sanction_list ///////////
+          var sanction_list = " CREATE TABLE sanction_list (name VARCHAR(255)) ";
+          //doSql(sanction_list , "sanction_list");
+        
+          response.send(`created`) 
+  })
 
 
 ///// insert into info (name,  source) SELECT name, entity_id  FROM au_dfat_sanctions_aliases  //
 
-app.get('/info', (request, response) => { 
+  app.get('/info', (request, response) => { 
 
-    /////////////////////////// 
-    ///// AU_DFAT sanction ////
-    /////////////////////////// 
+          /////////////////////////// 
+          ///// AU_DFAT sanction ////
+          /////////////////////////// 
 
-  ////// insert from au_drat_sanction into INFO table ////////
-  let au_dfat_sanctions = " insert into info (name,  source, type, summary, program, url) "
- + " SELECT name, id,  type,  summary, program, url  FROM au_dfat_sanctions";
-// doSql(au_dfat_sanctions, "insert from au_dfat_sanctions");
- ///// insert from sanction address into address table ///////
- let au_dfat_address = "  insert into address (source,  note )  "
- + " SELECT entity_id, text  FROM au_dfat_sanctions_addresses ";
-// doSql(au_dfat_address, "insert from sanction address");
- //// Just add to that then we specifies aliases ////
- let au_dfat_sanctions_aliases  = "insert into info (name,  source)   "
- + " SELECT name, entity_id  FROM au_dfat_sanctions_aliases";
- //doSql(au_dfat_sanctions_aliases , "au_dfat_sanctions_aliases");
-
- /// UPDATE `table_name` SET `column_name` = `new_value' [WHERE condition];
-//  UPDATE tableA a
-// INNER JOIN tableB b ON a.name_a = b.name_b
-// SET validation_check = if(start_dts > end_dts, 'VALID', '')
-// -- where clause can go here
-
-let birth_date = "UPDATE info ,( SELECT entity_id, date FROM au_dfat_sanctions_birth_dates bd ) AS src"
-+" SET info.birth_date = src.date"
-+" WHERE info.source = src.entity_id"
-//11 doSql(birth_date , "info birth date updated");
+          ////// insert from au_drat_sanction into INFO table ////////
+          let au_dfat_sanctions = " insert into info (name,  source, type, summary, program, url) "
+        + " SELECT name, id,  type,  summary, program, url  FROM au_dfat_sanctions";
+        // doSql(au_dfat_sanctions, "insert from au_dfat_sanctions");
+        ///// insert from sanction address into address table ///////
+        let au_dfat_address = "  insert into address (source,  note )  "
+        + " SELECT entity_id, text  FROM au_dfat_sanctions_addresses ";
+        // doSql(au_dfat_address, "insert from sanction address");
+        //// Just add to that then we specifies aliases ////
+        let au_dfat_sanctions_aliases  = "insert into info (name,  source)   "
+        + " SELECT name, entity_id  FROM au_dfat_sanctions_aliases";
+        //doSql(au_dfat_sanctions_aliases , "au_dfat_sanctions_aliases");
 
 
-let birth_place = "UPDATE info ,( SELECT entity_id, place FROM au_dfat_sanctions_birth_places bd ) AS src"
-+" SET info.birth_place = src.place"
-+" WHERE info.source = src.entity_id"
-//11 doSql(birth_place , "info birth place updated");
+        let birth_date = "UPDATE info ,( SELECT entity_id, date FROM au_dfat_sanctions_birth_dates bd ) AS src"
+        +" SET info.birth_date = src.date"
+        +" WHERE info.source = src.entity_id"
+        //11 doSql(birth_date , "info birth date updated");
 
 
-let country = "UPDATE info ,( SELECT entity_id, country_name, country_code FROM au_dfat_sanctions_nationalities) AS src"
-+" SET info.nationality = src.country_name"
-+" , info.nationality_code = src.country_code"
-+" WHERE info.source = src.entity_id"
-//doSql(country , "info country updated");
+        let birth_place = "UPDATE info ,( SELECT entity_id, place FROM au_dfat_sanctions_birth_places bd ) AS src"
+        +" SET info.birth_place = src.place"
+        +" WHERE info.source = src.entity_id"
+        //11 doSql(birth_place , "info birth place updated");
 
 
-  /////////////////////////// 
-  ///// ch_seco sanction/////
-  /////////////////////////// 
-
-  //// TODO function column has been removed due to error form ch_seco_sanctions tables 
-  let ch_seco_sanctions = " insert into info (firstName,  lastName, fatherName ,source, type, summary, program, name) "
-  + " SELECT first_name, last_name, father_name, id,  type,  summary, program,  name  FROM ch_seco_sanctions";
- // doSql(ch_seco_sanctions, "insert from ch_seco_sanctions");
-});
-
-let ch_seco_sanctions_addresses = "  insert into address (source,  note, street, street_2, postal_code, country, country_code, region  )  "
-+ " SELECT entity_id, text, street, street_2, postal_code, country_name, country_code, region  FROM ch_seco_sanctions_addresses ";
-//doSql(ch_seco_sanctions_addresses, "insert from ch_seco_sanctions_addresses ");
-
-let ch_seco_sanctions_aliases  = "insert into info (firstName, lastName, fatherName, name, source , quality, title, second_name, third_name)"
- + " SELECT first_name, last_name, father_name, name, entity_id, quality, title, second_name, third_name  FROM ch_seco_sanctions_aliases";
-// doSql(ch_seco_sanctions_aliases , " ch_seco_sanctions_aliases ");
-
-let ch_seco_birth_date = "UPDATE info ,( SELECT entity_id, date FROM ch_seco_sanctions_birth_dates bd ) AS src"
-+" SET info.birth_date = src.date"
-+" WHERE info.source = src.entity_id"
-//doSql(ch_seco_birth_date , "info birth date updated from ch_seco_birth_date");
+        let country = "UPDATE info ,( SELECT entity_id, country_name, country_code FROM au_dfat_sanctions_nationalities) AS src"
+        +" SET info.nationality = src.country_name"
+        +" , info.nationality_code = src.country_code"
+        +" WHERE info.source = src.entity_id"
+        //doSql(country , "info country updated");
 
 
-let ch_seco_sanctions_birth_places = "UPDATE info ,( SELECT entity_id, place, quality FROM ch_seco_sanctions_birth_places ) AS src"
-+" SET info.birth_place = src.place"
-+", info.quality = src.quality"
-+" WHERE info.source = src.entity_id"
-// doSql(ch_seco_sanctions_birth_places , "ch seco sanctions birth places ");
+          /////////////////////////// 
+          ///// ch_seco sanction/////
+          /////////////////////////// 
 
-let ch_seco_sanctions_identifiers = "UPDATE info ,( SELECT entity_id, country_name, country_code, type, description, number FROM ch_seco_sanctions_identifiers) AS src"
-+" SET info.nationality = src.country_name"
-+" , info.nationality_code = src.country_code"
-+" , info.type = src.type"
-+" , info.description = src.description"
-+" , info.number = src.number"
-+" WHERE info.source = src.entity_id"
-//doSql(ch_seco_sanctions_identifiers, "ch_seco_sanctions_identifiers");
+          //// TODO function column has been removed due to error form ch_seco_sanctions tables 
+          let ch_seco_sanctions = " insert into info (firstName,  lastName, fatherName ,source, type, summary, program, name) "
+          + " SELECT first_name, last_name, father_name, id,  type,  summary, program,  name  FROM ch_seco_sanctions";
+        // doSql(ch_seco_sanctions, "insert from ch_seco_sanctions");
+        });
 
-app.get('/info1', (request, response) => { 
+        let ch_seco_sanctions_addresses = "  insert into address (source,  note, street, street_2, postal_code, country, country_code, region  )  "
+        + " SELECT entity_id, text, street, street_2, postal_code, country_name, country_code, region  FROM ch_seco_sanctions_addresses ";
+        //doSql(ch_seco_sanctions_addresses, "insert from ch_seco_sanctions_addresses ");
+
+        let ch_seco_sanctions_aliases  = "insert into info (firstName, lastName, fatherName, name, source , quality, title, second_name, third_name)"
+        + " SELECT first_name, last_name, father_name, name, entity_id, quality, title, second_name, third_name  FROM ch_seco_sanctions_aliases";
+        // doSql(ch_seco_sanctions_aliases , " ch_seco_sanctions_aliases ");
+
+        let ch_seco_birth_date = "UPDATE info ,( SELECT entity_id, date FROM ch_seco_sanctions_birth_dates bd ) AS src"
+        +" SET info.birth_date = src.date"
+        +" WHERE info.source = src.entity_id"
+        //doSql(ch_seco_birth_date , "info birth date updated from ch_seco_birth_date");
+
+
+        let ch_seco_sanctions_birth_places = "UPDATE info ,( SELECT entity_id, place, quality FROM ch_seco_sanctions_birth_places ) AS src"
+        +" SET info.birth_place = src.place"
+        +", info.quality = src.quality"
+        +" WHERE info.source = src.entity_id"
+        // doSql(ch_seco_sanctions_birth_places , "ch seco sanctions birth places ");
+
+        let ch_seco_sanctions_identifiers = "UPDATE info ,( SELECT entity_id, country_name, country_code, type, description, number FROM ch_seco_sanctions_identifiers) AS src"
+        +" SET info.nationality = src.country_name"
+        +" , info.nationality_code = src.country_code"
+        +" , info.type = src.type"
+        +" , info.description = src.description"
+        +" , info.number = src.number"
+        +" WHERE info.source = src.entity_id"
+        //doSql(ch_seco_sanctions_identifiers, "ch_seco_sanctions_identifiers");
+
+  app.get('/info1', (request, response) => { 
 
         //////////////////////////// 
         ///// coe_assembly   ///////
@@ -401,9 +348,9 @@ app.get('/info1', (request, response) => {
        +" WHERE info.source = src.entity_id"
       // doSql(kg_fiu_national_birth_dates, "kg fiu national birth dates")
     
-});
+  });
 
-app.get('/info2', (request, response) => { 
+  app.get('/info2', (request, response) => { 
    
        //////////////////////////////////////////////////
        ///////////// ua_sdfm_blacklist //////////////////
@@ -581,9 +528,9 @@ app.get('/info2', (request, response) => {
 
      
 
-app.listen(
+  app.listen(
     process.env.PORT  || 3000, ()=>console.log('👽')
-)
+  )
 
 
 
