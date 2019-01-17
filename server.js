@@ -359,8 +359,8 @@
         //////////////////////////// 
 
         ////// insert from au_drat_sanction into INFO table ////////
-        let coe_assembly_table= "insert into sanction_list (name) SELECT source FROM aml.interpol_red_notices limit 1;"
-       //dosql(coe_assembly_table, "created!" );
+        let coe_assembly_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.interpol_red_notices ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
+         dosql(coe_assembly_table, "created!" );
 
         let coe_assembly = " insert into info (firstName, lastName,  source, type, summary,  url, name) "
         + " SELECT first_name, last_name, id,  type,  summary, url, name  FROM coe_assembly";
@@ -375,8 +375,8 @@
         ///////////////////////////// 
         ///////  eu_meps   /////////
         ////////////////////////////
-        let eu_meps_table= "insert into sanction_list (name) SELECT source FROM aml.eu_meps limit 1;"
-       //dosql(eu_meps_table, "created!" ); 
+        let eu_meps_table= "insert into aml_pro.sanction_list (name, source) SELECT source, id FROM aml.eu_meps ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
+        dosql(eu_meps_table, "created!" ); 
 
         let eu_meps = " insert into info (firstName, lastName,  source, type, summary ) "
         + " SELECT first_name, last_name, id,  type,  summary  FROM coe_assembly";
@@ -391,8 +391,8 @@
         /////////////////////////////////// 
         ///////  everypolitician  /////////
         /////////////////////////////////// 
-        let everypolitician_table= "insert into sanction_list (name) SELECT source FROM aml.everypolitician limit 1;"
-       //dosql(everypolitician_table, "created!" ); 
+        let everypolitician_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.everypolitician ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
+        dosql(everypolitician_table, "everypolitician_table" ); 
          
         let everypolitician = " insert into info ( source, type, program, name , gender ) "
         + " select  id,  type, program, name, gender  FROM everypolitician";
@@ -411,8 +411,8 @@
         ////////////////////////////////////// 
         ///////   gb_hmt_sanctions  /////////
         ///////////////////////////////////// 
-        let gb_hmt_sanctions_table= "insert into sanction_list (name) SELECT source FROM aml.gb_hmt_sanctions limit 1;"
-       //dosql(gb_hmt_sanctions_table, "created!" );
+        let gb_hmt_sanctions_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.gb_hmt_sanctions ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
+        dosql(gb_hmt_sanctions_table, "gb_hmt_sanctions_table" );
        
         let gb_hmt_sanctions  = " insert into info ( title, lastName, source, type, summary,  program, name , firstName, second_name, third_name ) "
         + "Select title, last_name, id, type, summary, program, name, first_name, second_name, third_name  FROM gb_hmt_sanctions ";
@@ -455,8 +455,8 @@
         ////////////////////////////////////// 
         ////////////   Ineterpol /////////////
         ///////////////////////////////////// 
-        let interpol_red_notices_table= "insert into sanction_list (name) SELECT source FROM aml.interpol_red_notices limit 1;"
-       //dosql(interpol_red_notices_table, "created!")
+        let interpol_red_notices_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.interpol_red_notices ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
+        dosql(interpol_red_notices_table, "created!")
 
         let interpol_red_notices = " insert into info ( firstName, lastName, source, type, summary,  program, url, gender, name  ) "
         + "Select first_name, last_name, id, type, summary, program, url, gender, name  FROM interpol_red_notices ";
@@ -489,8 +489,8 @@
        ///////////////////////////////////////////////
        //////////// kg_fiu_national //////////////////
        ///////////////////////////////////////////////
-       let kg_fiu_national_table= "insert into sanction_list (name) SELECT source FROM aml.kg_fiu_national limit 1;"
-      // dosql(kg_fiu_national_table, "created!")
+       let kg_fiu_national_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.kg_fiu_national ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
+       dosql(kg_fiu_national_table, "created!")
 
        let kg_fiu_national = " insert into info ( firstName, lastName, second_name ,source, type, summary,  program,  name, listed_at) "
        + "Select first_name, last_name, second_name, id, type, summary, program,  name, listed_at  FROM kg_fiu_national ";
@@ -512,8 +512,8 @@
        //////////////////////////////////////////////////
        ///////////// ua_sdfm_blacklist //////////////////
        /////////////////////////////////////////////////
-       let ua_sdfm_blacklist_table= "insert into sanction_list (name) SELECT source FROM aml.ua_sdfm_blacklist limit 1;"
-      //dosql_dml1(ua_sdfm_blacklist_table, "created!")
+       let ua_sdfm_blacklist_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.ua_sdfm_blacklist ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
+       dosql_dml1(ua_sdfm_blacklist_table, "created!")
 
        let ua_sdfm_blacklist = " insert into info (firstName, lastName, second_name , third_name, source, type, summary, program, url, name, title) "
        + "Select first_name, last_name, second_name, third_name ,id, type, summary, program, url, name, title  FROM ua_sdfm_blacklist ";
@@ -556,8 +556,8 @@
       //////////////////////////////
       ////// un_sc_sanctions //////
       /////////////////////////////
-      let un_sc_sanctions_table= "insert into sanction_list (name) SELECT source FROM aml.un_sc_sanctions limit 1;"
-    //dosql_dml1(un_sc_sanctions_table, "created!")
+      let un_sc_sanctions_table= "insert into aml_pro.sanction_list (name,source) SELECT source,id FROM aml.un_sc_sanctions ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
+      dosql_dml1(un_sc_sanctions_table, "created!")
        /// TODO updated_at from this table not consider 
 
       let un_sc_sanctions = " insert into info (firstName,  second_name , third_name, source, type, summary, program, listed_at,  name, title) "
@@ -605,8 +605,8 @@
       ////// us_bis_denied /////////
       /////////////////////////////
 
-      let us_bis_denied_table= "insert into sanction_list (name) SELECT source FROM aml.us_bis_denied limit 1;"
-    //dosql_dml1(us_bis_denied_table, "created!")
+      let us_bis_denied_table= "insert into aml_pro.sanction_list (name,source) SELECT source,id FROM aml.us_bis_denied ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
+      dosql_dml1(us_bis_denied_table, "created!")
 
       let us_bis_denied = " insert into info ( source, type, summary, program, listed_at,  name) "
       + "Select id, type, summary, program, updated_at, name FROM us_bis_denied";
@@ -636,8 +636,8 @@
       ///////// us_ofac //////////
       ////////////////////////////
 
-      let us_ofac_table= "insert into sanction_list (name) SELECT source FROM aml.us_ofac limit 1;"
-    //dosql_dml1(us_ofac_table, "created!")
+      let us_ofac_table= "insert into aml_pro.sanction_list (name,source) SELECT source,id FROM aml.us_ofac ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
+      dosql_dml1(us_ofac_table, "created!")
 
       let us_ofac = "insert into info (  source, type, summary, program, listed_at, name) "
       + "Select id, type, summary, program, updated_at, name FROM us_ofac";
@@ -678,8 +678,8 @@
       /////////////////////////////////////
 
      
-      let worldbank_debarred_table= "insert into sanction_list (name) SELECT source FROM aml.worldbank_debarred limit 1;"
-    //dosql_dml1(worldbank_debarred_table, "created!")
+      let worldbank_debarred_table= "insert into aml_pro.sanction_list (name,source) SELECT source,id FROM aml.worldbank_debarred ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
+      dosql_dml1(worldbank_debarred_table, "created!")
       
       let worldbank_debarred = "insert into info (  source, program, listed_at, name, url)"
       + "Select id, program, updated_at, name, url FROM worldbank_debarred ";
