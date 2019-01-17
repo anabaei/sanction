@@ -354,12 +354,12 @@
         + " SELECT first_name, last_name, id,  type,  summary, url, name  FROM aml.coe_assembly";
         dosql(coe_assembly_cluster, "insert coe_assembly_cluster");
       
-
-        let coe_assembly_nationalitiescountry = "UPDATE info ,( SELECT entity_id, country_name, country_code FROM coe_assembly_nationalities) AS src"
-        +" SET info.nationality = src.country_name"
-        +" , info.nationality_code = src.country_code"
-        +" WHERE info.source = src.entity_id AND src.country_name IS NOT NULL"
-       //dosql(coe_assembly_nationalitiescountry , "info country coe_assembly_nationalitiescountry");
+          //// TODO: cluster the selection ? ////
+        let coe_assembly_nationalitiescountry = "UPDATE aml_pro.info ,( SELECT entity_id, country_name, country_code FROM aml.coe_assembly_nationalities) AS src"
+        +" SET aml_pro.info.nationality = src.country_name"
+        +" , aml_pro.info.nationality_code = src.country_code"
+        +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL"
+        dosql(coe_assembly_nationalitiescountry , "info country coe_assembly_nationalitiescountry");
 
         ///////////////////////////// 
         ///////  eu_meps   /////////
@@ -374,11 +374,12 @@
         + " SELECT first_name, last_name, id,  type,  summary  FROM aml.coe_assembly";
         dosql(eu_meps_cluster, "eu_meps_cluster");
 
-        let eu_meps_nationalities = "UPDATE info ,( SELECT entity_id, country_name, country_code FROM eu_meps_nationalities) AS src"
-        +" SET info.nationality = src.country_name"
-        +" , info.nationality_code = src.country_code"
-        +" WHERE info.source = src.entity_id AND src.country_name IS NOT NULL ";
-       //dosql(eu_meps_nationalities, " eu_meps_nationalities");
+        //// TODO : cluster? ///
+        let eu_meps_nationalities = "UPDATE aml_pro.info ,( SELECT entity_id, country_name, country_code FROM aml.eu_meps_nationalities) AS src"
+        +" SET aml_pro.info.nationality = src.country_name"
+        +" , aml_pro.info.nationality_code = src.country_code"
+        +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL ";
+        dosql(eu_meps_nationalities, " eu_meps_nationalities");
 
         /////////////////////////////////// 
         ///////  everypolitician  /////////
@@ -397,11 +398,11 @@
         + " SELECT name, entity_id, 'yes'  FROM everypolitician_aliases";
         //dosql(everypolitician_aliases, "everypolitician_aliases");
        
-        let everypolitician_nationalities = "UPDATE info ,(SELECT entity_id, country_name, country_code FROM everypolitician_nationalities) AS src"
-        +" SET info.nationality = src.country_name"
-        +" , info.nationality_code = src.country_code"
-        +" WHERE info.source = src.entity_id AND src.country_name IS NOT NULL";
-       //dosql(everypolitician_nationalities, "everypolitician_nationalities");
+        let everypolitician_nationalities = "UPDATE aml_pro.info ,(SELECT entity_id, country_name, country_code FROM aml.everypolitician_nationalities) AS src"
+        +" SET aml_pro.info.nationality = src.country_name"
+        +" , aml_pro.info.nationality_code = src.country_code"
+        +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL";
+        dosql(everypolitician_nationalities, "everypolitician_nationalities");
 
         ////////////////////////////////////// 
         ///////   gb_hmt_sanctions  /////////
@@ -436,19 +437,20 @@
         +" WHERE info.source = src.entity_id AND src.place IS NOT NULL"
         //dosql(gb_hmt_sanctions_birth_places, "gb_hmt_sanctions_birth_places");
 
-        let gb_hmt_sanctions_identifiers = "UPDATE info ,( SELECT entity_id, country_name, country_code, type, number FROM gb_hmt_sanctions_identifiers) AS src"
-          +" SET info.nationality = src.country_name"
-          +" , info.nationality_code = src.country_code"
-          +" , info.type = src.type"
-          +" , info.number = src.number"
-          +" WHERE info.source = src.entity_id AND src.country_name IS NOT NULL"
-        //dosql(gb_hmt_sanctions_identifiers, "gb_hmt_sanctions_identifiers");
+        //// TODO : clsuter?
+        let gb_hmt_sanctions_identifiers = "UPDATE aml_pro.info ,( SELECT entity_id, country_name, country_code, type, number FROM aml.gb_hmt_sanctions_identifiers) AS src"
+          +" SET aml_pro.info.nationality = src.country_name"
+          +" , aml_pro.info.nationality_code = src.country_code"
+          +" , aml_pro.info.type = src.type"
+          +" , aml_pro.info.number = src.number"
+          +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL"
+          dosql(gb_hmt_sanctions_identifiers, "gb_hmt_sanctions_identifiers");
 
-       let gb_hmt_sanctions_nationalities = "UPDATE info ,(SELECT entity_id, country_name, country_code FROM gb_hmt_sanctions_nationalities) AS src"
-        +" SET info.nationality = src.country_name"
-        +" , info.nationality_code = src.country_code"
-        +" WHERE info.source = src.entity_id AND src.country_name IS NOT NULL";
-       //dosql(gb_hmt_sanctions_nationalities, "gb_hmt_sanctions_nationalities");
+       let gb_hmt_sanctions_nationalities = "UPDATE aml_pro.info ,(SELECT entity_id, country_name, country_code FROM aml.gb_hmt_sanctions_nationalities) AS src"
+        +" SET aml_pro.info.nationality = src.country_name"
+        +" , aml_pro.info.nationality_code = src.country_code"
+        +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL";
+        dosql(gb_hmt_sanctions_nationalities, "gb_hmt_sanctions_nationalities");
 
        
         ////////////////////////////////////// 
@@ -482,11 +484,11 @@
        //dosql(interpol_red_notices_birth_places, "interpol red notices birth places");
 
       
-       let interpol_red_notices_nationalities = "UPDATE info ,(SELECT entity_id, country_name, country_code FROM interpol_red_notices_nationalities) AS src"
-       +" SET info.nationality = src.country_name"
-       +" , info.nationality_code = src.country_code"
-       +" WHERE info.source = src.entity_id AND src.country_name IS NOT NULL";
-        //dosql(interpol_red_notices_nationalities, "interpol red notices nationalities");
+       let interpol_red_notices_nationalities = "UPDATE aml_pro.info ,(SELECT entity_id, country_name, country_code FROM aml.interpol_red_notices_nationalities) AS src"
+       +" SET aml_pro.info.nationality = src.country_name"
+       +" , aml_pro.info.nationality_code = src.country_code"
+       +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL";
+       dosql(interpol_red_notices_nationalities, "interpol red notices nationalities");
 
 
        ///////////////////////////////////////////////
@@ -558,11 +560,11 @@
       +" WHERE info.source = src.entity_id  AND src.country_name IS NOT NULL";
        //dosql_dml(ua_sdfm_blacklist_identifiers, "ua sdfm blacklist identifiers");
     
-      let ua_sdfm_blacklist_nationalities =  "UPDATE info ,(SELECT entity_id, country_name, country_code FROM ua_sdfm_blacklist_nationalities) AS src"
-      +" SET info.nationality = src.country_name"
-      +" , info.nationality_code = src.country_code"
-      +" WHERE info.source = src.entity_id  AND src.country_name IS NOT NULL";
-       //dosql_dml(ua_sdfm_blacklist_nationalities, "ua sdfm blacklist nationalities")
+      let ua_sdfm_blacklist_nationalities =  "UPDATE aml_pro.info ,(SELECT entity_id, country_name, country_code FROM aml.ua_sdfm_blacklist_nationalities) AS src"
+      +" SET aml_pro.info.nationality = src.country_name"
+      +" , aml_pro.info.nationality_code = src.country_code"
+      +" WHERE aml_pro.info.source = src.entity_id  AND src.country_name IS NOT NULL";
+       dosql_dml(ua_sdfm_blacklist_nationalities, "ua sdfm blacklist nationalities")
    
       //////////////////////////////
       ////// un_sc_sanctions //////
@@ -600,21 +602,21 @@
      +" WHERE info.source = src.entity_id AND src.place IS NOT NULL"
      //dosql_dml(un_sc_sanctions_birth_places, "un sc sanctions birth places");
     
-     let un_sc_sanctions_identifiers = "UPDATE info ,( SELECT entity_id, description, country_name, country_code, type, number, issued_at FROM un_sc_sanctions_identifiers) AS src"
-     +" SET info.nationality = src.country_name"
-     +" , info.nationality_code = src.country_code"
-     +" , info.type = src.type"
-     +" , info.number = src.number"
-     +" , info.listed_at = src.issued_at"
-     +" , info.description = src.description"
-     +" WHERE info.source = src.entity_id AND src.country_name IS NOT NULL";
+     let un_sc_sanctions_identifiers = "UPDATE aml_pro.info ,( SELECT entity_id, description, country_name, country_code, type, number, issued_at FROM aml.un_sc_sanctions_identifiers) AS src"
+     +" SET aml_pro.info.nationality = src.country_name"
+     +" , aml_pro.info.nationality_code = src.country_code"
+     +" , aml_pro.info.type = src.type"
+     +" , aml_pro.info.number = src.number"
+     +" , aml_pro.info.listed_at = src.issued_at"
+     +" , aml_pro.info.description = src.description"
+     +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL";
      //dosql_dml(un_sc_sanctions_identifiers, "un_sc_sanctions_identifiers")
 
-     let un_sc_sanctions_nationalities =  "UPDATE info ,(SELECT entity_id, country_name, country_code FROM un_sc_sanctions_nationalities) AS src"
-     +" SET info.nationality = src.country_name"
-     +" , info.nationality_code = src.country_code"
-     +" WHERE info.source = src.entity_id AND src.country_name IS NOT NULL";
-     //dosql_dml(un_sc_sanctions_nationalities, "un sc sanctions nationalities");
+     let un_sc_sanctions_nationalities =  "UPDATE aml_pro.info ,(SELECT entity_id, country_name, country_code FROM aml.un_sc_sanctions_nationalities) AS src"
+     +" SET aml_pro.info.nationality = src.country_name"
+     +" , aml_pro.info.nationality_code = src.country_code"
+     +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL";
+      dosql_dml(un_sc_sanctions_nationalities, "un sc sanctions nationalities");
 
       //////////////////////////////
       ////// us_bis_denied /////////
@@ -630,25 +632,25 @@
       + "Select id, type, summary, program, updated_at, name FROM aml.us_bis_denied";
       dosql_dml(us_bis_denied_cluster , "us_bis_denied_cluster")
 
-      let us_bis_denied_addresses = "insert into address (source,  country, country_code, street, postal_code, city, region  )  "
-      + " SELECT entity_id, country_name, country_code, street, postal_code, city, region  FROM us_bis_denied_addresses";
+      let us_bis_denied_addresses = "insert aml_pro.into address (source,  country, country_code, street, postal_code, city, region  )  "
+      + " SELECT entity_id, country_name, country_code, street, postal_code, city, region  FROM aml.us_bis_denied_addresses";
       //dosql_dml(us_bis_denied_addresses, "us_bis_denied_addresses");
     })
 
-      let us_cia_world_leaders = "UPDATE info ,( SELECT id, type, program, url, updated_at, name FROM us_cia_world_leaders) AS src"
-      +" SET info.name = src.name"
-      +" , info.type = src.type"
-      +" , info.program = src.program"
-      +" , info.url = src.url"
-      +" , info.listed_at = src.updated_at"
-      +" WHERE info.source = src.id AND src.name IS NOT NULL";
-       //dosql_dml(us_cia_world_leaders, "us cia world leaders")
+      let us_cia_world_leaders = "UPDATE aml_pro.info ,( SELECT id, type, program, url, updated_at, name FROM aml.us_cia_world_leaders) AS src"
+      +" SET aml_pro.info.name = src.name"
+      +" , aml_pro.info.type = src.type"
+      +" , aml_pro.info.program = src.program"
+      +" , aml_pro.info.url = src.url"
+      +" , aml_pro.info.listed_at = src.updated_at"
+      +" WHERE aml_pro.info.source = src.id AND src.name IS NOT NULL";
+      dosql_dml(us_cia_world_leaders, "us cia world leaders")
      
-      let us_cia_world_leaders_nationalities =  "UPDATE info ,(SELECT entity_id, country_name, country_code FROM us_cia_world_leaders_nationalities) AS src"
-      +" SET info.nationality = src.country_name"
-      +" , info.nationality_code = src.country_code"
-      +" WHERE info.source = src.entity_id AND src.country_name IS NOT NULL";
-       //dosql_dml(us_cia_world_leaders_nationalities, "us cia world leaders nationalities")
+      let us_cia_world_leaders_nationalities =  "UPDATE aml_pro.info ,(SELECT entity_id, country_name, country_code FROM aml.us_cia_world_leaders_nationalities) AS src"
+      +" SET aml_pro.info.nationality = src.country_name"
+      +" , aml_pro.info.nationality_code = src.country_code"
+      +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL";
+      dosql_dml(us_cia_world_leaders_nationalities, "us cia world leaders nationalities")
       
       /////////////////////////////
       ///////// us_ofac //////////
@@ -719,11 +721,11 @@
       + " SELECT entity_id, name, 'yes' FROM worldbank_debarred_aliases";
       //dosql_dml(worldbank_debarred_aliases, "worldbank debarred aliases")
 
-      let worldbank_debarred_nationalities = "UPDATE info ,(SELECT entity_id, country_name, country_code FROM worldbank_debarred_nationalities) AS src"
-      +" SET info.nationality = src.country_name"
-      +" , info.nationality_code = src.country_code"
-      +" WHERE info.source = src.entity_id AND src.country_name IS NOT NULL";
-      //dosql_dml(worldbank_debarred_nationalities, "worldbank debarred nationalities")
+      let worldbank_debarred_nationalities = "UPDATE aml_pro.info ,(SELECT entity_id, country_name, country_code FROM aml.worldbank_debarred_nationalities) AS src"
+      +" SET aml_pro.info.nationality = src.country_name"
+      +" , aml_pro.info.nationality_code = src.country_code"
+      +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL";
+      dosql_dml(worldbank_debarred_nationalities, "worldbank debarred nationalities")
 
       
   app.listen(
