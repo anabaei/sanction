@@ -83,15 +83,11 @@
 ////////// TEST
   app.get('/sanction_list', (request, response) => { 
 
-    // let update_alias = "update aml_pro.info ,(select name, source,id from aml_pro.sanction_list) as src set aml_pro.info.sanction_id = src.id"
-    // + " where  aml_pro.info.source =  src.source  ";
-    // dosql(update_alias, "update sanction_list forieng keys");
-
-
     let update_sanction_info = " insert into aml_pro.info_sanction (sanction_list_id,info_id) "
     + " select t.id, b.id from aml_pro.sanction_list t inner join aml_pro.info b on  b.source = t.source; "
     dosql(update_sanction_info, " update_sanction_info ");
- 
+    response.send("created")
+
   });
    
   
@@ -99,11 +95,8 @@
   ///////////////////////////////////////////////////
   app.get('/aliases', (request, response) => { 
 
-
-
     let update_alias = "update aml_pro.info ,(select id, source from aml_pro.info_cluster where alias = 0) as src set aml_pro.info.parent = src.id where aml_pro.info.source = aml_pro.src.source AND aml_pro.info.alias = 1 ";
     dosql(update_alias, "update alias");
-   
    
         response.send("created") 
       })
@@ -345,6 +338,8 @@
         ////// insert from au_drat_sanction into INFO table ////////
         let coe_assembly_table= "insert into sanction_list (name) SELECT source FROM aml.interpol_red_notices limit 1;"
        //dosql(coe_assembly_table, "created!" );
+
+       
 
         let coe_assembly = " insert into info (firstName, lastName,  source, type, summary,  url, name) "
         + " SELECT first_name, last_name, id,  type,  summary, url, name  FROM coe_assembly";
