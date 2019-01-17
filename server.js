@@ -416,9 +416,12 @@
         + "Select title, last_name, id, type, summary, program, name, first_name, second_name, third_name  FROM aml.gb_hmt_sanctions ";
         dosql(gb_hmt_sanctions_cluster , "info gb_hmt_sanctions_cluster ");
 
-        let gb_hmt_sanctions_addresses = "insert into address (source,  country, country_code, postal_code, note  )  "
-        + " SELECT entity_id, country_name, country_code, postal_code, text  FROM gb_hmt_sanctions_addresses ";
-       //dosql(gb_hmt_sanctions_addresses, "gb_hmt_sanctions_addresses");
+        let gb_hmt_sanctions_addresses = "insert into aml_pro.address (source,  country, country_code, postal_code, note  )  "
+        + " SELECT entity_id, country_name, country_code, postal_code, text  FROM aml.gb_hmt_sanctions_addresses "
+        + " ON DUPLICATE KEY update"
+        + " aml_pro.address.note  = aml_pro.address.note ";
+        dosql(gb_hmt_sanctions_addresses, "gb_hmt_sanctions_addresses");
+      
 
        /// TODO Cluster? ///
         let gb_hmt_sanctions_aliases = "insert into aml_pro.info (firstName, second_name, title, lastName,  source, third_name, name, type, alias )   "
@@ -531,9 +534,11 @@
        + "Select first_name, last_name, second_name, third_name ,id, type, summary, program, url, name, title  FROM aml.ua_sdfm_blacklist ";
        dosql_dml(ua_sdfm_blacklist_cluster, "ua sdfm blacklist_cluster"); 
 
-       let ua_sdfm_blacklist_addresses = "insert into address (source,  country, country_code, postal_code, note  )  "
-       + " SELECT entity_id, country_name, country_code, postal_code, text  FROM ua_sdfm_blacklist_addresses";
-       //dosql_dml(ua_sdfm_blacklist_addresses, "ua sdfm blacklist addresses");
+       let ua_sdfm_blacklist_addresses = "insert into aml_pro.address (source,  country, country_code, postal_code, note) "
+       + " SELECT entity_id, country_name, country_code, postal_code, text  FROM aml.ua_sdfm_blacklist_addresses "
+       + " ON DUPLICATE KEY update"
+       + " aml_pro.address.note  = aml_pro.address.note ";
+       dosql_dml(ua_sdfm_blacklist_addresses, "ua sdfm blacklist addresses");
 
        // TODO change name type to TEXT in info table
        let ua_sdfm_blacklist_aliases =  "insert into aml_pro.info (source, name, alias) "
@@ -580,9 +585,11 @@
       + "Select first_name, second_name, third_name ,id, type, summary, program, listed_at,   name, title  FROM aml.un_sc_sanctions  ";
       dosql_dml(un_sc_sanctions_cluster, "un sc sanctions_cluster")
 
-     let un_sc_sanctions_addresses = "insert into address (source,  country, country_code, note, street, city, region  )  "
-     + " SELECT entity_id, country_name, country_code, note, street, city, region  FROM un_sc_sanctions_addresses";
-     //dosql_dml(un_sc_sanctions_addresses, "un sc sanctions addresses")
+     let un_sc_sanctions_addresses = "insert into aml_pro.address (source,  country, country_code, note, street, city, region  )  "
+     + " SELECT entity_id, country_name, country_code, note, street, city, region  FROM aml.un_sc_sanctions_addresses "
+     + " ON DUPLICATE KEY update"
+     + " aml_pro.address.country  = aml_pro.address.country ";
+     dosql_dml(un_sc_sanctions_addresses, "un sc sanctions addresses")
      
      let un_sc_sanctions_aliases =  "insert into aml_pro.info (source, name, quality, alias) "
      + " SELECT entity_id, name, quality, true  FROM aml.un_sc_sanctions_aliases";
@@ -631,9 +638,11 @@
       + "Select id, type, summary, program, updated_at, name FROM aml.us_bis_denied";
       dosql_dml(us_bis_denied_cluster , "us_bis_denied_cluster")
 
-      let us_bis_denied_addresses = "insert aml_pro.into address (source,  country, country_code, street, postal_code, city, region  )  "
+      let us_bis_denied_addresses = "insert into aml_pro.address (source,  country, country_code, street, postal_code, city, region  )  "
       + " SELECT entity_id, country_name, country_code, street, postal_code, city, region  FROM aml.us_bis_denied_addresses";
-      //dosql_dml(us_bis_denied_addresses, "us_bis_denied_addresses");
+      + " ON DUPLICATE KEY update"
+      + " aml_pro.address.country  = aml_pro.address.country ";
+      dosql_dml(us_bis_denied_addresses, "us_bis_denied_addresses");
     })
 
       let us_cia_world_leaders = "UPDATE aml_pro.info ,( SELECT id, type, program, url, updated_at, name FROM aml.us_cia_world_leaders) AS src"
@@ -666,9 +675,11 @@
       + "Select id, type, summary, program, updated_at, name FROM aml.us_ofac";
       dosql_dml(us_ofac_cluster, "us_ofac_cluster")
     
-      let us_ofac_addresses = "insert into address (source,  country, country_code, street, street_2, city)"
-      + " SELECT entity_id, country_name, country_code, street, street_2, city  FROM us_ofac_addresses ";
-      //dosql_dml(us_ofac_addresses, "us ofac addresses")
+      let us_ofac_addresses = "insert into aml_pro.address (source,  country, country_code, street, street_2, city)"
+      + " SELECT entity_id, country_name, country_code, street, street_2, city  FROM aml.us_ofac_addresses "
+      + " ON DUPLICATE KEY update"
+      + " aml_pro.address.country = aml_pro.address.country ";
+      dosql_dml(us_ofac_addresses, "us ofac addresses")
 
       let us_ofac_aliases =  "insert into aml_pro.info (source, lastName, quality, type, name, firstName, alias) "
       + " SELECT entity_id, last_name, quality, type, name, first_name, true  FROM aml.us_ofac_aliases";
@@ -712,9 +723,11 @@
       + "Select id, program, updated_at, name, url FROM aml.worldbank_debarred ";
       dosql_dml(worldbank_debarred_cluster , "worldbank debarred_cluster")
 
-      let worldbank_debarred_addresses = "insert into address (source,  country, country_code, note)"
-      + " SELECT entity_id, country_name, country_code, text  FROM worldbank_debarred_addresses";
-      //dosql_dml(worldbank_debarred_addresses, "worldbank debarred addresses")
+      let worldbank_debarred_addresses = "insert into aml_pro.address (source,  country, country_code, note) "
+      + " SELECT entity_id, country_name, country_code, text  FROM aml.worldbank_debarred_addresses "
+      + " ON DUPLICATE KEY update"
+      + " aml_pro.address.country = aml_pro.address.country ";
+      dosql_dml(worldbank_debarred_addresses, "worldbank debarred addresses")
 
       let worldbank_debarred_aliases = "insert into aml_pro.info (source, name, alias) "
       + " SELECT entity_id, name, true FROM aml.worldbank_debarred_aliases";
