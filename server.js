@@ -311,13 +311,11 @@
         let ch_seco_sanctions_aliases_cluster  = "insert into aml_pro.info_cluster (firstName, lastName, fatherName, name, source , quality, title, second_name, third_name, alias)"
         + " SELECT first_name, last_name, father_name, name, entity_id, quality, title, second_name, third_name , true FROM aml.ch_seco_sanctions_aliases ";
         dosql(ch_seco_sanctions_aliases_cluster  , " aliases cluster inserted");
-      
 
         let ch_seco_birth_date = "UPDATE aml_pro.info ,( SELECT entity_id, date FROM aml.ch_seco_sanctions_birth_dates ) AS src"
         +" SET aml_pro.info.birth_date = src.date"
         +" WHERE aml_pro.info.source = src.entity_id AND src.date IS NOT NULL"
         dosql(ch_seco_birth_date , "info birth date updated from ch_seco_birth_date");
-
 
         let ch_seco_sanctions_birth_places = "UPDATE aml_pro.info ,( SELECT entity_id, place, quality FROM aml.ch_seco_sanctions_birth_places ) AS src"
         +" SET aml_pro.info.birth_place = src.place"
@@ -394,9 +392,9 @@
         + " select  id,  type, program, name, gender  FROM aml.everypolitician";
         dosql(everypolitician_cluster, "info everypolitician_cluster");
          
-        let everypolitician_aliases  = "insert into info (name,  source, alias)   "
-        + " SELECT name, entity_id, 'yes'  FROM everypolitician_aliases";
-        //dosql(everypolitician_aliases, "everypolitician_aliases");
+        let everypolitician_aliases  = "insert into aml_pro.info (name,  source, alias)   "
+        + " SELECT name, entity_id, true  FROM aml.everypolitician_aliases";
+        dosql(everypolitician_aliases, "everypolitician_aliases");
        
         let everypolitician_nationalities = "UPDATE aml_pro.info ,(SELECT entity_id, country_name, country_code FROM aml.everypolitician_nationalities) AS src"
         +" SET aml_pro.info.nationality = src.country_name"
@@ -422,9 +420,10 @@
         + " SELECT entity_id, country_name, country_code, postal_code, text  FROM gb_hmt_sanctions_addresses ";
        //dosql(gb_hmt_sanctions_addresses, "gb_hmt_sanctions_addresses");
 
-        let gb_hmt_sanctions_aliases = "insert into info (firstName, second_name, title, lastName,  source, third_name, name, type, alias )   "
-        + " SELECT first_name, second_name, title, last_name, entity_id, third_name, name, type, 'yes'  FROM gb_hmt_sanctions_aliases";
-       //dosql(gb_hmt_sanctions_aliases, "gb_hmt_sanctions_aliases");
+       /// TODO Cluster? ///
+        let gb_hmt_sanctions_aliases = "insert into aml_pro.info (firstName, second_name, title, lastName,  source, third_name, name, type, alias )   "
+        + " SELECT first_name, second_name, title, last_name, entity_id, third_name, name, type, true  FROM aml.gb_hmt_sanctions_aliases";
+        dosql(gb_hmt_sanctions_aliases, "gb_hmt_sanctions_aliases");
 
         let gb_hmt_sanctions_birth_dates = "UPDATE info ,( SELECT entity_id, date FROM gb_hmt_sanctions_birth_dates ) AS src"
         +" SET info.birth_date = src.date"
@@ -467,9 +466,9 @@
         + "Select first_name, last_name, id, type, summary, program, url, gender, name  FROM aml.interpol_red_notices ";
         dosql(interpol_red_notices_cluster , "interpol red notices_cluster");
          
-        let interpol_red_notices_aliases = "insert into info (source, name, alias) "
-        + " SELECT entity_id, name, 'yes'  FROM interpol_red_notices_aliases";
-       //dosql(interpol_red_notices_aliases, "interpol red notices aliases");
+        let interpol_red_notices_aliases = "insert into aml_pro.info (source, name, alias) "
+        + " SELECT entity_id, name, true FROM aml.interpol_red_notices_aliases";
+        dosql(interpol_red_notices_aliases, "interpol red notices aliases");
        
        let interpol_red_notices_birth_dates = "UPDATE info ,( SELECT entity_id, date FROM interpol_red_notices_birth_dates ) AS src"
        +" SET info.birth_date = src.date"
@@ -505,9 +504,9 @@
        + "Select first_name, last_name, second_name, id, type, summary, program,  name, listed_at  FROM aml.kg_fiu_national ";
        dosql(kg_fiu_national_cluster , "kg_fiu_national_cluster ");
       
-       let kg_fiu_national_aliases =  "insert into info (source, name, alias) "
-       + " SELECT entity_id, name, 'yes'  FROM kg_fiu_national_aliases";
-      // dosql(kg_fiu_national_aliases, "kg fiu national aliases");
+       let kg_fiu_national_aliases =  "insert into aml_pro.info (source, name, alias) "
+       + " SELECT entity_id, name, true FROM aml.kg_fiu_national_aliases";
+       dosql(kg_fiu_national_aliases, "kg fiu national aliases");
       
        let kg_fiu_national_birth_dates = "UPDATE info ,( SELECT entity_id, date FROM kg_fiu_national_birth_dates ) AS src"
        +" SET info.birth_date = src.date"
@@ -537,9 +536,9 @@
        //dosql_dml(ua_sdfm_blacklist_addresses, "ua sdfm blacklist addresses");
 
        // TODO change name type to TEXT in info table
-       let ua_sdfm_blacklist_aliases =  "insert into info (source, name, alias) "
-       + " SELECT entity_id, name, 'yes'  FROM ua_sdfm_blacklist_aliases";
-       ////dosql_dml(ua_sdfm_blacklist_aliases, "ua sdfm blacklist aliases");
+       let ua_sdfm_blacklist_aliases =  "insert into aml_pro.info (source, name, alias) "
+       + " SELECT entity_id, name, true  FROM aml.ua_sdfm_blacklist_aliases";
+       dosql_dml(ua_sdfm_blacklist_aliases, "ua sdfm blacklist aliases");
       
       let ua_sdfm_blacklist_birth_dates = "UPDATE info ,( SELECT entity_id, date FROM ua_sdfm_blacklist_birth_dates ) AS src"
       +" SET info.birth_date = src.date"
@@ -585,9 +584,9 @@
      + " SELECT entity_id, country_name, country_code, note, street, city, region  FROM un_sc_sanctions_addresses";
      //dosql_dml(un_sc_sanctions_addresses, "un sc sanctions addresses")
      
-     let un_sc_sanctions_aliases =  "insert into info (source, name, quality, alias) "
-     + " SELECT entity_id, name, quality, 'yes'  FROM un_sc_sanctions_aliases";
-     //dosql_dml(un_sc_sanctions_aliases, "un_sc_sanctions_aliases");
+     let un_sc_sanctions_aliases =  "insert into aml_pro.info (source, name, quality, alias) "
+     + " SELECT entity_id, name, quality, true  FROM aml.un_sc_sanctions_aliases";
+     dosql_dml(un_sc_sanctions_aliases, "un_sc_sanctions_aliases");
 
      let un_sc_sanctions_birth_dates = "UPDATE info ,( SELECT entity_id, date, quality FROM un_sc_sanctions_birth_dates) AS src"
      +" SET info.birth_date = src.date"
@@ -671,9 +670,9 @@
       + " SELECT entity_id, country_name, country_code, street, street_2, city  FROM us_ofac_addresses ";
       //dosql_dml(us_ofac_addresses, "us ofac addresses")
 
-      let us_ofac_aliases =  "insert into info (source, lastName, quality, type, name, firstName, alias) "
-      + " SELECT entity_id, last_name, quality, type, name, first_name, 'yes'  FROM us_ofac_aliases";
-      //dosql_dml(us_ofac_aliases, "us ofac aliases")
+      let us_ofac_aliases =  "insert into aml_pro.info (source, lastName, quality, type, name, firstName, alias) "
+      + " SELECT entity_id, last_name, quality, type, name, first_name, true  FROM aml.us_ofac_aliases";
+      dosql_dml(us_ofac_aliases, "us ofac aliases")
 
       let us_ofac_birth_dates = "UPDATE info ,( SELECT entity_id, date, quality FROM us_ofac_birth_dates) AS src"
       +" SET info.birth_date = src.date"
@@ -717,9 +716,9 @@
       + " SELECT entity_id, country_name, country_code, text  FROM worldbank_debarred_addresses";
       //dosql_dml(worldbank_debarred_addresses, "worldbank debarred addresses")
 
-      let worldbank_debarred_aliases = "insert into info (source, name, alias) "
-      + " SELECT entity_id, name, 'yes' FROM worldbank_debarred_aliases";
-      //dosql_dml(worldbank_debarred_aliases, "worldbank debarred aliases")
+      let worldbank_debarred_aliases = "insert into aml_pro.info (source, name, alias) "
+      + " SELECT entity_id, name, true FROM aml.worldbank_debarred_aliases";
+      dosql_dml(worldbank_debarred_aliases, "worldbank debarred aliases")
 
       let worldbank_debarred_nationalities = "UPDATE aml_pro.info ,(SELECT entity_id, country_name, country_code FROM aml.worldbank_debarred_nationalities) AS src"
       +" SET aml_pro.info.nationality = src.country_name"
