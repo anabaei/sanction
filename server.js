@@ -50,7 +50,6 @@
     });
   }
   
-  
 
   
  
@@ -100,25 +99,12 @@
   ///////////////////////////////////////////////////
   app.get('/aliases', (request, response) => { 
 
-    // var a = "select count(*) from aml_pro.info;"
-    // dosql(a, "aa")
+
 
     let update_alias = "update aml_pro.info ,(select id, source from aml_pro.info_cluster where alias = 0) as src set aml_pro.info.parent = src.id where aml_pro.info.source = aml_pro.src.source AND aml_pro.info.alias = 1 ";
     dosql(update_alias, "update alias");
    
-    // var selection = "UPDATE info ,( Select source, id from aml.info where aml.alias = 'yes' ) AS src"
-    // +" SET info.birth_date = src.id"
-    // +" WHERE info.source = src.entity_id AND src.date IS NOT NULL"
-
-   // var selection = "select source from aml.info where aml.alias = 'yes' SELECT * FROM aml.info where  source = 'everypolitician.dd6909de-898c-4e2d-8c28-f89a967398b3'' 
-
-      // var jsonResponse = {};
-      // var  b = "select * from info"
-      // var jsonResponse =  dosql_dmllll(b, "jsonResponse")
-    
-      //  return JSON.stringify(jsonResponse)
    
-       //return json.create_info;
         response.send("created") 
       })
 
@@ -167,7 +153,6 @@
         +", summary Text"
         +", text VARCHAR(255)"
         +", gender VARCHAR(255)"
-        +", sanction_id VARCHAR(255)"
         +", alias boolean DEFAULT false"
         +", parent VARCHAR(255), PRIMARY KEY (ID) )";
         dosql_sanction(create_info, "created info");
@@ -198,7 +183,6 @@
         +", summary Text"
         +", text VARCHAR(255)"
         +", gender VARCHAR(255)"
-        +", sanction_id VARCHAR(255)"
         +", alias boolean DEFAULT false"
         +", parent VARCHAR(255), PRIMARY KEY (ID) )";
         dosql_sanction(create_info_cluster, "created info cluster");
