@@ -346,9 +346,14 @@
         let coe_assembly_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.interpol_red_notices ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
          dosql(coe_assembly_table, "created!" );
 
-        let coe_assembly = " insert into info (firstName, lastName,  source, type, summary,  url, name) "
-        + " SELECT first_name, last_name, id,  type,  summary, url, name  FROM coe_assembly";
-       //dosql(coe_assembly, "insert from acoe_assembly");
+        let coe_assembly = " insert into aml_pro.info (firstName, lastName,  source, type, summary,  url, name) "
+        + " SELECT first_name, last_name, id,  type,  summary, url, name  FROM aml.coe_assembly";
+        dosql(coe_assembly, "insert from acoe_assembly");
+        
+        let coe_assembly_cluster = " insert into aml_pro.info_cluster (firstName, lastName,  source, type, summary,  url, name) "
+        + " SELECT first_name, last_name, id,  type,  summary, url, name  FROM aml.coe_assembly";
+        dosql(coe_assembly_cluster, "insert coe_assembly_cluster");
+      
 
         let coe_assembly_nationalitiescountry = "UPDATE info ,( SELECT entity_id, country_name, country_code FROM coe_assembly_nationalities) AS src"
         +" SET info.nationality = src.country_name"
@@ -362,9 +367,12 @@
         let eu_meps_table= "insert into aml_pro.sanction_list (name, source) SELECT source, id FROM aml.eu_meps ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
         dosql(eu_meps_table, "created!" ); 
 
-        let eu_meps = " insert into info (firstName, lastName,  source, type, summary ) "
-        + " SELECT first_name, last_name, id,  type,  summary  FROM coe_assembly";
-       //dosql(eu_meps, "info eu_meps");
+        let eu_meps = " insert into aml_pro.info (firstName, lastName,  source, type, summary ) "
+        + " SELECT first_name, last_name, id,  type,  summary  FROM aml.coe_assembly";
+        dosql(eu_meps, "info eu_meps");
+        let eu_meps_cluster = " insert into aml_pro.info_cluster (firstName, lastName,  source, type, summary ) "
+        + " SELECT first_name, last_name, id,  type,  summary  FROM aml.coe_assembly";
+        dosql(eu_meps_cluster, "eu_meps_cluster");
 
         let eu_meps_nationalities = "UPDATE info ,( SELECT entity_id, country_name, country_code FROM eu_meps_nationalities) AS src"
         +" SET info.nationality = src.country_name"
@@ -378,9 +386,12 @@
         let everypolitician_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.everypolitician ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
         dosql(everypolitician_table, "everypolitician_table" ); 
          
-        let everypolitician = " insert into info ( source, type, program, name , gender ) "
-        + " select  id,  type, program, name, gender  FROM everypolitician";
-       //dosql(everypolitician, "info everypolitician");
+        let everypolitician = " insert into aml_pro.info ( source, type, program, name , gender ) "
+        + " select  id,  type, program, name, gender  FROM aml.everypolitician";
+        dosql(everypolitician, "info everypolitician");
+        let everypolitician_cluster = " insert into aml_pro.info_cluster ( source, type, program, name , gender ) "
+        + " select  id,  type, program, name, gender  FROM aml.everypolitician";
+        dosql(everypolitician_cluster, "info everypolitician_cluster");
          
         let everypolitician_aliases  = "insert into info (name,  source, alias)   "
         + " SELECT name, entity_id, 'yes'  FROM everypolitician_aliases";
@@ -398,9 +409,13 @@
         let gb_hmt_sanctions_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.gb_hmt_sanctions ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
         dosql(gb_hmt_sanctions_table, "gb_hmt_sanctions_table" );
        
-        let gb_hmt_sanctions  = " insert into info ( title, lastName, source, type, summary,  program, name , firstName, second_name, third_name ) "
-        + "Select title, last_name, id, type, summary, program, name, first_name, second_name, third_name  FROM gb_hmt_sanctions ";
-       //dosql(gb_hmt_sanctions , "info gb_hmt_sanctions ");
+        let gb_hmt_sanctions  = " insert into aml_pro.info ( title, lastName, source, type, summary,  program, name , firstName, second_name, third_name ) "
+        + "Select title, last_name, id, type, summary, program, name, first_name, second_name, third_name  FROM aml.gb_hmt_sanctions ";
+        dosql(gb_hmt_sanctions , "info gb_hmt_sanctions ");
+        
+        let gb_hmt_sanctions_cluster  = " insert into aml_pro.info_cluster ( title, lastName, source, type, summary,  program, name , firstName, second_name, third_name ) "
+        + "Select title, last_name, id, type, summary, program, name, first_name, second_name, third_name  FROM aml.gb_hmt_sanctions ";
+        dosql(gb_hmt_sanctions_cluster , "info gb_hmt_sanctions_cluster ");
 
         let gb_hmt_sanctions_addresses = "insert into address (source,  country, country_code, postal_code, note  )  "
         + " SELECT entity_id, country_name, country_code, postal_code, text  FROM gb_hmt_sanctions_addresses ";
@@ -442,9 +457,13 @@
         let interpol_red_notices_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.interpol_red_notices ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
         dosql(interpol_red_notices_table, "created!")
 
-        let interpol_red_notices = " insert into info ( firstName, lastName, source, type, summary,  program, url, gender, name  ) "
-        + "Select first_name, last_name, id, type, summary, program, url, gender, name  FROM interpol_red_notices ";
-       //dosql(interpol_red_notices , "interpol red notices");
+        let interpol_red_notices = " insert into aml_pro.info ( firstName, lastName, source, type, summary,  program, url, gender, name) "
+        + "Select first_name, last_name, id, type, summary, program, url, gender, name  FROM aml.interpol_red_notices ";
+        dosql(interpol_red_notices , "interpol red notices");
+
+        let interpol_red_notices_cluster = " insert into aml_pro.info_cluster ( firstName, lastName, source, type, summary,  program, url, gender, name) "
+        + "Select first_name, last_name, id, type, summary, program, url, gender, name  FROM aml.interpol_red_notices ";
+        dosql(interpol_red_notices_cluster , "interpol red notices_cluster");
          
         let interpol_red_notices_aliases = "insert into info (source, name, alias) "
         + " SELECT entity_id, name, 'yes'  FROM interpol_red_notices_aliases";
@@ -476,9 +495,13 @@
        let kg_fiu_national_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.kg_fiu_national ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
        dosql(kg_fiu_national_table, "created!")
 
-       let kg_fiu_national = " insert into info ( firstName, lastName, second_name ,source, type, summary,  program,  name, listed_at) "
-       + "Select first_name, last_name, second_name, id, type, summary, program,  name, listed_at  FROM kg_fiu_national ";
-      // dosql(kg_fiu_national, "kg_fiu_national"); 
+       let kg_fiu_national = " insert into aml_pro.info ( firstName, lastName, second_name ,source, type, summary,  program,  name, listed_at) "
+       + "Select first_name, last_name, second_name, id, type, summary, program,  name, listed_at  FROM aml.kg_fiu_national ";
+       dosql(kg_fiu_national, "kg_fiu_national");
+       
+       let kg_fiu_national_cluster = " insert into aml_pro.info_cluster (firstName, lastName, second_name ,source, type, summary,  program,  name, listed_at) "
+       + "Select first_name, last_name, second_name, id, type, summary, program,  name, listed_at  FROM aml.kg_fiu_national ";
+       dosql(kg_fiu_national_cluster , "kg_fiu_national_cluster ");
       
        let kg_fiu_national_aliases =  "insert into info (source, name, alias) "
        + " SELECT entity_id, name, 'yes'  FROM kg_fiu_national_aliases";
@@ -499,9 +522,13 @@
        let ua_sdfm_blacklist_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.ua_sdfm_blacklist ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
        dosql_dml1(ua_sdfm_blacklist_table, "created!")
 
-       let ua_sdfm_blacklist = " insert into info (firstName, lastName, second_name , third_name, source, type, summary, program, url, name, title) "
-       + "Select first_name, last_name, second_name, third_name ,id, type, summary, program, url, name, title  FROM ua_sdfm_blacklist ";
-       //dosql_dml1(ua_sdfm_blacklist, "ua sdfm blacklist"); 
+       let ua_sdfm_blacklist = " insert into aml_pro.info (firstName, lastName, second_name , third_name, source, type, summary, program, url, name, title) "
+       + "Select first_name, last_name, second_name, third_name ,id, type, summary, program, url, name, title  FROM aml.ua_sdfm_blacklist ";
+       dosql_dml1(ua_sdfm_blacklist, "ua sdfm blacklist"); 
+
+       let ua_sdfm_blacklist_cluster = " insert into aml_pro.info_cluster (firstName, lastName, second_name , third_name, source, type, summary, program, url, name, title) "
+       + "Select first_name, last_name, second_name, third_name ,id, type, summary, program, url, name, title  FROM aml.ua_sdfm_blacklist ";
+       dosql_dml1(ua_sdfm_blacklist_cluster, "ua sdfm blacklist_cluster"); 
 
        let ua_sdfm_blacklist_addresses = "insert into address (source,  country, country_code, postal_code, note  )  "
        + " SELECT entity_id, country_name, country_code, postal_code, text  FROM ua_sdfm_blacklist_addresses";
@@ -544,9 +571,13 @@
       dosql_dml1(un_sc_sanctions_table, "created!")
        /// TODO updated_at from this table not consider 
 
-      let un_sc_sanctions = " insert into info (firstName,  second_name , third_name, source, type, summary, program, listed_at,  name, title) "
-      + "Select first_name, second_name, third_name ,id, type, summary, program, listed_at,   name, title  FROM un_sc_sanctions  ";
-      //dosql_dml1(un_sc_sanctions, "un sc sanctions")
+      let un_sc_sanctions = " insert into aml_pro.info (firstName,  second_name , third_name, source, type, summary, program, listed_at,  name, title) "
+      + "Select first_name, second_name, third_name ,id, type, summary, program, listed_at,   name, title  FROM aml.un_sc_sanctions  ";
+      dosql_dml1(un_sc_sanctions, "un sc sanctions")
+
+      let un_sc_sanctions_cluster = " insert into aml_pro.info_cluster (firstName,  second_name , third_name, source, type, summary, program, listed_at,  name, title) "
+      + "Select first_name, second_name, third_name ,id, type, summary, program, listed_at,   name, title  FROM aml.un_sc_sanctions  ";
+      dosql_dml1(un_sc_sanctions_cluster, "un sc sanctions_cluster")
 
      let un_sc_sanctions_addresses = "insert into address (source,  country, country_code, note, street, city, region  )  "
      + " SELECT entity_id, country_name, country_code, note, street, city, region  FROM un_sc_sanctions_addresses";
@@ -592,9 +623,12 @@
       let us_bis_denied_table= "insert into aml_pro.sanction_list (name,source) SELECT source,id FROM aml.us_bis_denied ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
       dosql_dml1(us_bis_denied_table, "created!")
 
-      let us_bis_denied = " insert into info ( source, type, summary, program, listed_at,  name) "
-      + "Select id, type, summary, program, updated_at, name FROM us_bis_denied";
-      //dosql_dml1(us_bis_denied , "us_bis_denied")
+      let us_bis_denied = " insert into aml_pro.info ( source, type, summary, program, listed_at,  name) "
+      + "Select id, type, summary, program, updated_at, name FROM aml.us_bis_denied";
+      dosql_dml1(us_bis_denied , "us_bis_denied")
+      let us_bis_denied_cluster = " insert into aml_pro.info_cluster ( source, type, summary, program, listed_at,  name) "
+      + "Select id, type, summary, program, updated_at, name FROM aml.us_bis_denied";
+      dosql_dml1(us_bis_denied_cluster , "us_bis_denied_cluster")
 
       let us_bis_denied_addresses = "insert into address (source,  country, country_code, street, postal_code, city, region  )  "
       + " SELECT entity_id, country_name, country_code, street, postal_code, city, region  FROM us_bis_denied_addresses";
@@ -623,9 +657,13 @@
       let us_ofac_table= "insert into aml_pro.sanction_list (name,source) SELECT source,id FROM aml.us_ofac ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
       dosql_dml1(us_ofac_table, "created!")
 
-      let us_ofac = "insert into info (  source, type, summary, program, listed_at, name) "
-      + "Select id, type, summary, program, updated_at, name FROM us_ofac";
-      //dosql_dml1(us_ofac, "us_ofac")
+      let us_ofac = "insert into aml_pro.info (  source, type, summary, program, listed_at, name) "
+      + "Select id, type, summary, program, updated_at, name FROM aml.us_ofac";
+      dosql_dml1(us_ofac, "us_ofac")
+
+      let us_ofac_cluster = "insert into aml_pro.info_cluster (source, type, summary, program, listed_at, name) "
+      + "Select id, type, summary, program, updated_at, name FROM aml.us_ofac";
+      dosql_dml1(us_ofac_cluster, "us_ofac_cluster")
     
       let us_ofac_addresses = "insert into address (source,  country, country_code, street, street_2, city)"
       + " SELECT entity_id, country_name, country_code, street, street_2, city  FROM us_ofac_addresses ";
@@ -665,9 +703,13 @@
       let worldbank_debarred_table= "insert into aml_pro.sanction_list (name,source) SELECT source,id FROM aml.worldbank_debarred ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
       dosql_dml1(worldbank_debarred_table, "created!")
       
-      let worldbank_debarred = "insert into info (  source, program, listed_at, name, url)"
-      + "Select id, program, updated_at, name, url FROM worldbank_debarred ";
-      //dosql_dml1(worldbank_debarred , "worldbank debarred ")
+      let worldbank_debarred = "insert into aml_pro.info (source, program, listed_at, name, url)"
+      + "Select id, program, updated_at, name, url FROM aml.worldbank_debarred ";
+      dosql_dml1(worldbank_debarred , "worldbank debarred ")
+
+      let worldbank_debarred_cluster = "insert into aml_pro.info_cluster (source, program, listed_at, name, url)"
+      + "Select id, program, updated_at, name, url FROM aml.worldbank_debarred ";
+      dosql_dml1(worldbank_debarred_cluster , "worldbank debarred_cluster ")
 
       let worldbank_debarred_addresses = "insert into address (source,  country, country_code, note)"
       + " SELECT entity_id, country_name, country_code, text  FROM worldbank_debarred_addresses";
