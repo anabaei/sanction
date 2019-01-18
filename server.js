@@ -71,17 +71,9 @@
  ///////////////////////////////////////////////////////////////////////////////////////////////////
 
  
-
-
   function dosql(table, message)
   {
     
-    // handleDisconnect(db_config);
-    // connection.query(table, function (err, result) 
-    // {
-    //   if (err) console.log(err);
-    //   else {console.log(message); return true}
-    // });
   }
 
   /////////////////////////////////////////// SANCTION /////////////////////////////////////////////
@@ -96,52 +88,6 @@
     });
   }
  
-
-
-
-////////// TEST
-app.get('/test', (request, response) => { 
-
-  let db = new Database(db_config ); 
-   db.query('insert into aml_pro.info (name, source, type, summary, program, url) SELECT name, id,  type,  summary, program, url  FROM aml.au_dfat_sanctions')
-   .then( rows => db.query('insert into aml_pro.info_cluster (name,  source, type, summary, program, url) SELECT name, id,  type,  summary, program, url  FROM aml.au_dfat_sanctions'), console.log("1"))
-   .then( rows => db.close());
-
-  //let Database = new Database(db_config ); 
-
-  // let gb_hmt_sanctions_nationalities = "UPDATE aml_pro.info ,(SELECT entity_id, country_name, country_code FROM aml.gb_hmt_sanctions_nationalities) AS src"
-  //       +" SET aml_pro.info.nationality = src.country_name"
-  //       +" , aml_pro.info.nationality_code = src.country_code"
-  //       +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL";
-  //       dosql(gb_hmt_sanctions_nationalities, "gb_hmt_sanctions_nationalities");
-
-
-     ///// AU_DFAT sanction ////
-          /////////////////////////// 
-        //   let au_dfat_sanctions_table= "insert into aml_pro.sanction_list (name,source) SELECT source,id FROM aml.au_dfat_sanctions"
-        //   + " ON DUPLICATE KEY update"
-        //   + " aml_pro.sanction_list.source = aml_pro.sanction_list.source";
-        //  // dosql(au_dfat_sanctions_table, "au_dfat_sanctions inserted")
-
-        //   ////// insert from au_drat_sanction into INFO table ////////
-        //   let au_dfat_sanctions_cluster = "insert into aml_pro.info_cluster (name,  source, type, summary, program, url) "
-        //   + " SELECT name, id,  type,  summary, program, url  FROM aml.au_dfat_sanctions ";
-        // //    dosql(au_dfat_sanctions_cluster, "clustered info");
-  
-        //   let au_dfat_sanctions = "insert into aml_pro.info (name,  source, type, summary, program, url) "
-        // + " SELECT name, id,  type,  summary, program, url  FROM aml.au_dfat_sanctions ";
-        //  // dosql(au_dfat_sanctions, "insert from au_dfat_sanctions");
-
-
-        //   ////// async //////
-        //   var promise1 = dosql(au_dfat_sanctions_table, "au_dfat_sanctions inserted");
-
-        //   Promise.all([promise1]).then(function(values) {
-        //     console.log(values);
-        //   }).then(dosql(au_dfat_sanctions_cluster, "clustered info"))
-        //   .then(dosql(au_dfat_sanctions, "insert from au_dfat_sanctions"))
-
-      });
 
 ////////// 
   app.get('/json_info', (request, response) => { 
@@ -159,16 +105,6 @@ app.get('/test', (request, response) => {
 
   });
    
-  
-  ////////// Allow to parse bodies in json //////////
-  ///////////////////////////////////////////////////
-  // app.get('/aliases', (request, response) => { 
-
-  //   let update_alias = "update aml_pro.info ,(select id, source from aml_pro.info_cluster where alias = 0) as src set aml_pro.info.parent = src.id where aml_pro.info.source = aml_pro.src.source AND aml_pro.info.alias = 1 ";
-  //   dosql(update_alias, "update alias");
-   
-  //       response.send("created") 
-  //     })
 
     //////////////////////////////////////////// CREAT //////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -429,9 +365,6 @@ app.get('/test', (request, response) => {
 
       });
 
-      // let db = new Database(db_config ); 
-      // db.query('')
-      // .then( rows => db.query(au_dfat_sanctions), console.log("1"));
 
   app.get('/info1', (request, response) => { 
 
