@@ -3,7 +3,8 @@
   const mysql = require('mysql');
   const bodyParser = require('body-parser');
   const cookieParser = require('cookie-parser');
-
+  const Database = require('./Database.js');
+  
 
   app.use(bodyParser.urlencoded({extended: false}));
   app.use(cookieParser());
@@ -21,6 +22,8 @@
     password: "password"//,
    // database: "aml"
   }
+
+
 
   let db_config_sanction = {
     host: "localhost",
@@ -51,6 +54,17 @@
   }
   
 
+
+  function dosqltest(table, message)
+  {
+    
+    handleDisconnect(db_config);
+    connection.query(table, function (err, result) 
+    {
+      if (err) console.log(err);
+      else {console.log(message); return true}
+    });
+  }
   
  
   /////////////////////////////////////////// source /////////////////////////////////////////////
@@ -58,12 +72,13 @@
 
   function dosql(table, message)
   {
-    handleDisconnect(db_config);
-    connection.query(table, function (err, result) 
-    {
-      if (err) console.log(err);
-      else {console.log(message);}
-    });
+    
+    // handleDisconnect(db_config);
+    // connection.query(table, function (err, result) 
+    // {
+    //   if (err) console.log(err);
+    //   else {console.log(message); return true}
+    // });
   }
 
   /////////////////////////////////////////// SANCTION /////////////////////////////////////////////
@@ -80,7 +95,52 @@
  
 
 
+
 ////////// TEST
+app.get('/test', (request, response) => { 
+
+  let db = new Database(db_config ); 
+   db.query('insert into aml_pro.info (name, source, type, summary, program, url) SELECT name, id,  type,  summary, program, url  FROM aml.au_dfat_sanctions')
+   .then( rows => db.query('insert into aml_pro.info_cluster (name,  source, type, summary, program, url) SELECT name, id,  type,  summary, program, url  FROM aml.au_dfat_sanctions'), console.log("1"))
+   .then( rows => db.close());
+
+  //let Database = new Database(db_config ); 
+
+  // let gb_hmt_sanctions_nationalities = "UPDATE aml_pro.info ,(SELECT entity_id, country_name, country_code FROM aml.gb_hmt_sanctions_nationalities) AS src"
+  //       +" SET aml_pro.info.nationality = src.country_name"
+  //       +" , aml_pro.info.nationality_code = src.country_code"
+  //       +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL";
+  //       dosql(gb_hmt_sanctions_nationalities, "gb_hmt_sanctions_nationalities");
+
+
+     ///// AU_DFAT sanction ////
+          /////////////////////////// 
+        //   let au_dfat_sanctions_table= "insert into aml_pro.sanction_list (name,source) SELECT source,id FROM aml.au_dfat_sanctions"
+        //   + " ON DUPLICATE KEY update"
+        //   + " aml_pro.sanction_list.source = aml_pro.sanction_list.source";
+        //  // dosql(au_dfat_sanctions_table, "au_dfat_sanctions inserted")
+
+        //   ////// insert from au_drat_sanction into INFO table ////////
+        //   let au_dfat_sanctions_cluster = "insert into aml_pro.info_cluster (name,  source, type, summary, program, url) "
+        //   + " SELECT name, id,  type,  summary, program, url  FROM aml.au_dfat_sanctions ";
+        // //    dosql(au_dfat_sanctions_cluster, "clustered info");
+  
+        //   let au_dfat_sanctions = "insert into aml_pro.info (name,  source, type, summary, program, url) "
+        // + " SELECT name, id,  type,  summary, program, url  FROM aml.au_dfat_sanctions ";
+        //  // dosql(au_dfat_sanctions, "insert from au_dfat_sanctions");
+
+
+        //   ////// async //////
+        //   var promise1 = dosql(au_dfat_sanctions_table, "au_dfat_sanctions inserted");
+
+        //   Promise.all([promise1]).then(function(values) {
+        //     console.log(values);
+        //   }).then(dosql(au_dfat_sanctions_cluster, "clustered info"))
+        //   .then(dosql(au_dfat_sanctions, "insert from au_dfat_sanctions"))
+
+      });
+
+////////// 
   app.get('/sanction_list', (request, response) => { 
 
     let update_sanction_info = " insert into aml_pro.info_sanction (sanction_list_id,info_id) "
@@ -101,9 +161,6 @@
         response.send("created") 
       })
 
-
-
-   
     //////////////////////////////////////////// CREAT //////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
       app.get('/create', (request, response) => { 
@@ -218,16 +275,16 @@
           let au_dfat_sanctions_table= "insert into aml_pro.sanction_list (name,source) SELECT source,id FROM aml.au_dfat_sanctions"
           + " ON DUPLICATE KEY update"
           + " aml_pro.sanction_list.source = aml_pro.sanction_list.source";
-          dosql(au_dfat_sanctions_table, "au_dfat_sanctions inserted")
+          //dosql(au_dfat_sanctions_table, "au_dfat_sanctions inserted")
 
           ////// insert from au_drat_sanction into INFO table ////////
           let au_dfat_sanctions_cluster = "insert into aml_pro.info_cluster (name,  source, type, summary, program, url) "
           + " SELECT name, id,  type,  summary, program, url  FROM aml.au_dfat_sanctions ";
-            dosql(au_dfat_sanctions_cluster, "clustered info");
+          //  dosql(au_dfat_sanctions_cluster, "clustered info");
   
           let au_dfat_sanctions = "insert into aml_pro.info (name,  source, type, summary, program, url) "
         + " SELECT name, id,  type,  summary, program, url  FROM aml.au_dfat_sanctions ";
-          dosql(au_dfat_sanctions, "insert from au_dfat_sanctions");
+         // dosql(au_dfat_sanctions, "insert from au_dfat_sanctions");
 
         ///// insert from sanction address into address table ///////
 
@@ -235,59 +292,57 @@
         + " SELECT entity_id, text FROM aml.au_dfat_sanctions_addresses "
         + "ON DUPLICATE KEY UPDATE"
         + " aml_pro.address.note = aml.au_dfat_sanctions_addresses.text";
-        dosql(au_dfat_address, "insert from sanction address");
+        //dosql(au_dfat_address, "insert from sanction address");
         //// Just add to that then we specifies aliases ////
         
         
 
         let au_dfat_sanctions_aliases_cluster  = "insert into aml_pro.info_cluster (name, source, alias)"
         + " SELECT name, entity_id, true FROM aml.au_dfat_sanctions_aliases ";
-        dosql(au_dfat_sanctions_aliases_cluster , " info_cluster");
+        //dosql(au_dfat_sanctions_aliases_cluster , " info_cluster");
 
         let au_dfat_sanctions_aliases  = "insert into aml_pro.info(name, source, alias)"
         + " SELECT name, entity_id, true FROM aml.au_dfat_sanctions_aliases";
-         dosql(au_dfat_sanctions_aliases , "au_dfat_sanctions_aliases");
+        // dosql(au_dfat_sanctions_aliases , "au_dfat_sanctions_aliases");
 
 
          let update_alias = "update aml_pro.info ,(select id, source from aml_pro.info_cluster where alias = false) as src set aml_pro.info.parent = src.id where aml_pro.info.source = aml_pro.src.source";
-         dosql(update_alias, "update alias");
+        // dosql(update_alias, "update alias");
 
 
         let birth_date = "UPDATE aml_pro.info ,( SELECT entity_id, date FROM aml.au_dfat_sanctions_birth_dates ) AS src"
         +" SET aml_pro.info.birth_date = src.date"
         +" WHERE aml_pro.info.source = src.entity_id AND src.date IS NOT NULL"
-        dosql(birth_date , "info birth date updated");
+        //dosql(birth_date , "info birth date updated");
 
 
         let birth_place = "UPDATE aml_pro.info ,( SELECT entity_id, place FROM aml.au_dfat_sanctions_birth_places bd ) AS src"
         +" SET aml_pro.info.birth_place = src.place"
         +" WHERE aml_pro.info.source = src.entity_id AND src.place IS NOT NULL"
-        dosql(birth_place , "info birth place updated");
+        // dosql(birth_place , "info birth place updated");
 
 
         let country = "UPDATE aml_pro.info ,( SELECT entity_id, country_name, country_code FROM aml.au_dfat_sanctions_nationalities) AS src"
         +" SET aml_pro.info.nationality = src.country_name"
         +" , aml_pro.info.nationality_code = src.country_code"
         +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL"
-        dosql(country , "info country updated");
+        //dosql(country , "info country updated");
 
 
           /////////////////////////// 
           ///// ch_seco sanction/////
           /////////////////////////// 
           let ch_seco_sanctions_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.ch_seco_sanctions ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
-        
-
-          dosql(ch_seco_sanctions_table, "ch_seco_sanctions_table inserted")
+         // dosql(ch_seco_sanctions_table, "ch_seco_sanctions_table inserted")
 
           //// TODO function column has been removed due to error form ch_seco_sanctions tables 
           let ch_seco_sanctions = " insert into aml_pro.info (firstName,  lastName, fatherName ,source, type, summary, program, name) "
           + " SELECT first_name, last_name, father_name, id,  type,  summary, program,  name  FROM aml.ch_seco_sanctions";
-           dosql(ch_seco_sanctions, "insert from ch_seco_sanctions");
+          // dosql(ch_seco_sanctions, "insert from ch_seco_sanctions");
         
           let ch_seco_sanctions_cluster = " insert into aml_pro.info_cluster (firstName,  lastName, fatherName ,source, type, summary, program, name) "
           + " SELECT first_name, last_name, father_name, id,  type,  summary, program,  name  FROM aml.ch_seco_sanctions";
-          dosql(ch_seco_sanctions_cluster, "insert from ch_seco_sanctions cluster");
+         // dosql(ch_seco_sanctions_cluster, "insert from ch_seco_sanctions cluster");
         
         
 
@@ -295,26 +350,26 @@
         + " SELECT entity_id, text, street, street_2, postal_code, country_name, country_code, region  FROM aml.ch_seco_sanctions_addresses "
         + " ON DUPLICATE KEY update"
         + "   aml_pro.address.note  = aml_pro.address.note ";
-        dosql(ch_seco_sanctions_addresses, "insert from ch_seco_sanctions_addresses ");
+        // dosql(ch_seco_sanctions_addresses, "insert from ch_seco_sanctions_addresses ");
 
         let ch_seco_sanctions_aliases  = "insert into aml_pro.info (firstName, lastName, fatherName, name, source , quality, title, second_name, third_name, alias)"
         + " SELECT first_name, last_name, father_name, name, entity_id, quality, title, second_name, third_name , true FROM aml.ch_seco_sanctions_aliases ";
-        dosql(ch_seco_sanctions_aliases , " aliases inserted");
+        // dosql(ch_seco_sanctions_aliases , " aliases inserted");
 
         let ch_seco_sanctions_aliases_cluster  = "insert into aml_pro.info_cluster (firstName, lastName, fatherName, name, source , quality, title, second_name, third_name, alias)"
         + " SELECT first_name, last_name, father_name, name, entity_id, quality, title, second_name, third_name , true FROM aml.ch_seco_sanctions_aliases ";
-        dosql(ch_seco_sanctions_aliases_cluster  , " aliases cluster inserted");
+        // dosql(ch_seco_sanctions_aliases_cluster  , " aliases cluster inserted");
 
         let ch_seco_birth_date = "UPDATE aml_pro.info ,( SELECT entity_id, date FROM aml.ch_seco_sanctions_birth_dates ) AS src"
         +" SET aml_pro.info.birth_date = src.date"
         +" WHERE aml_pro.info.source = src.entity_id AND src.date IS NOT NULL"
-        dosql(ch_seco_birth_date , "info birth date updated from ch_seco_birth_date");
+        // dosql(ch_seco_birth_date , "info birth date updated from ch_seco_birth_date");
 
         let ch_seco_sanctions_birth_places = "UPDATE aml_pro.info ,( SELECT entity_id, place, quality FROM aml.ch_seco_sanctions_birth_places ) AS src"
         +" SET aml_pro.info.birth_place = src.place"
         +", aml_pro.info.quality = src.quality"
         +" WHERE aml_pro.info.source = src.entity_id AND src.place IS NOT NULL"
-        dosql(ch_seco_sanctions_birth_places , "ch seco sanctions birth places ");
+        //dosql(ch_seco_sanctions_birth_places , "ch seco sanctions birth places ");
 
         let ch_seco_sanctions_identifiers = "UPDATE aml_pro.info ,( SELECT entity_id, country_name, country_code, type, description, number FROM aml.ch_seco_sanctions_identifiers) AS src"
         +" SET aml_pro.info.nationality = src.country_name"
@@ -323,7 +378,54 @@
         +" , aml_pro.info.description = src.description"
         +" , aml_pro.info.number = src.number"
         +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL"
-        dosql(ch_seco_sanctions_identifiers, "ch_seco_sanctions_identifiers");
+        //dosql(ch_seco_sanctions_identifiers, "_________");
+
+
+        ///// ⚛⚛⚛⚛⚛⚛⚛⚛⚛⚛⚛ RUN Async DML⚛⚛⚛⚛⚛⚛⚛⚛⚛⚛ //////
+        // var promise1 = dosql(au_dfat_sanctions_table, "1 au_dfat_sanctions inserted");
+        //   Promise.all([promise1]).then(function(values) {
+        //     console.log(values);
+        //   })
+        //   .then(dosqltest(au_dfat_sanctions_cluster, "2 clustered info"))
+        //   .then(dosqltest(au_dfat_sanctions, "3 insert from au_dfat_sanctions")) //1
+        //   .then(dosqltest(au_dfat_address, "4 insert from sanction address"))    // 11
+        //   .then(dosqltest(au_dfat_sanctions_aliases_cluster , "5 info_cluster"))  //3
+        //   .then(dosqltest(au_dfat_sanctions_aliases , "6 au_dfat_sanctions_aliases")) //
+        //   .then(dosqltest(update_alias, "7 update alias"))
+        //   .then(dosqltest(birth_date , "8 info birth date updated"))
+        //   .then(dosqltest(birth_place , " 9 info birth place updated"))
+        //   .then(dosqltest(country , "10 info country updated"))
+        //   .then(dosqltest(ch_seco_sanctions_table, "11 ch_seco_sanctions_table inserted")) //12
+        //   .then(dosqltest(ch_seco_sanctions, "12 insert from ch_seco_sanctions")) //4
+        //   .then(dosqltest(ch_seco_sanctions_cluster, "13 insert from ch_seco_sanctions cluster")) // 7
+        //   .then(dosqltest(ch_seco_sanctions_addresses, "14 insert from ch_seco_sanctions_addresses ")) // 5
+        //   .then(dosqltest(ch_seco_sanctions_aliases , "15 aliases inserted")) //9
+        //   .then(dosqltest(ch_seco_sanctions_aliases_cluster  , "16 aliases cluster inserted")) //10
+        //   .then(dosqltest(ch_seco_birth_date , "17 info birth date updated from ch_seco_birth_date"))
+        //   .then(dosqltest(ch_seco_sanctions_birth_places , "19 ch seco sanctions birth places ")) //??
+        //   .then(dosqltest(ch_seco_sanctions_identifiers, "20_________"))
+
+        let db = new Database(db_config ); 
+        db.query('insert into aml_pro.info (name, source, type, summary, program, url) SELECT name, id,  type,  summary, program, url  FROM aml.au_dfat_sanctions')
+        .then( rows => db.query('insert into aml_pro.info_cluster (name,  source, type, summary, program, url) SELECT name, id,  type,  summary, program, url  FROM aml.au_dfat_sanctions'), console.log("1"))
+        .then( rows => db.query(au_dfat_sanctions), console.log("1")) 
+        .then( rows => db.query(au_dfat_address), console.log("2")) 
+        .then( rows => db.query(au_dfat_sanctions_aliases_cluster), console.log("3")) 
+        .then( rows => db.query(au_dfat_sanctions_aliases), console.log("4")) 
+        .then( rows => db.query(update_alias), console.log("5")) 
+        .then( rows => db.query(birth_date), console.log("6")) 
+        .then( rows => db.query(birth_place), console.log("7")) 
+        .then( rows => db.query(cch_seco_sanctions_table), console.log("8")) 
+        .then( rows => db.query(ch_seco_sanctions), console.log("9")) 
+        .then( rows => db.query(ch_seco_sanctions_cluster), console.log("10")) 
+        .then( rows => db.query(ch_seco_sanctions_addresses), console.log("11"))
+        .then( rows => db.query(ch_seco_sanctions_aliases), console.log("12"))
+        .then( rows => db.query(ch_seco_sanctions_aliases_cluster), console.log("13"))
+        .then( rows => db.query(ch_seco_birth_date), console.log("14"))
+        .then( rows => db.query(ch_seco_sanctions_birth_places), console.log("15"))
+        .then( rows => db.query(ch_seco_sanctions_identifiers), console.log("16"))
+        .then( rows => db.close());
+
 
       });
 
@@ -519,37 +621,37 @@
        ///////////// ua_sdfm_blacklist //////////////////
        /////////////////////////////////////////////////
        let ua_sdfm_blacklist_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.ua_sdfm_blacklist ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
-       dosql_dml(ua_sdfm_blacklist_table, "created!")
+       dosql(ua_sdfm_blacklist_table, "created!")
 
        let ua_sdfm_blacklist = " insert into aml_pro.info (firstName, lastName, second_name , third_name, source, type, summary, program, url, name, title) "
        + "Select first_name, last_name, second_name, third_name ,id, type, summary, program, url, name, title  FROM aml.ua_sdfm_blacklist ";
-       dosql_dml(ua_sdfm_blacklist, "ua sdfm blacklist"); 
+       dosql(ua_sdfm_blacklist, "ua sdfm blacklist"); 
 
        let ua_sdfm_blacklist_cluster = " insert into aml_pro.info_cluster (firstName, lastName, second_name , third_name, source, type, summary, program, url, name, title) "
        + "Select first_name, last_name, second_name, third_name ,id, type, summary, program, url, name, title  FROM aml.ua_sdfm_blacklist ";
-       dosql_dml(ua_sdfm_blacklist_cluster, "ua sdfm blacklist_cluster"); 
+       dosql(ua_sdfm_blacklist_cluster, "ua sdfm blacklist_cluster"); 
 
        let ua_sdfm_blacklist_addresses = "insert into aml_pro.address (source,  country, country_code, postal_code, note) "
        + " SELECT entity_id, country_name, country_code, postal_code, text  FROM aml.ua_sdfm_blacklist_addresses "
        + " ON DUPLICATE KEY update"
        + " aml_pro.address.note  = aml_pro.address.note ";
-       dosql_dml(ua_sdfm_blacklist_addresses, "ua sdfm blacklist addresses");
+       dosql(ua_sdfm_blacklist_addresses, "ua sdfm blacklist addresses");
 
        // TODO change name type to TEXT in info table
        let ua_sdfm_blacklist_aliases =  "insert into aml_pro.info (source, name, alias) "
        + " SELECT entity_id, name, true  FROM aml.ua_sdfm_blacklist_aliases";
-       dosql_dml(ua_sdfm_blacklist_aliases, "ua sdfm blacklist aliases");
+       dosql(ua_sdfm_blacklist_aliases, "ua sdfm blacklist aliases");
       
       let ua_sdfm_blacklist_birth_dates = "UPDATE info ,( SELECT entity_id, date FROM ua_sdfm_blacklist_birth_dates ) AS src"
       +" SET info.birth_date = src.date"
       +" WHERE info.source = src.entity_id  AND src.date IS NOT NULL"
-      //dosql_dml(ua_sdfm_blacklist_birth_dates, "ua sdfm blacklist birth dates");
+      //dosql(ua_sdfm_blacklist_birth_dates, "ua sdfm blacklist birth dates");
      
       let ua_sdfm_blacklist_birth_places = "UPDATE info ,( SELECT entity_id, place FROM ua_sdfm_blacklist_birth_places) AS src"
       +" SET info.birth_place = src.place"
       // +" , info.country_code = src.country_code" ///TODO country codes??
       +" WHERE info.source = src.entity_id  AND src.place IS NOT NULL"
-       //dosql_dml(ua_sdfm_blacklist_birth_places, "ua sdfm blacklist birth places")
+       //dosql(ua_sdfm_blacklist_birth_places, "ua sdfm blacklist birth places")
 
       let ua_sdfm_blacklist_identifiers = "UPDATE info ,( SELECT entity_id, description, country_name, country_code, type, number FROM ua_sdfm_blacklist_identifiers) AS src"
       +" SET info.nationality = src.country_name"
@@ -557,51 +659,51 @@
       +" , info.type = src.type"
       +" , info.number = src.number"
       +" WHERE info.source = src.entity_id  AND src.country_name IS NOT NULL";
-       //dosql_dml(ua_sdfm_blacklist_identifiers, "ua sdfm blacklist identifiers");
+       //dosql(ua_sdfm_blacklist_identifiers, "ua sdfm blacklist identifiers");
     
       let ua_sdfm_blacklist_nationalities =  "UPDATE aml_pro.info ,(SELECT entity_id, country_name, country_code FROM aml.ua_sdfm_blacklist_nationalities) AS src"
       +" SET aml_pro.info.nationality = src.country_name"
       +" , aml_pro.info.nationality_code = src.country_code"
       +" WHERE aml_pro.info.source = src.entity_id  AND src.country_name IS NOT NULL";
-       dosql_dml(ua_sdfm_blacklist_nationalities, "ua sdfm blacklist nationalities")
+       dosql(ua_sdfm_blacklist_nationalities, "ua sdfm blacklist nationalities")
    
       //////////////////////////////
       ////// un_sc_sanctions //////
       /////////////////////////////
       let un_sc_sanctions_table= "insert into aml_pro.sanction_list (name,source) SELECT source,id FROM aml.un_sc_sanctions ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
-      dosql_dml(un_sc_sanctions_table, "created!")
+      dosql(un_sc_sanctions_table, "created!")
        /// TODO updated_at from this table not consider 
 
       let un_sc_sanctions = " insert into aml_pro.info (firstName,  second_name , third_name, source, type, summary, program, listed_at,  name, title) "
       + "Select first_name, second_name, third_name ,id, type, summary, program, listed_at,   name, title  FROM aml.un_sc_sanctions  ";
-      dosql_dml(un_sc_sanctions, "un sc sanctions")
+      dosql(un_sc_sanctions, "un sc sanctions")
 
       let un_sc_sanctions_cluster = " insert into aml_pro.info_cluster (firstName,  second_name , third_name, source, type, summary, program, listed_at,  name, title) "
       + "Select first_name, second_name, third_name ,id, type, summary, program, listed_at,   name, title  FROM aml.un_sc_sanctions  ";
-      dosql_dml(un_sc_sanctions_cluster, "un sc sanctions_cluster")
+      dosql(un_sc_sanctions_cluster, "un sc sanctions_cluster")
 
      let un_sc_sanctions_addresses = "insert into aml_pro.address (source,  country, country_code, note, street, city, region  )  "
      + " SELECT entity_id, country_name, country_code, note, street, city, region  FROM aml.un_sc_sanctions_addresses "
      + " ON DUPLICATE KEY update"
      + " aml_pro.address.country  = aml_pro.address.country ";
-     dosql_dml(un_sc_sanctions_addresses, "un sc sanctions addresses")
+     dosql(un_sc_sanctions_addresses, "un sc sanctions addresses")
      
      let un_sc_sanctions_aliases =  "insert into aml_pro.info (source, name, quality, alias) "
      + " SELECT entity_id, name, quality, true  FROM aml.un_sc_sanctions_aliases";
-     dosql_dml(un_sc_sanctions_aliases, "un_sc_sanctions_aliases");
+     dosql(un_sc_sanctions_aliases, "un_sc_sanctions_aliases");
 
      let un_sc_sanctions_birth_dates = "UPDATE info ,( SELECT entity_id, date, quality FROM un_sc_sanctions_birth_dates) AS src"
      +" SET info.birth_date = src.date"
      +" , info.quality = src.quality"
      +" WHERE info.source = src.entity_id AND src.date IS NOT NULL "
-     //dosql_dml(un_sc_sanctions_birth_dates, "un_sc_sanctions_birth_dates")
+     //dosql(un_sc_sanctions_birth_dates, "un_sc_sanctions_birth_dates")
 
      let un_sc_sanctions_birth_places = "UPDATE info ,( SELECT entity_id, place, country_name, country_code FROM un_sc_sanctions_birth_places) AS src"
      +" SET info.birth_place = src.place"
      +" , info.nationality = src.country_code" ///TODO country codes??
      +" , info.nationality_code = src.country_code"
      +" WHERE info.source = src.entity_id AND src.place IS NOT NULL"
-     //dosql_dml(un_sc_sanctions_birth_places, "un sc sanctions birth places");
+     //dosql(un_sc_sanctions_birth_places, "un sc sanctions birth places");
     
      let un_sc_sanctions_identifiers = "UPDATE aml_pro.info ,( SELECT entity_id, description, country_name, country_code, type, number, issued_at FROM aml.un_sc_sanctions_identifiers) AS src"
      +" SET aml_pro.info.nationality = src.country_name"
@@ -611,33 +713,33 @@
      +" , aml_pro.info.listed_at = src.issued_at"
      +" , aml_pro.info.description = src.description"
      +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL";
-     //dosql_dml(un_sc_sanctions_identifiers, "un_sc_sanctions_identifiers")
+     //dosql(un_sc_sanctions_identifiers, "un_sc_sanctions_identifiers")
 
      let un_sc_sanctions_nationalities =  "UPDATE aml_pro.info ,(SELECT entity_id, country_name, country_code FROM aml.un_sc_sanctions_nationalities) AS src"
      +" SET aml_pro.info.nationality = src.country_name"
      +" , aml_pro.info.nationality_code = src.country_code"
      +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL";
-      dosql_dml(un_sc_sanctions_nationalities, "un sc sanctions nationalities");
+      dosql(un_sc_sanctions_nationalities, "un sc sanctions nationalities");
 
       //////////////////////////////
       ////// us_bis_denied /////////
       /////////////////////////////
 
       let us_bis_denied_table= "insert into aml_pro.sanction_list (name,source) SELECT source,id FROM aml.us_bis_denied ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
-      dosql_dml(us_bis_denied_table, "created!")
+      dosql(us_bis_denied_table, "created!")
 
       let us_bis_denied = " insert into aml_pro.info ( source, type, summary, program, listed_at,  name) "
       + "Select id, type, summary, program, updated_at, name FROM aml.us_bis_denied";
-      dosql_dml(us_bis_denied , "us_bis_denied")
+      dosql(us_bis_denied , "us_bis_denied")
       let us_bis_denied_cluster = " insert into aml_pro.info_cluster ( source, type, summary, program, listed_at,  name) "
       + "Select id, type, summary, program, updated_at, name FROM aml.us_bis_denied";
-      dosql_dml(us_bis_denied_cluster , "us_bis_denied_cluster")
+      dosql(us_bis_denied_cluster , "us_bis_denied_cluster")
 
       let us_bis_denied_addresses = "insert into aml_pro.address (source,  country, country_code, street, postal_code, city, region  )  "
       + " SELECT entity_id, country_name, country_code, street, postal_code, city, region  FROM aml.us_bis_denied_addresses";
       + " ON DUPLICATE KEY update"
       + " aml_pro.address.country  = aml_pro.address.country ";
-      dosql_dml(us_bis_denied_addresses, "us_bis_denied_addresses");
+      dosql(us_bis_denied_addresses, "us_bis_denied_addresses");
     })
 
       let us_cia_world_leaders = "UPDATE aml_pro.info ,( SELECT id, type, program, url, updated_at, name FROM aml.us_cia_world_leaders) AS src"
@@ -647,50 +749,50 @@
       +" , aml_pro.info.url = src.url"
       +" , aml_pro.info.listed_at = src.updated_at"
       +" WHERE aml_pro.info.source = src.id AND src.name IS NOT NULL";
-      dosql_dml(us_cia_world_leaders, "us cia world leaders")
+      dosql(us_cia_world_leaders, "us cia world leaders")
      
       let us_cia_world_leaders_nationalities =  "UPDATE aml_pro.info ,(SELECT entity_id, country_name, country_code FROM aml.us_cia_world_leaders_nationalities) AS src"
       +" SET aml_pro.info.nationality = src.country_name"
       +" , aml_pro.info.nationality_code = src.country_code"
       +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL";
-      dosql_dml(us_cia_world_leaders_nationalities, "us cia world leaders nationalities")
+      dosql(us_cia_world_leaders_nationalities, "us cia world leaders nationalities")
       
       /////////////////////////////
       ///////// us_ofac //////////
       ////////////////////////////
 
       let us_ofac_table= "insert into aml_pro.sanction_list (name,source) SELECT source,id FROM aml.us_ofac ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
-      dosql_dml(us_ofac_table, "created!")
+      dosql(us_ofac_table, "created!")
 
       let us_ofac = "insert into aml_pro.info (  source, type, summary, program, listed_at, name) "
       + "Select id, type, summary, program, updated_at, name FROM aml.us_ofac";
-      dosql_dml(us_ofac, "us_ofac")
+      dosql(us_ofac, "us_ofac")
 
       let us_ofac_cluster = "insert into aml_pro.info_cluster (source, type, summary, program, listed_at, name) "
       + "Select id, type, summary, program, updated_at, name FROM aml.us_ofac";
-      dosql_dml(us_ofac_cluster, "us_ofac_cluster")
+      dosql(us_ofac_cluster, "us_ofac_cluster")
     
       let us_ofac_addresses = "insert into aml_pro.address (source,  country, country_code, street, street_2, city)"
       + " SELECT entity_id, country_name, country_code, street, street_2, city  FROM aml.us_ofac_addresses "
       + " ON DUPLICATE KEY update"
       + " aml_pro.address.country = aml_pro.address.country ";
-      dosql_dml(us_ofac_addresses, "us ofac addresses")
+      dosql(us_ofac_addresses, "us ofac addresses")
 
       let us_ofac_aliases =  "insert into aml_pro.info (source, lastName, quality, type, name, firstName, alias) "
       + " SELECT entity_id, last_name, quality, type, name, first_name, true  FROM aml.us_ofac_aliases";
-      dosql_dml(us_ofac_aliases, "us ofac aliases")
+      dosql(us_ofac_aliases, "us ofac aliases")
 
       let us_ofac_birth_dates = "UPDATE info ,( SELECT entity_id, date, quality FROM us_ofac_birth_dates) AS src"
       +" SET info.birth_date = src.date"
       +" , info.quality = src.quality" ///TODO country codes??
       +" WHERE info.source = src.entity_id AND src.date IS NOT NULL"
-      //dosql_dml(us_ofac_birth_dates, "us ofac birth dates")
+      //dosql(us_ofac_birth_dates, "us ofac birth dates")
       
       let us_ofac_birth_places = "UPDATE info ,( SELECT entity_id, place, quality FROM us_ofac_birth_places) AS src"
       +" SET info.birth_place = src.place"
       +" , info.quality = src.quality"
       +" WHERE info.source = src.entity_id AND src.place IS NOT NULL"
-      //dosql_dml(us_ofac_birth_places, "us ofac birth places")
+      //dosql(us_ofac_birth_places, "us ofac birth places")
 
       let us_ofac_identifiers = "UPDATE info ,( SELECT entity_id, description, country_name, country_code, type, number FROM us_ofac_identifiers) AS src"
       +" SET info.nationality = src.country_name"
@@ -699,7 +801,7 @@
       +" , info.number = src.number"
       +" , info.description = src.description"
       +" WHERE info.source = src.entity_id AND src.country_name IS NOT NULL";
-      //dosql_dml(us_ofac_identifiers, "us ofac identifiers")
+      //dosql(us_ofac_identifiers, "us ofac identifiers")
 
 
       //////////////////////////////////////
@@ -708,31 +810,31 @@
 
      
       let worldbank_debarred_table= "insert into aml_pro.sanction_list (name,source) SELECT source,id FROM aml.worldbank_debarred ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
-      dosql_dml(worldbank_debarred_table, "created!")
+      dosql(worldbank_debarred_table, "created!")
       
       let worldbank_debarred = "insert into aml_pro.info (source, program, listed_at, name, url)"
       + "Select id, program, updated_at, name, url FROM aml.worldbank_debarred ";
-      dosql_dml(worldbank_debarred , "worldbank debarred ")
+      dosql(worldbank_debarred , "worldbank debarred ")
 
       let worldbank_debarred_cluster = "insert into aml_pro.info_cluster (source, program, listed_at, name, url)"
       + "Select id, program, updated_at, name, url FROM aml.worldbank_debarred ";
-      dosql_dml(worldbank_debarred_cluster , "worldbank debarred_cluster")
+      dosql(worldbank_debarred_cluster , "worldbank debarred_cluster")
 
       let worldbank_debarred_addresses = "insert into aml_pro.address (source,  country, country_code, note) "
       + " SELECT entity_id, country_name, country_code, text  FROM aml.worldbank_debarred_addresses "
       + " ON DUPLICATE KEY update"
       + " aml_pro.address.country = aml_pro.address.country ";
-      dosql_dml(worldbank_debarred_addresses, "worldbank debarred addresses")
+      dosql(worldbank_debarred_addresses, "worldbank debarred addresses")
 
       let worldbank_debarred_aliases = "insert into aml_pro.info (source, name, alias) "
       + " SELECT entity_id, name, true FROM aml.worldbank_debarred_aliases";
-      dosql_dml(worldbank_debarred_aliases, "worldbank debarred aliases")
+      dosql(worldbank_debarred_aliases, "worldbank debarred aliases")
 
       let worldbank_debarred_nationalities = "UPDATE aml_pro.info ,(SELECT entity_id, country_name, country_code FROM aml.worldbank_debarred_nationalities) AS src"
       +" SET aml_pro.info.nationality = src.country_name"
       +" , aml_pro.info.nationality_code = src.country_code"
       +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL";
-      dosql_dml(worldbank_debarred_nationalities, "worldbank debarred nationalities")
+      dosql(worldbank_debarred_nationalities, "worldbank debarred nationalities")
 
       
   app.listen(
