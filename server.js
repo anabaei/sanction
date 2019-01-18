@@ -70,6 +70,9 @@
   /////////////////////////////////////////// source /////////////////////////////////////////////
  ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+ 
+
+
   function dosql(table, message)
   {
     
@@ -141,44 +144,50 @@ app.get('/test', (request, response) => {
       });
 
 ////////// 
-  app.get('/sanction_list', (request, response) => { 
+  app.get('/json_info', (request, response) => { 
 
-    let update_sanction_info = " insert into aml_pro.info_sanction (sanction_list_id,info_id) "
-    + " select t.id, b.id from aml_pro.sanction_list t inner join aml_pro.info b on  b.source = t.source; "
-    dosql(update_sanction_info, " update_sanction_info ");
-    response.send("created")
+    let update_sanction_info = " select * from aml_pro.info "
+   
+      handleDisconnect(db_config);
+      connection.query(update_sanction_info, function (err, result) 
+        {
+        if (err) console.log(err);
+        else {
+          response.json(result);
+        }
+        });
 
   });
    
   
   ////////// Allow to parse bodies in json //////////
   ///////////////////////////////////////////////////
-  app.get('/aliases', (request, response) => { 
+  // app.get('/aliases', (request, response) => { 
 
-    let update_alias = "update aml_pro.info ,(select id, source from aml_pro.info_cluster where alias = 0) as src set aml_pro.info.parent = src.id where aml_pro.info.source = aml_pro.src.source AND aml_pro.info.alias = 1 ";
-    dosql(update_alias, "update alias");
+  //   let update_alias = "update aml_pro.info ,(select id, source from aml_pro.info_cluster where alias = 0) as src set aml_pro.info.parent = src.id where aml_pro.info.source = aml_pro.src.source AND aml_pro.info.alias = 1 ";
+  //   dosql(update_alias, "update alias");
    
-        response.send("created") 
-      })
+  //       response.send("created") 
+  //     })
 
     //////////////////////////////////////////// CREAT //////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
       app.get('/create', (request, response) => { 
        
-        var drop_sanction = "DROP TABLE IF EXISTS sanction_list";
-        var drop_address = "DROP TABLE IF EXISTS address";
-        var drop_info_santion = "DROP TABLE IF EXISTS info_sanction";
-        var drop_info_cluster = "DROP TABLE IF EXISTS info_cluster";
-        var drop_info = "DROP TABLE IF EXISTS info";
+        var drop_sanction = "DROP TABLE IF EXISTS aml_pro.sanction_list";
+        var drop_address = "DROP TABLE IF EXISTS aml_pro.address";
+        var drop_info_santion = "DROP TABLE IF EXISTS aml_pro.info_sanction";
+        var drop_info_cluster = "DROP TABLE IF EXISTS aml_pro.info_cluster";
+        var drop_info = "DROP TABLE IF EXISTS aml_pro.info";
         
-        dosql_sanction(drop_info, "drop info");
-        dosql_sanction(drop_address, "drop address");
-        dosql_sanction(drop_info_santion, "drop info santion");
-        dosql_sanction(drop_sanction, "drop sanction");
-        dosql_sanction(drop_info_cluster, "drop info cluster");
+        // dosql_sanction(drop_info, "drop info");
+        // dosql_sanction(drop_address, "drop address");
+        // dosql_sanction(drop_info_santion, "drop info santion");
+        // dosql_sanction(drop_sanction, "drop sanction");
+        // dosql_sanction(drop_info_cluster, "drop info cluster");
         
         ///////// INFO ///////////
-        var create_info = " CREATE TABLE info (ID int NOT NULL AUTO_INCREMENT, name Text, "
+        var create_info = " CREATE TABLE aml_pro.info (ID int NOT NULL AUTO_INCREMENT, name Text, "
         +"firstName VARCHAR(255), "
         +"lastName VARCHAR(255), "
         +"fatherName VARCHAR(255), "
@@ -205,10 +214,10 @@ app.get('/test', (request, response) => {
         +", gender VARCHAR(255)"
         +", alias boolean DEFAULT false"
         +", parent VARCHAR(255), PRIMARY KEY (ID) )";
-        dosql_sanction(create_info, "created info");
+       //  dosql_sanction(create_info, "created info");
 
         ///////// INFO  Cluster ///////////
-        var create_info_cluster = " CREATE TABLE info_cluster (ID int NOT NULL AUTO_INCREMENT, name Text, "
+        var create_info_cluster = " CREATE TABLE aml_pro.info_cluster (ID int NOT NULL AUTO_INCREMENT, name Text, "
         +"firstName VARCHAR(255), "
         +"lastName VARCHAR(255), "
         +"fatherName VARCHAR(255), "
@@ -235,12 +244,12 @@ app.get('/test', (request, response) => {
         +", gender VARCHAR(255)"
         +", alias boolean DEFAULT false"
         +", parent VARCHAR(255), PRIMARY KEY (ID) )";
-        dosql_sanction(create_info_cluster, "created info cluster");
+        //dosql_sanction(create_info_cluster, "created info cluster");
         
         
 
         ///////// Address ///////////
-        var create_address = " CREATE TABLE address (ID int NOT NULL AUTO_INCREMENT, source VARCHAR(255) UNIQUE, info_id INT, "
+        var create_address = " CREATE TABLE aml_pro.address (ID int NOT NULL AUTO_INCREMENT, source VARCHAR(255) UNIQUE, info_id INT, "
         +"country VARCHAR(255), "
         +"city VARCHAR(255), "
         +"street VARCHAR(255), "
@@ -249,18 +258,30 @@ app.get('/test', (request, response) => {
         +"region VARCHAR(255), "
         +"note Text, "
         +"street_2 VARCHAR(255), PRIMARY KEY (ID))";
-        dosql_sanction(create_address, "created address");
+        // dosql_sanction(create_address, "created address");
       
         ///////// Info-Sanction ///////////
-        var create_info_sanction = " CREATE TABLE info_sanction (ID int NOT NULL AUTO_INCREMENT, sanction_list_id INT, "
+        var create_info_sanction = " CREATE TABLE aml_pro.info_sanction (ID int NOT NULL AUTO_INCREMENT, sanction_list_id INT, "
         +"info_id INT, PRIMARY KEY (ID) )";
-        dosql_sanction(create_info_sanction, "created info sanction");
+       // dosql_sanction(create_info_sanction, "created info sanction");
 
         ///////// sanction_list ///////////
-        var sanction_list = " CREATE TABLE sanction_list (ID int NOT NULL AUTO_INCREMENT, name VARCHAR(255) UNIQUE, source VARCHAR(255), PRIMARY KEY (ID, name)) ";
-        dosql_sanction(sanction_list , " Created sanctionist");
+        var sanction_list = " CREATE TABLE aml_pro.sanction_list (ID int NOT NULL AUTO_INCREMENT, name VARCHAR(255) UNIQUE, source VARCHAR(255), PRIMARY KEY (ID, name)) ";
+       // dosql_sanction(sanction_list , " Created sanctionist");
         response.send(`created!`);
 
+         let dba = new Database(db_config ); 
+          dba.query(drop_info)
+         .then( rows => dba.query(drop_sanction), console.log("1"))
+         .then( rows => dba.query(drop_address), console.log("1"))
+         .then( rows => dba.query(drop_info_santion), console.log("1"))
+         .then( rows => dba.query(drop_info_cluster), console.log("1"))
+         .then( rows => dba.query(create_info), console.log("1"))
+         .then( rows => dba.query(create_info_cluster), console.log("1"))
+         .then( rows => dba.query(create_address), console.log("1"))
+         .then( rows => dba.query(create_info_sanction), console.log("1"))
+         .then( rows => dba.query(sanction_list), console.log("1"))
+         .then( rows => dba.close());
         
   })
 
@@ -378,44 +399,22 @@ app.get('/test', (request, response) => {
         +" , aml_pro.info.description = src.description"
         +" , aml_pro.info.number = src.number"
         +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL"
-        //dosql(ch_seco_sanctions_identifiers, "_________");
 
 
-        ///// ⚛⚛⚛⚛⚛⚛⚛⚛⚛⚛⚛ RUN Async DML⚛⚛⚛⚛⚛⚛⚛⚛⚛⚛ //////
-        // var promise1 = dosql(au_dfat_sanctions_table, "1 au_dfat_sanctions inserted");
-        //   Promise.all([promise1]).then(function(values) {
-        //     console.log(values);
-        //   })
-        //   .then(dosqltest(au_dfat_sanctions_cluster, "2 clustered info"))
-        //   .then(dosqltest(au_dfat_sanctions, "3 insert from au_dfat_sanctions")) //1
-        //   .then(dosqltest(au_dfat_address, "4 insert from sanction address"))    // 11
-        //   .then(dosqltest(au_dfat_sanctions_aliases_cluster , "5 info_cluster"))  //3
-        //   .then(dosqltest(au_dfat_sanctions_aliases , "6 au_dfat_sanctions_aliases")) //
-        //   .then(dosqltest(update_alias, "7 update alias"))
-        //   .then(dosqltest(birth_date , "8 info birth date updated"))
-        //   .then(dosqltest(birth_place , " 9 info birth place updated"))
-        //   .then(dosqltest(country , "10 info country updated"))
-        //   .then(dosqltest(ch_seco_sanctions_table, "11 ch_seco_sanctions_table inserted")) //12
-        //   .then(dosqltest(ch_seco_sanctions, "12 insert from ch_seco_sanctions")) //4
-        //   .then(dosqltest(ch_seco_sanctions_cluster, "13 insert from ch_seco_sanctions cluster")) // 7
-        //   .then(dosqltest(ch_seco_sanctions_addresses, "14 insert from ch_seco_sanctions_addresses ")) // 5
-        //   .then(dosqltest(ch_seco_sanctions_aliases , "15 aliases inserted")) //9
-        //   .then(dosqltest(ch_seco_sanctions_aliases_cluster  , "16 aliases cluster inserted")) //10
-        //   .then(dosqltest(ch_seco_birth_date , "17 info birth date updated from ch_seco_birth_date"))
-        //   .then(dosqltest(ch_seco_sanctions_birth_places , "19 ch seco sanctions birth places ")) //??
-        //   .then(dosqltest(ch_seco_sanctions_identifiers, "20_________"))
+        let update_alias_im = "update aml_pro.info ,(select id, source from aml_pro.info_cluster where alias = true ) as src set aml_pro.info.parent = src.id where aml_pro.info.source = aml_pro.src.source AND aml_pro.info.alias = true ";
 
         let db = new Database(db_config ); 
         db.query('insert into aml_pro.info (name, source, type, summary, program, url) SELECT name, id,  type,  summary, program, url  FROM aml.au_dfat_sanctions')
         .then( rows => db.query('insert into aml_pro.info_cluster (name,  source, type, summary, program, url) SELECT name, id,  type,  summary, program, url  FROM aml.au_dfat_sanctions'), console.log("1"))
         .then( rows => db.query(au_dfat_sanctions), console.log("1")) 
+        .then( rows=> db.query(update_alias_im), console.log("*"))
         .then( rows => db.query(au_dfat_address), console.log("2")) 
         .then( rows => db.query(au_dfat_sanctions_aliases_cluster), console.log("3")) 
         .then( rows => db.query(au_dfat_sanctions_aliases), console.log("4")) 
         .then( rows => db.query(update_alias), console.log("5")) 
         .then( rows => db.query(birth_date), console.log("6")) 
         .then( rows => db.query(birth_place), console.log("7")) 
-        .then( rows => db.query(cch_seco_sanctions_table), console.log("8")) 
+        .then( rows => db.query(ch_seco_sanctions_table), console.log("8")) 
         .then( rows => db.query(ch_seco_sanctions), console.log("9")) 
         .then( rows => db.query(ch_seco_sanctions_cluster), console.log("10")) 
         .then( rows => db.query(ch_seco_sanctions_addresses), console.log("11"))
@@ -424,10 +423,15 @@ app.get('/test', (request, response) => {
         .then( rows => db.query(ch_seco_birth_date), console.log("14"))
         .then( rows => db.query(ch_seco_sanctions_birth_places), console.log("15"))
         .then( rows => db.query(ch_seco_sanctions_identifiers), console.log("16"))
+        
         .then( rows => db.close());
 
 
       });
+
+      // let db = new Database(db_config ); 
+      // db.query('')
+      // .then( rows => db.query(au_dfat_sanctions), console.log("1"));
 
   app.get('/info1', (request, response) => { 
 
@@ -438,23 +442,24 @@ app.get('/test', (request, response) => {
         ////// insert from au_drat_sanction into INFO table ////////
 
         let coe_assembly_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.interpol_red_notices ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
-         dosql(coe_assembly_table, "created!" );
+        // dosql(coe_assembly_table, "created!" );
 
 
         let coe_assembly = " insert into aml_pro.info (firstName, lastName,  source, type, summary,  url, name) "
         + " SELECT first_name, last_name, id,  type,  summary, url, name  FROM aml.coe_assembly";
-        dosql(coe_assembly, "insert from acoe_assembly");
+        //dosql(coe_assembly, "insert from acoe_assembly");
         
         let coe_assembly_cluster = " insert into aml_pro.info_cluster (firstName, lastName,  source, type, summary,  url, name) "
         + " SELECT first_name, last_name, id,  type,  summary, url, name  FROM aml.coe_assembly";
-        dosql(coe_assembly_cluster, "insert coe_assembly_cluster");
+        //dosql(coe_assembly_cluster, "insert coe_assembly_cluster");
       
           //// TODO: cluster the selection ? ////
         let coe_assembly_nationalitiescountry = "UPDATE aml_pro.info ,( SELECT entity_id, country_name, country_code FROM aml.coe_assembly_nationalities) AS src"
         +" SET aml_pro.info.nationality = src.country_name"
         +" , aml_pro.info.nationality_code = src.country_code"
         +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL"
-        dosql(coe_assembly_nationalitiescountry , "info country coe_assembly_nationalitiescountry");
+        //dosql(coe_assembly_nationalitiescountry , "info country coe_assembly_nationalitiescountry");
+
 
         ///////////////////////////// 
         ///////  eu_meps   /////////
@@ -551,6 +556,8 @@ app.get('/test', (request, response) => {
         +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL";
         dosql(gb_hmt_sanctions_nationalities, "gb_hmt_sanctions_nationalities");
 
+      
+
        
         ////////////////////////////////////// 
         ////////////   Ineterpol /////////////
@@ -612,6 +619,47 @@ app.get('/test', (request, response) => {
        +" SET info.birth_date = src.date"
        +" WHERE info.source = src.entity_id AND src.date IS NOT NULL"
       // dosql(kg_fiu_national_birth_dates, "kg fiu national birth dates")
+
+      update_alias = "update aml_pro.info ,(select id, source from aml_pro.info_cluster where alias = 1) as src set aml_pro.info.parent = src.id where aml_pro.info.source = aml_pro.src.source AND aml_pro.info.alias = 1 ";
+
+      // let db = new Database(db_config ); 
+      // db.query(coe_assembly_table)
+      // .then( rows => db.query(coe_assembly), console.log("1"))
+      // .then( rows => db.query(coe_assembly_cluster), console.log("2"))
+      // .then( rows => db.query(coe_assembly_nationalitiescountry), console.log("3"))
+      // .then( rows => db.query(eu_meps_table), console.log(" 4"))
+      // .then( rows => db.query(eu_meps), console.log("5 "))
+      // .then( rows => db.query(eu_meps_cluster), console.log(" 6"))
+      // .then( rows => db.query(eu_meps_nationalities), console.log(" 7"))
+      // .then( rows => db.query(everypolitician_table), console.log(" 8"))
+      // .then( rows => db.query(everypolitician), console.log("9 "))
+      // .then( rows => db.query(everypolitician_cluster), console.log("10"))
+      // .then( rows => db.query(everypolitician_aliases), console.log(" 11"))
+      // .then( rows => db.query(everypolitician_nationalities), console.log("12 "))
+      // .then( rows => db.query(gb_hmt_sanctions_table), console.log("13 "))
+      // .then( rows => db.query(gb_hmt_sanctions), console.log("14 "))
+      // .then( rows => db.query(gb_hmt_sanctions_cluster), console.log("15 "))
+      // .then( rows => db.query(gb_hmt_sanctions_addresses), console.log(" 16"))
+      // .then( rows => db.query(gb_hmt_sanctions_aliases), console.log("17 "))
+      // .then( rows => db.query(gb_hmt_sanctions_birth_dates), console.log(" 18"))
+      // .then( rows => db.query(gb_hmt_sanctions_birth_places), console.log(" 19"))
+      // .then( rows => db.query(gb_hmt_sanctions_identifiers), console.log(" 20"))
+      // .then( rows => db.query(gb_hmt_sanctions_nationalities), console.log(" 21"))
+      // .then( rows => db.query(interpol_red_notices_table), console.log("22 "))
+      // .then( rows => db.query(interpol_red_notices), console.log(" 23"))
+      // .then( rows => db.query(interpol_red_notices_cluster), console.log("24 "))
+      // .then( rows => db.query(interpol_red_notices_aliases), console.log(" 25"))
+      // .then( rows => db.query(interpol_red_notices_birth_dates), console.log(" 26"))
+      // .then( rows => db.query(interpol_red_notices_birth_places), console.log("27 "))
+      // .then( rows => db.query(interpol_red_notices_nationalities), console.log("28 "))
+      // .then( rows => db.query(kg_fiu_national_table), console.log("29 "))
+      // .then( rows => db.query(kg_fiu_national), console.log(" 30"))
+      // .then( rows => db.query(kg_fiu_national_cluster), console.log("31 "))
+      // .then( rows => db.query(kg_fiu_national_aliases), console.log("32 "))
+      // .then( rows => db.query(kg_fiu_national_birth_dates), console.log("33 "))
+      // .then( rows=> db.query(update_alias), console.log("34"))
+      // .then( rows => db.close());
+      
     
   });
 
@@ -642,23 +690,23 @@ app.get('/test', (request, response) => {
        + " SELECT entity_id, name, true  FROM aml.ua_sdfm_blacklist_aliases";
        dosql(ua_sdfm_blacklist_aliases, "ua sdfm blacklist aliases");
       
-      let ua_sdfm_blacklist_birth_dates = "UPDATE info ,( SELECT entity_id, date FROM ua_sdfm_blacklist_birth_dates ) AS src"
-      +" SET info.birth_date = src.date"
-      +" WHERE info.source = src.entity_id  AND src.date IS NOT NULL"
+      let ua_sdfm_blacklist_birth_dates = "UPDATE aml_pro.info ,( SELECT entity_id, date FROM aml.ua_sdfm_blacklist_birth_dates ) AS src"
+      +" SET aml_pro.info.birth_date = src.date"
+      +" WHERE aml_pro.info.source = src.entity_id  AND src.date IS NOT NULL"
       //dosql(ua_sdfm_blacklist_birth_dates, "ua sdfm blacklist birth dates");
      
-      let ua_sdfm_blacklist_birth_places = "UPDATE info ,( SELECT entity_id, place FROM ua_sdfm_blacklist_birth_places) AS src"
-      +" SET info.birth_place = src.place"
+      let ua_sdfm_blacklist_birth_places = "UPDATE aml_pro.info ,( SELECT entity_id, place FROM aml.ua_sdfm_blacklist_birth_places) AS src"
+      +" SET aml_pro.info.birth_place = src.place"
       // +" , info.country_code = src.country_code" ///TODO country codes??
-      +" WHERE info.source = src.entity_id  AND src.place IS NOT NULL"
+      +" WHERE aml_pro.info.source = src.entity_id  AND src.place IS NOT NULL"
        //dosql(ua_sdfm_blacklist_birth_places, "ua sdfm blacklist birth places")
 
-      let ua_sdfm_blacklist_identifiers = "UPDATE info ,( SELECT entity_id, description, country_name, country_code, type, number FROM ua_sdfm_blacklist_identifiers) AS src"
-      +" SET info.nationality = src.country_name"
-      +" , info.nationality_code = src.country_code"
-      +" , info.type = src.type"
-      +" , info.number = src.number"
-      +" WHERE info.source = src.entity_id  AND src.country_name IS NOT NULL";
+      let ua_sdfm_blacklist_identifiers = "UPDATE aml_pro.info ,( SELECT entity_id, description, country_name, country_code, type, number FROM aml.ua_sdfm_blacklist_identifiers) AS src"
+      +" SET aml_pro.info.nationality = src.country_name"
+      +" , aml_pro.info.nationality_code = src.country_code"
+      +" , aml_pro.info.type = src.type"
+      +" , aml_pro.info.number = src.number"
+      +" WHERE aml_pro.info.source = src.entity_id  AND src.country_name IS NOT NULL";
        //dosql(ua_sdfm_blacklist_identifiers, "ua sdfm blacklist identifiers");
     
       let ua_sdfm_blacklist_nationalities =  "UPDATE aml_pro.info ,(SELECT entity_id, country_name, country_code FROM aml.ua_sdfm_blacklist_nationalities) AS src"
@@ -692,17 +740,17 @@ app.get('/test', (request, response) => {
      + " SELECT entity_id, name, quality, true  FROM aml.un_sc_sanctions_aliases";
      dosql(un_sc_sanctions_aliases, "un_sc_sanctions_aliases");
 
-     let un_sc_sanctions_birth_dates = "UPDATE info ,( SELECT entity_id, date, quality FROM un_sc_sanctions_birth_dates) AS src"
-     +" SET info.birth_date = src.date"
-     +" , info.quality = src.quality"
-     +" WHERE info.source = src.entity_id AND src.date IS NOT NULL "
+     let un_sc_sanctions_birth_dates = "UPDATE aml_pro.info ,( SELECT entity_id, date, quality FROM aml.un_sc_sanctions_birth_dates) AS src"
+     +" SET aml_pro.info.birth_date = src.date"
+     +" , aml_pro.info.quality = src.quality"
+     +" WHERE aml_pro.info.source = src.entity_id AND src.date IS NOT NULL "
      //dosql(un_sc_sanctions_birth_dates, "un_sc_sanctions_birth_dates")
 
-     let un_sc_sanctions_birth_places = "UPDATE info ,( SELECT entity_id, place, country_name, country_code FROM un_sc_sanctions_birth_places) AS src"
-     +" SET info.birth_place = src.place"
-     +" , info.nationality = src.country_code" ///TODO country codes??
-     +" , info.nationality_code = src.country_code"
-     +" WHERE info.source = src.entity_id AND src.place IS NOT NULL"
+     let un_sc_sanctions_birth_places = "UPDATE aml_pro.info ,( SELECT entity_id, place, country_name, country_code FROM aml.un_sc_sanctions_birth_places) AS src"
+     +" SET aml_pro.info.birth_place = src.place"
+     +" , aml_pro.info.nationality = src.country_code" ///TODO country codes??
+     +" , aml_pro.info.nationality_code = src.country_code"
+     +" WHERE aml_pro.info.source = src.entity_id AND src.place IS NOT NULL"
      //dosql(un_sc_sanctions_birth_places, "un sc sanctions birth places");
     
      let un_sc_sanctions_identifiers = "UPDATE aml_pro.info ,( SELECT entity_id, description, country_name, country_code, type, number, issued_at FROM aml.un_sc_sanctions_identifiers) AS src"
@@ -740,7 +788,7 @@ app.get('/test', (request, response) => {
       + " ON DUPLICATE KEY update"
       + " aml_pro.address.country  = aml_pro.address.country ";
       dosql(us_bis_denied_addresses, "us_bis_denied_addresses");
-    })
+    
 
       let us_cia_world_leaders = "UPDATE aml_pro.info ,( SELECT id, type, program, url, updated_at, name FROM aml.us_cia_world_leaders) AS src"
       +" SET aml_pro.info.name = src.name"
@@ -782,25 +830,25 @@ app.get('/test', (request, response) => {
       + " SELECT entity_id, last_name, quality, type, name, first_name, true  FROM aml.us_ofac_aliases";
       dosql(us_ofac_aliases, "us ofac aliases")
 
-      let us_ofac_birth_dates = "UPDATE info ,( SELECT entity_id, date, quality FROM us_ofac_birth_dates) AS src"
-      +" SET info.birth_date = src.date"
-      +" , info.quality = src.quality" ///TODO country codes??
-      +" WHERE info.source = src.entity_id AND src.date IS NOT NULL"
+      let us_ofac_birth_dates = "UPDATE aml_pro.info ,( SELECT entity_id, date, quality FROM aml.us_ofac_birth_dates) AS src"
+      +" SET aml_pro.info.birth_date = src.date"
+      +" , aml_pro.info.quality = src.quality" ///TODO country codes??
+      +" WHERE aml_pro.info.source = src.entity_id AND src.date IS NOT NULL"
       //dosql(us_ofac_birth_dates, "us ofac birth dates")
       
-      let us_ofac_birth_places = "UPDATE info ,( SELECT entity_id, place, quality FROM us_ofac_birth_places) AS src"
-      +" SET info.birth_place = src.place"
-      +" , info.quality = src.quality"
-      +" WHERE info.source = src.entity_id AND src.place IS NOT NULL"
+      let us_ofac_birth_places = "UPDATE aml_pro.info ,( SELECT entity_id, place, quality FROM aml.us_ofac_birth_places) AS src"
+      +" SET aml_pro.info.birth_place = src.place"
+      +" , aml_pro.info.quality = src.quality"
+      +" WHERE aml_pro.info.source = src.entity_id AND src.place IS NOT NULL"
       //dosql(us_ofac_birth_places, "us ofac birth places")
 
-      let us_ofac_identifiers = "UPDATE info ,( SELECT entity_id, description, country_name, country_code, type, number FROM us_ofac_identifiers) AS src"
-      +" SET info.nationality = src.country_name"
-      +" , info.nationality_code = src.country_code"
-      +" , info.type = src.type"
-      +" , info.number = src.number"
-      +" , info.description = src.description"
-      +" WHERE info.source = src.entity_id AND src.country_name IS NOT NULL";
+      let us_ofac_identifiers = "UPDATE aml_pro.info ,( SELECT entity_id, description, country_name, country_code, type, number FROM aml.us_ofac_identifiers) AS src"
+      +" SET aml_pro.info.nationality = src.country_name"
+      +" , aml_pro.info.nationality_code = src.country_code"
+      +" , aml_pro.info.type = src.type"
+      +" , aml_pro.info.number = src.number"
+      +" , aml_pro.info.description = src.description"
+      +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL";
       //dosql(us_ofac_identifiers, "us ofac identifiers")
 
 
@@ -835,6 +883,52 @@ app.get('/test', (request, response) => {
       +" , aml_pro.info.nationality_code = src.country_code"
       +" WHERE aml_pro.info.source = src.entity_id AND src.country_name IS NOT NULL";
       dosql(worldbank_debarred_nationalities, "worldbank debarred nationalities")
+
+      update_alias = "update aml_pro.info ,(select id, source from aml_pro.info_cluster where alias = 1) as src set aml_pro.info.parent = src.id where aml_pro.info.source = aml_pro.src.source AND aml_pro.info.alias = 1 ";
+      
+    //   db = new Database(db_config ); 
+    //    db.query(ua_sdfm_blacklist_table)
+    //   .then( rows => db.query(ua_sdfm_blacklist), console.log("1"))
+    //   .then( rows => db.query(ua_sdfm_blacklist_cluster), console.log("3"))
+    //  // .then( rows => db.query(ua_sdfm_blacklist_addresses), console.log("4"))
+    //   .then( rows => db.query(ua_sdfm_blacklist_aliases), console.log("5"))
+    //   .then( rows => db.query(ua_sdfm_blacklist_birth_dates), console.log("6"))
+    //   .then( rows => db.query(ua_sdfm_blacklist_birth_places), console.log("7"))
+    //   .then( rows => db.query(ua_sdfm_blacklist_identifiers), console.log("8"))
+    //   .then( rows => db.query(ua_sdfm_blacklist_nationalities), console.log("9"))
+    //   .then( rows => db.query(un_sc_sanctions_table), console.log("10"))
+    //   .then( rows => db.query(un_sc_sanctions), console.log("11"))
+    //   .then( rows => db.query(un_sc_sanctions_cluster), console.log("12"))
+    //   .then( rows => db.query(un_sc_sanctions_addresses), console.log("13 "))
+    //   .then( rows => db.query(un_sc_sanctions_aliases), console.log("14"))
+    //   .then( rows => db.query(un_sc_sanctions_birth_dates), console.log("15 "))
+    //   .then( rows => db.query(un_sc_sanctions_birth_places), console.log("16 "))
+    //   .then( rows => db.query(un_sc_sanctions_identifiers), console.log("17 "))
+    //   .then( rows => db.query(un_sc_sanctions_nationalities), console.log("18 "))
+    //   .then( rows => db.query(us_bis_denied_table), console.log(" 19"))
+    //   .then( rows => db.query(us_bis_denied), console.log(" 20"))
+    //   .then( rows => db.query(us_bis_denied_cluster), console.log("21 "))
+    //  // .then( rows => db.query(us_bis_denied_addresses), console.log("22 ")) has issue about duplicate keys 
+    //   .then( rows => db.query(us_cia_world_leaders), console.log(" 23"))
+    //   .then( rows => db.query(us_cia_world_leaders_nationalities), console.log("24 "))
+    //   .then( rows => db.query(us_ofac_table), console.log(" 25"))
+    //   .then( rows => db.query(us_ofac), console.log(" 26"))
+    //   .then( rows => db.query(us_ofac_cluster), console.log("27 "))
+    //   .then( rows => db.query(us_ofac_addresses), console.log("28 "))
+    //   .then( rows => db.query(us_ofac_aliases), console.log(" 29"))
+    //   .then( rows => db.query(us_ofac_birth_dates), console.log("30 "))
+    //   .then( rows => db.query(us_ofac_birth_places), console.log(" 31"))
+    //   .then( rows => db.query(us_ofac_identifiers), console.log(" 32"))
+    //   .then( rows => db.query(worldbank_debarred_table), console.log("33 "))
+    //   .then( rows => db.query(worldbank_debarred), console.log("34 "))
+    //   .then( rows => db.query(worldbank_debarred_cluster), console.log("35 "))
+    //   .then( rows => db.query(worldbank_debarred_addresses), console.log("36 "))
+    //   .then( rows => db.query(worldbank_debarred_aliases), console.log("37 "))
+    //   .then( rows => db.query(worldbank_debarred_nationalities), console.log("38 "))
+    //   .then( rows=> db.query(update_alias), console.log("39"))
+    //   .then( rows => db.close());  
+  
+  })
 
       
   app.listen(
