@@ -18,7 +18,11 @@ class Database
             this.connection.query( sql, args, ( err, rows ) => 
             {
                 if ( err )
+                {
+                    console.log("ERR= "+ err);
                     return reject( err );
+                }
+                    
                 else {
                     console.log(sql);
                     resolve( rows );
