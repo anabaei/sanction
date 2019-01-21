@@ -97,11 +97,28 @@
   app.get('/testIt', (request, response) => { 
     
   
-    let info_table = "insert into aml_pro.info (firstName, lastName, fatherName, name,  source, type, summary, program, url) "
-    + " SELECT @defualt as firstName, @defualt as lastName, @defualt as fatherName, name as name, id as source, type as type, summary as summary, program as program, url as url  FROM aml.au_dfat_sanctions  union"
-    + " SELECT first_name as firstName, last_name as lastName, @defualt as fatherName, name as name, id as source, type as type, summary as summary, @defualt as program, @defualt as url  FROM aml.coe_assembly union" 
-    + " SELECT first_name as firstName, last_name as lastName, father_name as fatherName, name as name, id as source, type as type, summary as summary, program as program, @defualt as url  FROM aml.ch_seco_sanctions" 
-   // + " SELECT first_name as firstName, last_name as lastName, @defualt as fatherName, name as name, id as source, type as type,  summary as summary, @default as program, url as url FROM aml.coe_assembly "
+    let info_table = "insert into aml_pro.info (firstName, lastName, fatherName, name,  source, type, summary, program, url, gender, title, second_name, third_name) "
+    + " SELECT @defualt as firstName, @defualt as lastName, @defualt as fatherName, name as name, id as source, type as type, summary as summary, program as program, url as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name FROM aml.au_dfat_sanctions  union"
+    + " SELECT first_name as firstName, last_name as lastName, @defualt as fatherName, name as name, id as source, type as type, summary as summary, @defualt as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name  FROM aml.coe_assembly union" 
+    + " SELECT first_name as firstName, last_name as lastName, father_name as fatherName, name as name, id as source, type as type, summary as summary, program as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name  FROM aml.ch_seco_sanctions union" 
+    + " SELECT first_name as firstName, last_name as lastName, @defualt as fatherName, @defualt as name, id as source, type as type,  summary as summary, @defualt as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name FROM aml.eu_meps union" 
+    + " SELECT @defualt as firstName, @defualt as lastName, @defualt as fatherName, name as name, id as source, type as type , @defualt as summary, program as program, @defualt as url,  gender as gender, @defualt as title, @defualt as second_name, @defualt as third_name FROM aml.everypolitician"             
+    + " SELECT first_name as first_name, last_name as lastName, @defualt as fatherName, @defualt as name, id as source, type as type, summary as summary, program as program, @defualt as url, title as title, second_name as second_name, third_name as third_name  FROM aml.gb_hmt_sanctions  union" 
+                                                                                                                      // id, type, summary, program, url, gender, name  FROM aml.interpol_red_notices 
+    + " SELECT first_name as firstName, last_name as lastName, @default as fatherName, name as name, id as source, type as type, summary as summary, program as program, url as url  FROM aml.ch_seco_sanctions union" 
+    + " SELECT first_name as firstName, last_name as lastName, father_name as fatherName, name as name, id as source, type as type, summary as summary, program as program, @defualt as url  FROM aml.ch_seco_sanctions union" 
+    + " SELECT first_name as firstName, last_name as lastName, father_name as fatherName, name as name, id as source, type as type, summary as summary, program as program, @defualt as url  FROM aml.ch_seco_sanctions union" 
+    + " SELECT first_name as firstName, last_name as lastName, father_name as fatherName, name as name, id as source, type as type, summary as summary, program as program, @defualt as url  FROM aml.ch_seco_sanctions union" 
+    + " SELECT first_name as firstName, last_name as lastName, father_name as fatherName, name as name, id as source, type as type, summary as summary, program as program, @defualt as url  FROM aml.ch_seco_sanctions union" 
+    + " SELECT first_name as firstName, last_name as lastName, father_name as fatherName, name as name, id as source, type as type, summary as summary, program as program, @defualt as url  FROM aml.ch_seco_sanctions union" 
+    + " SELECT first_name as firstName, last_name as lastName, father_name as fatherName, name as name, id as source, type as type, summary as summary, program as program, @defualt as url  FROM aml.ch_seco_sanctions union" 
+    + " SELECT first_name as firstName, last_name as lastName, father_name as fatherName, name as name, id as source, type as type, summary as summary, program as program, @defualt as url  FROM aml.ch_seco_sanctions union" 
+    + " SELECT first_name as firstName, last_name as lastName, father_name as fatherName, name as name, id as source, type as type, summary as summary, program as program, @defualt as url  FROM aml.ch_seco_sanctions union" 
+    + " SELECT first_name as firstName, last_name as lastName, father_name as fatherName, name as name, id as source, type as type, summary as summary, program as program, @defualt as url  FROM aml.ch_seco_sanctions union" 
+    + " SELECT first_name as firstName, last_name as lastName, father_name as fatherName, name as name, id as source, type as type, summary as summary, program as program, @defualt as url  FROM aml.ch_seco_sanctions union" 
+    + " SELECT first_name as firstName, last_name as lastName, father_name as fatherName, name as name, id as source, type as type, summary as summary, program as program, @defualt as url  FROM aml.ch_seco_sanctions union" 
+
+    // + " SELECT first_name as firstName, last_name as lastName, @defualt as fatherName, name as name, id as source, type as type,  summary as summary, @default as program, url as url FROM aml.coe_assembly "
     // +"  ON DUPLICATE KEY update"
     // + " aml_pro.info.source = aml_pro.info.source"; 
 
@@ -453,8 +470,8 @@
         ////////////////////////////
       
 
-        let eu_meps = " insert into aml_pro.info (firstName, lastName,  source, type, summary ) "
-        + " SELECT first_name, last_name, id,  type,  summary  FROM aml.eu_meps";
+       // let eu_meps = " insert into aml_pro.info (firstName, lastName,  source, type, summary ) "
+      //  + " SELECT first_name, last_name, id,  type,  summary  FROM aml.eu_meps";
        // dosql(eu_meps, "info eu_meps");
         let eu_meps_cluster = " insert into aml_pro.info_cluster (firstName, lastName,  source, type, summary ) "
         + " SELECT first_name, last_name, id,  type,  summary  FROM aml.eu_meps";
@@ -472,8 +489,8 @@
         /////////////////////////////////// 
         
          
-        let everypolitician = " insert into aml_pro.info ( source, type, program, name , gender ) "
-        + " select  id,  type, program, name, gender  FROM aml.everypolitician";
+        // let everypolitician = " insert into aml_pro.info ( source, type, program, name , gender ) "
+        // + " select  id,  type, program, name, gender  FROM aml.everypolitician";
        // dosql(everypolitician, "info everypolitician");
         let everypolitician_cluster = " insert into aml_pro.info_cluster ( source, type, program, name , gender ) "
         + " select  id,  type, program, name, gender  FROM aml.everypolitician";
@@ -494,8 +511,8 @@
         ///////////////////////////////////// 
        
        
-        let gb_hmt_sanctions  = " insert into aml_pro.info ( title, lastName, source, type, summary,  program, name , firstName, second_name, third_name ) "
-        + "Select title, last_name, id, type, summary, program, name, first_name, second_name, third_name  FROM aml.gb_hmt_sanctions ";
+      //  let gb_hmt_sanctions  = " insert into aml_pro.info ( title, lastName, source, type, summary,  program, name , firstName, second_name, third_name ) "
+      //  + "Select title, last_name, id, type, summary, program, name, first_name, second_name, third_name  FROM aml.gb_hmt_sanctions ";
         //dosql(gb_hmt_sanctions , "info gb_hmt_sanctions ");
         
         let gb_hmt_sanctions_cluster  = " insert into aml_pro.info_cluster ( title, lastName, source, type, summary,  program, name , firstName, second_name, third_name ) "
@@ -548,8 +565,8 @@
         ///////////////////////////////////// 
 
 
-        let interpol_red_notices = " insert into aml_pro.info ( firstName, lastName, source, type, summary,  program, url, gender, name) "
-        + "Select first_name, last_name, id, type, summary, program, url, gender, name  FROM aml.interpol_red_notices ";
+        // let interpol_red_notices = " insert into aml_pro.info ( firstName, lastName, source, type, summary,  program, url, gender, name) "
+        // + "Select first_name, last_name, id, type, summary, program, url, gender, name  FROM aml.interpol_red_notices ";
         //dosql(interpol_red_notices , "interpol red notices");
 
         let interpol_red_notices_cluster = " insert into aml_pro.info_cluster ( firstName, lastName, source, type, summary,  program, url, gender, name) "
@@ -605,21 +622,21 @@
       update_alias = "update aml_pro.info ,(select id, source from aml_pro.info_cluster where alias = 1) as src set aml_pro.info.parent = src.id where aml_pro.info.source = aml_pro.src.source AND aml_pro.info.alias = 1 ";
 
       db = new Database(db_config ); 
-      db.query(coe_assembly)
+      db.query(coe_assembly_nationalitiescountry)
     //  .then( rows => db.query(coe_assembly))  /// end lock  Error: ER_LOCK_WAIT_TIMEOUT:
       .then( rows => db.query(coe_assembly_cluster))
-      .then( rows => db.query(coe_assembly_nationalitiescountry))
+     
  
-      .then( rows => db.query(eu_meps))
+     // .then( rows => db.query(eu_meps))
       .then( rows => db.query(eu_meps_cluster))
       .then( rows => db.query(eu_meps_nationalities))
       .then( rows => db.query(everypolitician_table))
-      .then( rows => db.query(everypolitician))
+     // .then( rows => db.query(everypolitician))
       .then( rows => db.query(everypolitician_cluster))
       .then( rows => db.query(everypolitician_aliases))
       .then( rows => db.query(everypolitician_nationalities))
   
-      .then( rows => db.query(gb_hmt_sanctions))
+    //  .then( rows => db.query(gb_hmt_sanctions))
       .then( rows => db.query(gb_hmt_sanctions_cluster))
       .then( rows => db.query(gb_hmt_sanctions_addresses))
       .then( rows => db.query(gb_hmt_sanctions_aliases))
@@ -628,7 +645,7 @@
       .then( rows => db.query(gb_hmt_sanctions_identifiers))
       .then( rows => db.query(gb_hmt_sanctions_nationalities))
 
-      .then( rows => db.query(interpol_red_notices))
+   //   .then( rows => db.query(interpol_red_notices))
       .then( rows => db.query(interpol_red_notices_cluster))
       .then( rows => db.query(interpol_red_notices_aliases))
       .then( rows => db.query(interpol_red_notices_birth_dates))
