@@ -715,8 +715,8 @@
       /////////////////////////////
       
 
-      let un_sc_sanctions = " insert into aml_pro.info (firstName,  second_name , third_name, source, type, summary, program, listed_at,  name, title) "
-      + "Select first_name, second_name, third_name ,id, type, summary, program, listed_at,   name, title  FROM aml.un_sc_sanctions  ";
+      // let un_sc_sanctions = " insert into aml_pro.info (firstName,  second_name , third_name, source, type, summary, program, listed_at,  name, title) "
+      // + "Select first_name, second_name, third_name ,id, type, summary, program, listed_at,   name, title  FROM aml.un_sc_sanctions  ";
       //dosql(un_sc_sanctions, "un sc sanctions")
 
       let un_sc_sanctions_cluster = " insert into aml_pro.info_cluster (firstName,  second_name , third_name, source, type, summary, program, listed_at,  name, title) "
@@ -769,8 +769,8 @@
 
     
 
-      let us_bis_denied = " insert into aml_pro.info ( source, type, summary, program, listed_at,  name) "
-      + "Select id, type, summary, program, updated_at, name FROM aml.us_bis_denied";
+    //  let us_bis_denied = " insert into aml_pro.info ( source, type, summary, program, listed_at,  name) "
+    //  + "Select id, type, summary, program, updated_at, name FROM aml.us_bis_denied";
       //dosql(us_bis_denied , "us_bis_denied")
       let us_bis_denied_cluster = " insert into aml_pro.info_cluster ( source, type, summary, program, listed_at,  name) "
       + "Select id, type, summary, program, updated_at, name FROM aml.us_bis_denied";
@@ -804,8 +804,8 @@
 
     
 
-      let us_ofac = "insert into aml_pro.info (  source, type, summary, program, listed_at, name) "
-      + "Select id, type, summary, program, updated_at, name FROM aml.us_ofac";
+    //  let us_ofac = "insert into aml_pro.info (  source, type, summary, program, listed_at, name) "
+    //  + "Select id, type, summary, program, updated_at, name FROM aml.us_ofac";
       //dosql(us_ofac, "us_ofac")
 
       let us_ofac_cluster = "insert into aml_pro.info_cluster (source, type, summary, program, listed_at, name) "
@@ -851,8 +851,8 @@
      
    
       
-      let worldbank_debarred = "insert into aml_pro.info (source, program, listed_at, name, url)"
-      + "Select id, program, updated_at, name, url FROM aml.worldbank_debarred ";
+     // let worldbank_debarred = "insert into aml_pro.info (source, program, listed_at, name, url)"
+    //  + "Select id, program, updated_at, name, url FROM aml.worldbank_debarred ";
       //dosql(worldbank_debarred , "worldbank debarred ")
 
       let worldbank_debarred_cluster = "insert into aml_pro.info_cluster (source, program, listed_at, name, url)"
@@ -892,7 +892,7 @@
       .then( rows => db.query(ua_sdfm_blacklist_identifiers))
       .then( rows => db.query(ua_sdfm_blacklist_nationalities))
     
-      .then( rows => db.query(un_sc_sanctions))
+     // .then( rows => db.query(un_sc_sanctions))
       .then( rows => db.query(un_sc_sanctions_cluster))
       .then( rows => db.query(un_sc_sanctions_addresses))
       .then( rows => db.query(un_sc_sanctions_aliases))
@@ -901,13 +901,13 @@
       .then( rows => db.query(un_sc_sanctions_identifiers))
       .then( rows => db.query(un_sc_sanctions_nationalities))
    
-      .then( rows => db.query(us_bis_denied))
+     // .then( rows => db.query(us_bis_denied))
       .then( rows => db.query(us_bis_denied_cluster))
      // .then( rows => db.query(us_bis_denied_addresses)) has issue about duplicate keys 
       .then( rows => db.query(us_cia_world_leaders))
       .then( rows => db.query(us_cia_world_leaders_nationalities))
       .then( rows => db.query(us_ofac_table))
-      .then( rows => db.query(us_ofac))
+    //  .then( rows => db.query(us_ofac))
       .then( rows => db.query(us_ofac_cluster))
       .then( rows => db.query(us_ofac_addresses))
       .then( rows => db.query(us_ofac_aliases))
@@ -915,7 +915,7 @@
       .then( rows => db.query(us_ofac_birth_places))
       .then( rows => db.query(us_ofac_identifiers))
    
-      .then( rows => db.query(worldbank_debarred))
+     // .then( rows => db.query(worldbank_debarred))
       .then( rows => db.query(worldbank_debarred_cluster))
       .then( rows => db.query(worldbank_debarred_addresses))
       .then( rows => db.query(worldbank_debarred_aliases))
