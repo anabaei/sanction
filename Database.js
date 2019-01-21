@@ -20,7 +20,7 @@ class Database
                 if ( err )
                     return reject( err );
                 else {
-                    console.log(rows.message);
+                    console.log(sql);
                     resolve( rows );
                 }    
                 

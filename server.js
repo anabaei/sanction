@@ -94,6 +94,26 @@
   }
  
 
+  app.get('/testIt', (request, response) => { 
+    
+  
+    let info_table = "insert into aml_pro.info (firstName, lastName, fatherName, name,  source, type, summary, program, url) "
+    + " SELECT @defualt as firstName, @defualt as lastName, @defualt as fatherName, name as name, id as source, type as type, summary as summary, program as program, url as url  FROM aml.au_dfat_sanctions  union"
+    + " SELECT first_name as firstName, last_name as lastName, @defualt as fatherName, name as name, id as source, type as type, summary as summary, @defualt as program, @defualt as url  FROM aml.coe_assembly union" 
+    + " SELECT first_name as firstName, last_name as lastName, father_name as fatherName, name as name, id as source, type as type, summary as summary, program as program, @defualt as url  FROM aml.ch_seco_sanctions" 
+   // + " SELECT first_name as firstName, last_name as lastName, @defualt as fatherName, name as name, id as source, type as type,  summary as summary, @default as program, url as url FROM aml.coe_assembly "
+    // +"  ON DUPLICATE KEY update"
+    // + " aml_pro.info.source = aml_pro.info.source"; 
+
+
+    let db_db = new Database(db_config); 
+    db_db.query(info_table);
+  
+  })
+
+
+
+
 
   app.get('/truncate', (request, response) => { 
 
@@ -102,13 +122,32 @@
     //var truncate_address = "TRUNCATE TABLE aml_pro.address";
     // var truncate_info_santion = "TRUNCATE TABLE aml_pro.info_sanction";
     var truncate_info_cluster = "TRUNCATE TABLE aml_pro.info_cluster";
+    let set_var = ' SET @defualt := Null ';
     var truncate_info = "TRUNCATE TABLE aml_pro.info";
 
 
+    let updateSanctionList = " insert into aml_pro.sanction_list (name,source) SELECT source as name,id as source FROM aml.au_dfat_sanctions union "
+    +" SELECT source as name,id as source FROM aml.ch_seco_sanctions union"
+    +" SELECT source as name,id as source FROM aml.everypolitician  union"
+    +" SELECT source as name,id as source FROM aml.interpol_red_notices union"
+    +" SELECT source as name,id as source FROM aml.eu_meps union"
+    +" SELECT source as name,id as source FROM aml.gb_hmt_sanctions union"
+    +" SELECT source as name,id as source FROM aml.us_ofac union"
+    +" SELECT source as name,id as source FROM aml.kg_fiu_national union"
+    +" SELECT source as name,id as source FROM aml.ua_sdfm_blacklist union"
+    +" SELECT source as name,id as source FROM aml.un_sc_sanctions union"
+    +" SELECT source as name,id as source FROM aml.us_bis_denied union"
+    +" SELECT source as name,id as source FROM aml.worldbank_debarred"  
+    +" ON DUPLICATE KEY update"
+    + " aml_pro.sanction_list.source = aml_pro.sanction_list.source"; 
+
     let db_a = new Database(db_config); 
     db_a.query(truncate_info_cluster)
+    .then( rows => db_a.query(set_var))
     .then( rows => db_a.query(truncate_info), console.log("truncated!"))
+    .then( rows => db_a.query(updateSanctionList), console.log("sanction_list"))
     .then( rows => db_a.close());
+
       
 
   })
@@ -226,9 +265,9 @@
        // dosql_sanction(create_info_sanction, "created info sanction");
 
         ///////// sanction_list ///////////
-        var sanction_list = " CREATE TABLE aml_pro.sanction_list (ID int NOT NULL AUTO_INCREMENT, name VARCHAR(255) UNIQUE, source VARCHAR(255), PRIMARY KEY (ID, name)) ";
-       // dosql_sanction(sanction_list , " Created sanctionist");
-        response.send(`created!`);
+      //   var sanction_list = " CREATE TABLE aml_pro.sanction_list (ID int NOT NULL AUTO_INCREMENT, name VARCHAR(255), source VARCHAR(255) unique, PRIMARY KEY (ID, source)) ";
+      //  // dosql_sanction(sanction_list , " Created sanctionist");
+      //   response.send(`created!`);
 
          let dba = new Database(db_config ); 
           dba.query(drop_info)
@@ -240,7 +279,7 @@
          .then( rows => dba.query(create_info_cluster), console.log("1"))
          .then( rows => dba.query(create_address), console.log("1"))
          .then( rows => dba.query(create_info_sanction), console.log("1"))
-         .then( rows => dba.query(sanction_list), console.log("1"))
+        
          .then( rows => dba.close());
         
   })
@@ -253,18 +292,16 @@
         
           ///// AU_DFAT sanction ////
           /////////////////////////// 
-          let au_dfat_sanctions_table= "insert into aml_pro.sanction_list (name,source) SELECT source,id FROM aml.au_dfat_sanctions"
-          + " limit 1 ON DUPLICATE KEY update"
-          + " aml_pro.sanction_list.source = aml_pro.sanction_list.source";
-          dosql_sl(au_dfat_sanctions_table, "au_dfat_sanctions inserted")
+       
+        //  dosql_sl(au_dfat_sanctions_table, "au_dfat_sanctions inserted")
 
           ////// insert from au_drat_sanction into INFO table ////////
           let au_dfat_sanctions_cluster = "insert into aml_pro.info_cluster (name,  source, type, summary, program, url) "
           + " SELECT name, id,  type,  summary, program, url  FROM aml.au_dfat_sanctions ";
           //  dosql(au_dfat_sanctions_cluster, "clustered info");
   
-          let au_dfat_sanctions = "insert into aml_pro.info (name,  source, type, summary, program, url) "
-        + " SELECT name, id,  type,  summary, program, url  FROM aml.au_dfat_sanctions ";
+        //   let au_dfat_sanctions = "insert into aml_pro.info (name,  source, type, summary, program, url) "
+        // + " SELECT name, id,  type,  summary, program, url  FROM aml.au_dfat_sanctions ";
          // dosql(au_dfat_sanctions, "insert from au_dfat_sanctions");
 
         ///// insert from sanction address into address table ///////
@@ -313,12 +350,11 @@
           /////////////////////////// 
           ///// ch_seco sanction/////
           /////////////////////////// 
-          let ch_seco_sanctions_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.ch_seco_sanctions limit 1 ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
-          dosql_sl(ch_seco_sanctions_table, "ch_seco_sanctions_table inserted")
+        
 
           //// TODO function column has been removed due to error form ch_seco_sanctions tables 
-          let ch_seco_sanctions = " insert into aml_pro.info (firstName,  lastName, fatherName ,source, type, summary, program, name) "
-          + " SELECT first_name, last_name, father_name, id,  type,  summary, program,  name  FROM aml.ch_seco_sanctions";
+          // let ch_seco_sanctions = " insert into aml_pro.info (firstName,  lastName, fatherName ,source, type, summary, program, name) "
+          // + " SELECT first_name, last_name, father_name, id,  type,  summary, program, name  FROM aml.ch_seco_sanctions";
           // dosql(ch_seco_sanctions, "insert from ch_seco_sanctions");
         
           let ch_seco_sanctions_cluster = " insert into aml_pro.info_cluster (firstName,  lastName, fatherName ,source, type, summary, program, name) "
@@ -364,10 +400,9 @@
         let update_alias_im = "update aml_pro.info ,(select id, source from aml_pro.info_cluster where alias = true ) as src set aml_pro.info.parent = src.id where aml_pro.info.source = aml_pro.src.source AND aml_pro.info.alias = true ";
 
         let db = new Database(db_config ); 
-        db.query('insert into aml_pro.info (name, source, type, summary, program, url) SELECT name, id,  type,  summary, program, url  FROM aml.au_dfat_sanctions')
-        .then( rows => db.query('insert into aml_pro.info_cluster (name,  source, type, summary, program, url) SELECT name, id,  type,  summary, program, url  FROM aml.au_dfat_sanctions'), console.log("1"))
-       // .then( rows => db.query(au_dfat_sanctions_table))
-        .then( rows => db.query(au_dfat_sanctions)) 
+        
+        db.query(au_dfat_address)
+        .then( rows => db.query('insert into aml_pro.info_cluster (name, source, type, summary, program, url) select name, source, type, summary, program, url from aml_pro.info'), console.log("1")) 
         .then( rows=> db.query(update_alias_im))
         .then( rows => db.query(au_dfat_address)) 
         .then( rows => db.query(au_dfat_sanctions_aliases_cluster)) 
@@ -375,8 +410,7 @@
         .then( rows => db.query(update_alias)) 
         .then( rows => db.query(birth_date)) 
         .then( rows => db.query(birth_place)) 
-      //  .then( rows => db.query(ch_seco_sanctions_table)) 
-        .then( rows => db.query(ch_seco_sanctions)) 
+     
         .then( rows => db.query(ch_seco_sanctions_cluster)) 
         .then( rows => db.query(ch_seco_sanctions_addresses))
         .then( rows => db.query(ch_seco_sanctions_aliases))
@@ -399,12 +433,7 @@
 
         ////// insert from au_drat_sanction into INFO table ////////
 
-        let coe_assembly_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.interpol_red_notices limit 1 ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
-        dosql_sl(coe_assembly_table, "coe_assembly_table" );
-
-
-        let coe_assembly = " insert into aml_pro.info (firstName, lastName,  source, type, summary,  url, name) "
-        + " SELECT first_name, last_name, id,  type,  summary, url, name  FROM aml.coe_assembly";
+       // let coe_assembly = " insert into aml_pro.info (firstName, lastName,  source, type, summary,  url, name) SELECT first_name, last_name, id,  type,  summary, url, name  FROM aml.coe_assembly";
         //dosql(coe_assembly, "insert from acoe_assembly");
         
         let coe_assembly_cluster = " insert into aml_pro.info_cluster (firstName, lastName,  source, type, summary,  url, name) "
@@ -422,14 +451,13 @@
         ///////////////////////////// 
         ///////  eu_meps   /////////
         ////////////////////////////
-        let eu_meps_table= "insert into aml_pro.sanction_list (name, source) SELECT source, id FROM aml.eu_meps limit 1 ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
-        dosql_sl(eu_meps_table, "eu_meps_table" ); 
+      
 
         let eu_meps = " insert into aml_pro.info (firstName, lastName,  source, type, summary ) "
-        + " SELECT first_name, last_name, id,  type,  summary  FROM aml.coe_assembly";
+        + " SELECT first_name, last_name, id,  type,  summary  FROM aml.eu_meps";
        // dosql(eu_meps, "info eu_meps");
         let eu_meps_cluster = " insert into aml_pro.info_cluster (firstName, lastName,  source, type, summary ) "
-        + " SELECT first_name, last_name, id,  type,  summary  FROM aml.coe_assembly";
+        + " SELECT first_name, last_name, id,  type,  summary  FROM aml.eu_meps";
        // dosql(eu_meps_cluster, "eu_meps_cluster");
 
         //// TODO : cluster? ///
@@ -442,8 +470,7 @@
         /////////////////////////////////// 
         ///////  everypolitician  /////////
         /////////////////////////////////// 
-        let everypolitician_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.everypolitician  limit 1 ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
-        dosql_sl(everypolitician_table, "everypolitician_table" ); 
+        
          
         let everypolitician = " insert into aml_pro.info ( source, type, program, name , gender ) "
         + " select  id,  type, program, name, gender  FROM aml.everypolitician";
@@ -465,8 +492,7 @@
         ////////////////////////////////////// 
         ///////   gb_hmt_sanctions  /////////
         ///////////////////////////////////// 
-        let gb_hmt_sanctions_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.gb_hmt_sanctions limit 1 ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
-        dosql_sl(gb_hmt_sanctions_table, "gb_hmt_sanctions_table" );
+       
        
         let gb_hmt_sanctions  = " insert into aml_pro.info ( title, lastName, source, type, summary,  program, name , firstName, second_name, third_name ) "
         + "Select title, last_name, id, type, summary, program, name, first_name, second_name, third_name  FROM aml.gb_hmt_sanctions ";
@@ -520,8 +546,7 @@
         ////////////////////////////////////// 
         ////////////   Ineterpol /////////////
         ///////////////////////////////////// 
-        let interpol_red_notices_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.interpol_red_notices limit 1 ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
-        dosql_sl(interpol_red_notices_table, "cinterpol_red_notices_table")
+
 
         let interpol_red_notices = " insert into aml_pro.info ( firstName, lastName, source, type, summary,  program, url, gender, name) "
         + "Select first_name, last_name, id, type, summary, program, url, gender, name  FROM aml.interpol_red_notices ";
@@ -558,8 +583,7 @@
        ///////////////////////////////////////////////
        //////////// kg_fiu_national //////////////////
        ///////////////////////////////////////////////
-       let kg_fiu_national_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.kg_fiu_national limit 1 ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
-       dosql_sl(kg_fiu_national_table, "kg_fiu_national_table")
+    
 
        let kg_fiu_national = " insert into aml_pro.info ( firstName, lastName, second_name ,source, type, summary,  program,  name, listed_at) "
        + "Select first_name, last_name, second_name, id, type, summary, program,  name, listed_at  FROM aml.kg_fiu_national ";
@@ -585,7 +609,7 @@
     //  .then( rows => db.query(coe_assembly))  /// end lock  Error: ER_LOCK_WAIT_TIMEOUT:
       .then( rows => db.query(coe_assembly_cluster))
       .then( rows => db.query(coe_assembly_nationalitiescountry))
-    //  .then( rows => db.query(eu_meps_table))
+ 
       .then( rows => db.query(eu_meps))
       .then( rows => db.query(eu_meps_cluster))
       .then( rows => db.query(eu_meps_nationalities))
@@ -594,7 +618,7 @@
       .then( rows => db.query(everypolitician_cluster))
       .then( rows => db.query(everypolitician_aliases))
       .then( rows => db.query(everypolitician_nationalities))
-     // .then( rows => db.query(gb_hmt_sanctions_table))
+  
       .then( rows => db.query(gb_hmt_sanctions))
       .then( rows => db.query(gb_hmt_sanctions_cluster))
       .then( rows => db.query(gb_hmt_sanctions_addresses))
@@ -603,14 +627,14 @@
       .then( rows => db.query(gb_hmt_sanctions_birth_places))
       .then( rows => db.query(gb_hmt_sanctions_identifiers))
       .then( rows => db.query(gb_hmt_sanctions_nationalities))
-     // .then( rows => db.query(interpol_red_notices_table))
+
       .then( rows => db.query(interpol_red_notices))
       .then( rows => db.query(interpol_red_notices_cluster))
       .then( rows => db.query(interpol_red_notices_aliases))
       .then( rows => db.query(interpol_red_notices_birth_dates))
       .then( rows => db.query(interpol_red_notices_birth_places))
       .then( rows => db.query(interpol_red_notices_nationalities))
-     // .then( rows => db.query(kg_fiu_national_table))
+
       .then( rows => db.query(kg_fiu_national))
       .then( rows => db.query(kg_fiu_national_cluster))
       .then( rows => db.query(kg_fiu_national_aliases))
@@ -626,8 +650,7 @@
        //////////////////////////////////////////////////
        ///////////// ua_sdfm_blacklist //////////////////
        /////////////////////////////////////////////////
-       let ua_sdfm_blacklist_table= "insert into aml_pro.sanction_list (name, source) SELECT source,id FROM aml.ua_sdfm_blacklist limit 1 ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
-       dosql_sl(ua_sdfm_blacklist_table, "created!")
+     
 
        let ua_sdfm_blacklist = " insert into aml_pro.info (firstName, lastName, second_name , third_name, source, type, summary, program, url, name, title) "
        + "Select first_name, last_name, second_name, third_name ,id, type, summary, program, url, name, title  FROM aml.ua_sdfm_blacklist ";
@@ -676,9 +699,7 @@
       //////////////////////////////
       ////// un_sc_sanctions //////
       /////////////////////////////
-      let un_sc_sanctions_table= "insert into aml_pro.sanction_list (name,source) SELECT source,id FROM aml.un_sc_sanctions limit 1 ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
-      dosql_sl(un_sc_sanctions_table, "created!")
-       /// TODO updated_at from this table not consider 
+      
 
       let un_sc_sanctions = " insert into aml_pro.info (firstName,  second_name , third_name, source, type, summary, program, listed_at,  name, title) "
       + "Select first_name, second_name, third_name ,id, type, summary, program, listed_at,   name, title  FROM aml.un_sc_sanctions  ";
@@ -731,12 +752,8 @@
       ////// us_bis_denied /////////
       /////////////////////////////
 
-      //insert into aml_pro.sanction_list (name,source) SELECT source,id FROM aml.us_bis_denied ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source limit 1
 
-
-      let us_bis_denied_table= "insert into aml_pro.sanction_list (name,source) SELECT source,id FROM aml.us_bis_denied "
-      + "  limit 1 ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source limit 1";
-      dosql_sl(us_bis_denied_table, "created!")
+    
 
       let us_bis_denied = " insert into aml_pro.info ( source, type, summary, program, listed_at,  name) "
       + "Select id, type, summary, program, updated_at, name FROM aml.us_bis_denied";
@@ -771,8 +788,7 @@
       ///////// us_ofac //////////
       ////////////////////////////
 
-      let us_ofac_table= "insert into aml_pro.sanction_list (name,source) SELECT source,id FROM aml.us_ofac limit 1 ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
-      dosql_sl(us_ofac_table, "created!")
+    
 
       let us_ofac = "insert into aml_pro.info (  source, type, summary, program, listed_at, name) "
       + "Select id, type, summary, program, updated_at, name FROM aml.us_ofac";
@@ -819,8 +835,7 @@
       /////////////////////////////////////
 
      
-      let worldbank_debarred_table= "insert into aml_pro.sanction_list (name,source) SELECT source,id FROM aml.worldbank_debarred limit 1 ON DUPLICATE KEY UPDATE aml_pro.sanction_list.source = aml_pro.sanction_list.source";
-      dosql_sl(worldbank_debarred_table, "worldbank_debarred_table")
+   
       
       let worldbank_debarred = "insert into aml_pro.info (source, program, listed_at, name, url)"
       + "Select id, program, updated_at, name, url FROM aml.worldbank_debarred ";
@@ -853,9 +868,8 @@
 
        // some not running ! 
        db = new Database(db_config ); 
-       db.query(insert_sanction_info_table)
-     // .then( rows=> db.query(insert_sanction_info_table))
-      .then( rows => db.query(ua_sdfm_blacklist))
+       db.query(ua_sdfm_blacklist)
+   
       .then( rows => db.query(ua_sdfm_blacklist_cluster))
      // .then( rows => db.query(ua_sdfm_blacklist_addresses))
       .then( rows => db.query(ua_sdfm_blacklist_aliases))
@@ -863,7 +877,7 @@
       .then( rows => db.query(ua_sdfm_blacklist_birth_places))
       .then( rows => db.query(ua_sdfm_blacklist_identifiers))
       .then( rows => db.query(ua_sdfm_blacklist_nationalities))
-    //  .then( rows => db.query(un_sc_sanctions_table))
+  
       .then( rows => db.query(un_sc_sanctions))
       .then( rows => db.query(un_sc_sanctions_cluster))
       .then( rows => db.query(un_sc_sanctions_addresses))
@@ -872,7 +886,7 @@
       .then( rows => db.query(un_sc_sanctions_birth_places))
       .then( rows => db.query(un_sc_sanctions_identifiers))
       .then( rows => db.query(un_sc_sanctions_nationalities))
-     // .then( rows => db.query(us_bis_denied_table))
+   
       .then( rows => db.query(us_bis_denied))
       .then( rows => db.query(us_bis_denied_cluster))
      // .then( rows => db.query(us_bis_denied_addresses)) has issue about duplicate keys 
@@ -886,7 +900,7 @@
       .then( rows => db.query(us_ofac_birth_dates))
       .then( rows => db.query(us_ofac_birth_places))
       .then( rows => db.query(us_ofac_identifiers))
-    //  .then( rows => db.query(worldbank_debarred_table))
+   
       .then( rows => db.query(worldbank_debarred))
       .then( rows => db.query(worldbank_debarred_cluster))
       .then( rows => db.query(worldbank_debarred_addresses))
