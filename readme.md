@@ -22,7 +22,7 @@ info1
 ```
 
 
-# Server installation 
+# Run Sanctions 
 
 ```java
 
@@ -34,7 +34,11 @@ info1
  // Done!
  
  If error happen as The 'pyicu>=1.9.3' distribution was not found and is required by normality
- 
+ then follow some server installations
+```
+
+# Server Installation
+```java
  //check pip version
  pip -V
  // upgrade if needed 
