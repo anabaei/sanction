@@ -26,24 +26,26 @@ info1
 
 ```java
 
-python setup.py --help-commands
+ python setup.py --help-commands
  python setup.py build
  python setup.py install
-then iferror happen as The 'pyicu>=1.9.3' distribution was not found and is required by normality
- //install it first
+ then iferror happen as The 'pyicu>=1.9.3' distribution was not found and is required by normality
+ 
+ //check pip version
+ pip -V
+ // upgrade if needed 
+ pip install --upgrade pip
+ // install sometools
+ pip install -U setuptools
+ // to install mysql if not exist
+ yum install mysql
+ yum install mariadb-server
+ // to start mysql
+ systemctl start mariadb  
 
-yum install python-pip
-pip -V
-pip install --upgrade pip
-pip install -U setuptools
-// to install mysql if not exist
-yum install mysql
-yum install mariadb-server
-// to start mysql
-systemctl start mariadb  
-
-// then inside sanctions run
-memorious list
+ // then inside sanctions run
+ memorious list
+ memorious run crawl_name
 ```
 
 
