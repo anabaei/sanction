@@ -25,6 +25,9 @@ info1
 # Run Sanctions 
 
 ```java
+at ... /lib/python3.7/site-packages/memorious-0.7.20-py3.7.egg/memorious/settings.py
+//change to
+DATASTORE_URI = env('DATASTORE_URI', 'mysql+pymysql://root:password@localhost/aml')
 
  python setup.py --help-commands
  python setup.py build
@@ -52,6 +55,6 @@ info1
  systemctl start mariadb  
 
 ```
-
+This [link](https://linuxize.com/post/how-to-install-python-3-on-centos-7/) useful for installation python
 
 
