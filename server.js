@@ -31,7 +31,8 @@
   // }
 
   let db_config = {
-    host: "192.168.2.10:3030",
+    host: "192.168.2.10",
+    port: "3030",
     user: "root",
     password: "Glsys2015!"//,
    // database: "aml"
@@ -39,6 +40,7 @@
 
   let db_config_sanction = {
     host: "192.168.2.10:3030",
+    port: "3030",
     user: "root",
     password: "Glsys2015!",
     database: "aml_pro_dev"
