@@ -17,17 +17,30 @@
   //////////////////////// DB  //////////////////////
   ///////////////////////////////////////////////////
   // -u root -h 192.168.2.10 -P 3030 -p
+  // let db_config = {
+  //   host: "localhost",
+  //   user: "root",
+  //   password: "password"//,
+  //  // database: "aml"
+  // }
+  // let db_config_sanction = {
+  //   host: "localhost",
+  //   user: "root",
+  //   password: "password",
+  //   database: "aml_pro_dev"
+  // }
+
   let db_config = {
-    host: "localhost",
+    host: "192.168.2.10:3030",
     user: "root",
-    password: "password"//,
+    password: "Glsys2015!"//,
    // database: "aml"
   }
 
   let db_config_sanction = {
-    host: "localhost",
+    host: "192.168.2.10:3030",
     user: "root",
-    password: "password",
+    password: "Glsys2015!",
     database: "aml_pro_dev"
   }
   
