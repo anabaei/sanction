@@ -31,14 +31,16 @@
   // }
 
   let db_config = {
-    host: "192.168.2.10:3030",
+    host: "192.168.2.10",
+    port: "3030",
     user: "root",
     password: "Glsys2015!"//,
    // database: "aml"
   }
 
   let db_config_sanction = {
-    host: "192.168.2.10:3030",
+    host: "192.168.2.10",
+    port: "3030",
     user: "root",
     password: "Glsys2015!",
     database: "aml_pro_dev"
@@ -371,7 +373,7 @@
         // dosql(au_dfat_sanctions_aliases , "au_dfat_sanctions_aliases");
 
 
-         let update_alias = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = false) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = aml_pro_dev.src.source";
+         let update_alias = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = false) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = aml_pro_dev.src.id";
         // dosql(update_alias, "update alias");
 
 
@@ -436,7 +438,7 @@
         +" WHERE aml_pro_dev.info.source = src.entity_id AND src.country_name IS NOT NULL"
 
 
-        let update_alias_im = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true ) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = aml_pro_dev.src.source AND aml_pro_dev.info.alias = true ";
+        let update_alias_im = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true ) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = aml_pro_dev.src.id AND aml_pro_dev.info.alias = true ";
 
         
     
