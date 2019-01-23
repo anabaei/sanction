@@ -29,22 +29,20 @@ info1
 python setup.py --help-commands
  python setup.py build
  python setup.py install
-then error!
-The 'pyicu>=1.9.3' distribution was not found and is required by normality
-has to install it
-install pip as wel
-Amir [6:43 PM]
-yum --enablerepo=extras install epel-release
-This command will install the correct EPEL repository for the CentOS version you are running.
+then iferror happen as The 'pyicu>=1.9.3' distribution was not found and is required by normality
+ //install it first
 
-After this you will be able to install python-pip.
 yum install python-pip
 pip -V
 pip install --upgrade pip
 pip install -U setuptools
+// to install mysql if not exist
 yum install mysql
 yum install mariadb-server
-systemctl start mariadb
+// to start mysql
+systemctl start mariadb  
+
+// then inside sanctions run
 memorious list
 ```
 
