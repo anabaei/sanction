@@ -35,8 +35,12 @@ DATASTORE_URI = env('DATASTORE_URI', 'mysql+pymysql://root:password@localhost/am
  memorious list
  memorious run crawl_name
  // Done!
+
+Notice: to run any python command, you need to used the following:
+example: python3.6 setup.py build
+or: pip3.6 
  
- If error happen as The 'pyicu>=1.9.3' distribution was not found and is required by normality
+If error happen as The 'pyicu>=1.9.3' distribution was not found and is required by normality
  then follow some server installations
 ```
 
