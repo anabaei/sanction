@@ -332,18 +332,18 @@
     let info_table = "insert into aml_pro_dev.info (firstName, lastName, fatherName, name,  source, type, summary, program, url, gender, title, second_name, third_name, listed_at) "
     // + " Select @defualt as firstName, @defualt as LastName, @defualt as fatherName, name as name, id as source, type as type , summary as summary, program as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, @defualt as listed_at from  union "
     + " SELECT  @defualt as firstName, @defualt as lastName,   @defualt as fatherName,   name as name, id as source, type as type, summary as summary,  program as program, url as url, @defualt as gender, @defualt as title,     @defualt as second_name, @defualt as third_name, @defualt  as listed_at  FROM aml.au_dfat_sanctions  union"
-    + " SELECT first_name as firstName, last_name as lastName, @defualt as fatherName,   name as name, id as source, type as type, summary as summary, @defualt as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, @defualt  as listed_at  FROM aml.coe_assembly union" 
+   //  + " SELECT first_name as firstName, last_name as lastName, @defualt as fatherName,   name as name, id as source, type as type, summary as summary, @defualt as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, @defualt  as listed_at  FROM aml.coe_assembly union" 
     + " SELECT first_name as firstName, last_name as lastName, father_name as fatherName, name as name, id as source, type as type, summary as summary, program as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name , @defualt  as listed_at FROM aml.ch_seco_sanctions union" 
     + " SELECT first_name as firstName, last_name as lastName, @defualt as fatherName, @defualt as name, id as source, type as type, summary as summary,@defualt as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, @defualt  as listed_at FROM aml.eu_meps union" 
     + " SELECT  @defualt as firstName,  @defualt as lastName,  @defualt as fatherName,  name as name, id as source, type as type , @defualt as summary, program as program, @defualt as url,  gender as gender, @defualt as title,   @defualt as second_name, @defualt as third_name, @defualt  as listed_at FROM aml.everypolitician union "             
-    + " SelECT first_name as first_name, last_name as lastName,@defualt as fatherName,  name as name, id as source, type as type, summary as summary, program as program, @defualt as url, @defualt as gender, title as title,     second_name as second_name, third_name as third_name, @defualt as listed_at  FROM aml.gb_hmt_sanctions  union"                                                                                                               
+    + " SelECT first_name as first_name, last_name as lastName,@defualt as fatherName,  name as name, id as source, type as type, @defualt as summary, program as program, @defualt as url, @defualt as gender, title as title,     second_name as second_name, third_name as third_name, @defualt as listed_at  FROM aml.gb_hmt_sanctions  union"                                                                                                               
     + " SeLECT first_name  as firstName, last_name as lastName, @defualt as fatherName, name as name, id as source, type as type, summary as summary, program as program, url as url,     gender as gender,    @defualt as title,   @defualt as second_name, @defualt as third_name, @defualt  as listed_at  FROM aml.interpol_red_notices  union" 
     + " SELECT first_name as first_name, last_name as lastName,@defualt as fatherName, name as name, id as source, type as type, summary as summary, program as program, @defualt as url,  @defualt as gender, @defualt as title, second_name as second_name, @defualt as third_name, listed_at as listed_at FROM aml.kg_fiu_national union"
     + " SELECT first_name as firstName, last_name as lastName, @defualt as fatherName,  name as name, id as source, type as type, summary as summary, program as program, url as url,      @defualt as gender, @defualt as title, second_name as second_name,third_name as third_name,  @defualt as listed_at FROM aml.ua_sdfm_blacklist union" 
     + " SELECT first_name as firstName, @defualt as lastName, @defualt as fatherName,  name as name, id as source, type as type, summary as summary, program as program, @defualt as url, @defualt as gender,  title as title , second_name as second_name,third_name as third_name,listed_at as listed_at  FROM aml.un_sc_sanctions union" 
     + " Select @defualt as firstName, @defualt as LastName,    @defualt as fatherName,  name as name, id as source, type as type ,summary as summary, program as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.us_bis_denied union "
-    + " Select @defualt as firstName, @defualt as LastName,    @defualt as fatherName,  name as name, id as source, type as type ,summary as summary, program as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.us_ofac union "
-    + " Select @defualt as firstName, @defualt as LastName, @defualt as fatherName, name as name, id as source, @defualt as type ,@defualt as summary, program as program, url as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.worldbank_debarred ";
+    + " Select @defualt as firstName, @defualt as LastName,    @defualt as fatherName,  name as name, id as source, type as type , @defualt as summary, program as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.us_ofac "
+   // + " Select @defualt as firstName, @defualt as LastName, @defualt as fatherName, name as name, id as source, @defualt as type ,@defualt as summary, program as program, url as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.worldbank_debarred ";
    
    // let info_table_cluster = "insert into aml_pro_dev.info_cluster (firstName, lastName, fatherName, name,  source, type, summary, program, url, gender, title, second_name, third_name, listed_at) "
    // + "SELECT  firstName, lastName, fatherName, name,  source, type, summary, program, url, gender, title, second_name, third_name, listed_at FROM  aml_pro_dev.info ";
@@ -373,8 +373,8 @@
         // dosql(au_dfat_sanctions_aliases , "au_dfat_sanctions_aliases");
 
 
-         let update_alias = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = false) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = aml_pro_dev.src.id";
-        // dosql(update_alias, "update alias");
+       
+         let  update_alias = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = false) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = src.source";
 
 
         let birth_date = "UPDATE aml_pro_dev.info ,( SELECT entity_id, date FROM aml.au_dfat_sanctions_birth_dates ) AS src"
@@ -438,7 +438,7 @@
         +" WHERE aml_pro_dev.info.source = src.entity_id AND src.country_name IS NOT NULL"
 
 
-        let update_alias_im = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true ) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = aml_pro_dev.src.id AND aml_pro_dev.info.alias = true ";
+        let update_alias_im = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true ) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = src.source AND aml_pro_dev.info.alias = true ";
 
         
     
@@ -660,7 +660,7 @@
        +" WHERE aml_pro_dev.info.source = src.entity_id AND src.date IS NOT NULL"
       // dosql(kg_fiu_national_birth_dates, "kg fiu national birth dates")
 
-      update_alias = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = aml_pro_dev.src.source AND aml_pro_dev.info.alias = true ";
+      update_alias = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = src.source AND aml_pro_dev.info.alias = true ";
       
 
       
@@ -668,7 +668,7 @@
       // let db2 = new Database(db_config); 
       //  db_db_1.query(coe_assembly_nationalitiescountry)
         db_db_1.query(updateSanctionList)
-       .then (rows => db_db_1.query(coe_assembly_nationalitiescountry)) // this table if comes at first query back error database not defined! 
+      // .then (rows => db_db_1.query(coe_assembly_nationalitiescountry)) // this table if comes at first query back error database not defined! 
        .then( rows => db_db_1.query(everypolitician_nationalities))
        .then( rows => db_db_1.query(eu_meps_nationalities)) // nt wrk
        .then( rows => db_db_1.query(gb_hmt_sanctions_addresses))
@@ -909,7 +909,7 @@
       +" WHERE aml_pro_dev.info.source = src.entity_id AND src.country_name IS NOT NULL";
       //dosql(worldbank_debarred_nationalities, "worldbank debarred nationalities")
 
-      update_alias = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = aml_pro_dev.src.source AND aml_pro_dev.info.alias = true ";
+      update_alias = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = src.source AND aml_pro_dev.info.alias = true ";
       
       let insert_sanction_info_table = " insert into aml_pro_dev.info_sanction (sanction_list_id,info_id) "
       + " select t.id, b.id from aml_pro_dev.sanction_list t inner join aml_pro_dev.info b on  b.source = t.source";
