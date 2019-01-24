@@ -657,7 +657,7 @@
        .then( rows => db_db_1.query(interpol_red_notices_aliases))
        .then( rows => db_db_1.query(interpol_red_notices_birth_dates))
        .then( rows => db_db_1.query(interpol_red_notices_nationalities)) 
-       .then( rows => db_db_1.query(kg_fiu_national_aliases))   
+     //  .then( rows => db_db_1.query(kg_fiu_national_aliases))   
        .then (rows => db_db_1.query(update_alias))
        
      .then( rows=> db_db_1.query(kg_fiu_national_birth_dates), console.log("Info1 start"))
@@ -841,7 +841,7 @@
         +", source VARCHAR(255)"
         +", description VARCHAR(255)"
         +", issued_at VARCHAR(255)"
-        +", number VARCHAR(255)"
+        +", number Text"
         +", url VARCHAR(255)"
         +", type VARCHAR(255)"
         +", second_name VARCHAR(255)"
@@ -856,36 +856,6 @@
         +", parent VARCHAR(255), PRIMARY KEY (ID) )";
        //  dosql_sanction(create_info, "created info");
 
-        ///////// INFO  Cluster ///////////
-        var create_info_cluster = " CREATE TABLE aml_pro_dev.info_cluster (ID int NOT NULL AUTO_INCREMENT, name Text, "
-        +"firstName VARCHAR(255), "
-        +"lastName VARCHAR(255), "
-        +"fatherName VARCHAR(255), "
-        +"birth_date VARCHAR(255)"
-        +", birth_place Text"
-        +", place VARCHAR(255)"
-        +", nationality Text"
-        +", nationality_code VARCHAR(255)"
-        +", quality VARCHAR(255)"
-        +", title VARCHAR(255)"
-        +", source VARCHAR(255)"
-        +", description VARCHAR(255)"
-        +", issued_at VARCHAR(255)"
-        +", number VARCHAR(255)"
-        +", url VARCHAR(255)"
-        +", type VARCHAR(255)"
-        +", second_name VARCHAR(255)"
-        +", third_name VARCHAR(255)"
-        +", listed_at VARCHAR(255)"
-        +", action VARCHAR(255)"
-        +", program Text"
-        +", summary Text"
-        +", text VARCHAR(255)"
-        +", gender VARCHAR(255)"
-        +", alias boolean DEFAULT false"
-        +", parent VARCHAR(255), PRIMARY KEY (ID) )";
-        //dosql_sanction(create_info_cluster, "created info cluster");
-        
         
         ///////// Address ///////////
         var create_address = " CREATE TABLE aml_pro_dev.address (ID int NOT NULL AUTO_INCREMENT, source VARCHAR(255) UNIQUE, info_id INT, "
@@ -948,13 +918,7 @@
 
    // + " Select @defualt as firstName, @defualt as LastName, @defualt as fatherName, name as name, id as source, @defualt as type ,@defualt as summary, program as program, url as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.worldbank_debarred ";
    
-   // let info_table_cluster = "insert into aml_pro_dev.info_cluster (firstName, lastName, fatherName, name,  source, type, summary, program, url, gender, title, second_name, third_name, listed_at) "
-   // + "SELECT  firstName, lastName, fatherName, name,  source, type, summary, program, url, gender, title, second_name, third_name, listed_at FROM  aml_pro_dev.info ";
-    // + " SELECT first_name as firstName, last_name as lastName, @defualt as fatherName, name as name, id as source, type as type,  summary as summary, @defualt as program, url as url FROM aml.coe_assembly "
-    // +"  ON DUPLICATE KEY update"
-    // + " aml_pro_dev.info.source = aml_pro_dev.info.source"; 
-
-    
+   
 
         ///// insert from sanction address into address table ///////
 
@@ -965,11 +929,6 @@
         //dosql(au_dfat_address, "insert from sanction address");
         //// Just add to that then we specifies aliases ////
         
-        
-
-        // let au_dfat_sanctions_aliases_cluster  = "insert into aml_pro_dev.info_cluster (name, source, alias)"
-        // + " SELECT name, entity_id, true FROM aml.au_dfat_sanctions_aliases ";
-        //dosql(au_dfat_sanctions_aliases_cluster , " info_cluster");
 
         let au_dfat_sanctions_aliases  = "insert into aml_pro_dev.info(name, source, alias)"
         + " SELECT name, entity_id, true FROM aml.au_dfat_sanctions_aliases";
@@ -1017,9 +976,6 @@
         let everypolitician_aliases  = "insert into aml_pro_dev.info (name,  source, alias)"
         + " SELECT name, entity_id, true  FROM aml.everypolitician_aliases";
 
-        // let ch_seco_sanctions_aliases_cluster  = "insert into aml_pro_dev.info_cluster (firstName, lastName, fatherName, name, source , quality, title, second_name, third_name, alias)"
-        // + " SELECT first_name, last_name, father_name, name, entity_id, quality, title, second_name, third_name , true FROM aml.ch_seco_sanctions_aliases ";
-        // dosql(ch_seco_sanctions_aliases_cluster  , " aliases cluster inserted");
 
         let ch_seco_birth_date = "UPDATE aml_pro_dev.info ,( SELECT entity_id, date FROM aml.ch_seco_sanctions_birth_dates ) AS src"
         +" SET aml_pro_dev.info.birth_date = src.date"
@@ -1113,13 +1069,6 @@
         ////////////////////////////
       
 
-       // let eu_meps = " insert into aml_pro_dev.info (firstName, lastName,  source, type, summary ) "
-      //  + " SELECT first_name, last_name, id,  type,  summary  FROM aml.eu_meps";
-       // dosql(eu_meps, "info eu_meps");
-      //  let eu_meps_cluster = " insert into aml_pro_dev.info_cluster (firstName, lastName,  source, type, summary ) "
-      //  + " SELECT first_name, last_name, id,  type,  summary  FROM aml.eu_meps";
-       // dosql(eu_meps_cluster, "eu_meps_cluster");
-
         //// TODO : cluster? ///
         let eu_meps_nationalities = "UPDATE aml_pro_dev.info ,( SELECT entity_id, country_name, country_code FROM aml.eu_meps_nationalities) AS src"
         +" SET aml_pro_dev.info.nationality = src.country_name"
@@ -1131,14 +1080,7 @@
         ///////  everypolitician  /////////
         /////////////////////////////////// 
         
-         
-        // let everypolitician = " insert into aml_pro_dev.info ( source, type, program, name , gender ) "
-        // + " select  id,  type, program, name, gender  FROM aml.everypolitician";
-       // dosql(everypolitician, "info everypolitician");
-       // let everypolitician_cluster = " insert into aml_pro_dev.info_cluster ( source, type, program, name , gender ) "
-       // + " select  id,  type, program, name, gender  FROM aml.everypolitician";
-       // dosql(everypolitician_cluster, "info everypolitician_cluster");
-         
+
        
        // dosql(everypolitician_aliases, "everypolitician_aliases");
        
@@ -1157,9 +1099,6 @@
       //  + "Select title, last_name, id, type, summary, program, name, first_name, second_name, third_name  FROM aml.gb_hmt_sanctions ";
         //dosql(gb_hmt_sanctions , "info gb_hmt_sanctions ");
         
-       // let gb_hmt_sanctions_cluster  = " insert into aml_pro_dev.info_cluster ( title, lastName, source, type, summary,  program, name , firstName, second_name, third_name ) "
-       // + "Select title, last_name, id, type, summary, program, name, first_name, second_name, third_name  FROM aml.gb_hmt_sanctions ";
-        //dosql(gb_hmt_sanctions_cluster , "info gb_hmt_sanctions_cluster ");
 
         let gb_hmt_sanctions_addresses = "insert into aml_pro_dev.address (source, country, country_code, postal_code, note  )  "
         + " SELECT entity_id, country_name, country_code, postal_code, text  FROM aml.gb_hmt_sanctions_addresses "
@@ -1211,11 +1150,6 @@
         // + "Select first_name, last_name, id, type, summary, program, url, gender, name  FROM aml.interpol_red_notices ";
         //dosql(interpol_red_notices , "interpol red notices");
 
-       // let interpol_red_notices_cluster = " insert into aml_pro_dev.info_cluster ( firstName, lastName, source, type, summary,  program, url, gender, name) "
-      //  + "Select first_name, last_name, id, type, summary, program, url, gender, name  FROM aml.interpol_red_notices ";
-        //dosql(interpol_red_notices_cluster , "interpol red notices_cluster");
-       
-        
 
         let interpol_red_notices_aliases = "insert into aml_pro_dev.info (source, name, alias) "
         + " SELECT entity_id, name, true FROM aml.interpol_red_notices_aliases";
@@ -1249,10 +1183,7 @@
      //  let kg_fiu_national = " insert into aml_pro_dev.info ( firstName, lastName, second_name ,source, type, summary,  program,  name, listed_at) "
      //  + "Select first_name, last_name, second_name, id, type, summary, program,  name, listed_at  FROM aml.kg_fiu_national ";
        //dosql(kg_fiu_national, "kg_fiu_national");
-       
-      // let kg_fiu_national_cluster = " insert into aml_pro_dev.info_cluster (firstName, lastName, second_name ,source, type, summary,  program,  name, listed_at) "
-     //  + "Select first_name, last_name, second_name, id, type, summary, program,  name, listed_at  FROM aml.kg_fiu_national ";
-       //dosql(kg_fiu_national_cluster , "kg_fiu_national_cluster ");
+
       
        let kg_fiu_national_aliases =  "insert into aml_pro_dev.info (source, name, alias) "
        + " SELECT entity_id, name, true FROM aml.kg_fiu_national_aliases";
@@ -1307,9 +1238,6 @@
      //  + "Select first_name, last_name, second_name, third_name ,id, type, summary, program, url, name, title  FROM aml.ua_sdfm_blacklist ";
        //dosql(ua_sdfm_blacklist, "ua sdfm blacklist"); 
 
-    //   let ua_sdfm_blacklist_cluster = " insert into aml_pro_dev.info_cluster (firstName, lastName, second_name , third_name, source, type, summary, program, url, name, title) "
-    //   + "Select first_name, last_name, second_name, third_name ,id, type, summary, program, url, name, title  FROM aml.ua_sdfm_blacklist ";
-       //dosql(ua_sdfm_blacklist_cluster, "ua sdfm blacklist_cluster"); 
 
        let ua_sdfm_blacklist_addresses = "insert into aml_pro_dev.address (source,note) "
        + " SELECT entity_id, text  FROM aml.ua_sdfm_blacklist_addresses "
@@ -1356,9 +1284,6 @@
       // + "Select first_name, second_name, third_name ,id, type, summary, program, listed_at,   name, title  FROM aml.un_sc_sanctions  ";
       //dosql(un_sc_sanctions, "un sc sanctions")
 
-    //  let un_sc_sanctions_cluster = " insert into aml_pro_dev.info_cluster (firstName,  second_name , third_name, source, type, summary, program, listed_at,  name, title) "
-   //   + "Select first_name, second_name, third_name ,id, type, summary, program, listed_at,   name, title  FROM aml.un_sc_sanctions  ";
-      //dosql(un_sc_sanctions_cluster, "un sc sanctions_cluster")
 
      let un_sc_sanctions_addresses = "insert into aml_pro_dev.address (source,  country, country_code, note, street, city, region  )  "
      + " SELECT entity_id, country_name, country_code, note, street, city, region  FROM aml.un_sc_sanctions_addresses "
@@ -1409,9 +1334,7 @@
     //  let us_bis_denied = " insert into aml_pro_dev.info ( source, type, summary, program, listed_at,  name) "
     //  + "Select id, type, summary, program, updated_at, name FROM aml.us_bis_denied";
       //dosql(us_bis_denied , "us_bis_denied")
-    //  let us_bis_denied_cluster = " insert into aml_pro_dev.info_cluster ( source, type, summary, program, listed_at,  name) "
-    //  + "Select id, type, summary, program, updated_at, name FROM aml.us_bis_denied";
-      //dosql(us_bis_denied_cluster , "us_bis_denied_cluster")
+
 
       let us_bis_denied_addresses = "insert into aml_pro_dev.address (source, country, country_code, street, postal_code, city, region  )  "
       + " SELECT entity_id, country_name, country_code, street, postal_code, city, region  FROM aml.us_bis_denied_addresses";
@@ -1445,9 +1368,6 @@
     //  + "Select id, type, summary, program, updated_at, name FROM aml.us_ofac";
       //dosql(us_ofac, "us_ofac")
 
-     // let us_ofac_cluster = "insert into aml_pro_dev.info_cluster (source, type, summary, program, listed_at, name) "
-     // + "Select id, type, summary, program, updated_at, name FROM aml.us_ofac";
-      //dosql(us_ofac_cluster, "us_ofac_cluster")
     
       let us_ofac_addresses = "insert into aml_pro_dev.address (source,  country, country_code, street, street_2, city)"
       + " SELECT entity_id, country_name, country_code, street, street_2, city  FROM aml.us_ofac_addresses "
@@ -1488,10 +1408,6 @@
      // let worldbank_debarred = "insert into aml_pro_dev.info (source, program, listed_at, name, url)"
     //  + "Select id, program, updated_at, name, url FROM aml.worldbank_debarred ";
       //dosql(worldbank_debarred , "worldbank debarred ")
-
-     // let worldbank_debarred_cluster = "insert into aml_pro_dev.info_cluster (source, program, listed_at, name, url)"
-    //  + "Select id, program, updated_at, name, url FROM aml.worldbank_debarred ";
-    //  //dosql(worldbank_debarred_cluster , "worldbank debarred_cluster")
 
       let worldbank_debarred_addresses = "insert into aml_pro_dev.address (source,  country, country_code, note) "
       + " SELECT entity_id, country_name, country_code, text  FROM aml.worldbank_debarred_addresses "
