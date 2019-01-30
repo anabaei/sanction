@@ -680,6 +680,9 @@
      //  .then( rows => db_db_1.query(kg_fiu_national_aliases))   
        .then (rows => db_db_1.query(update_alias))
        
+   
+      .then( rows => db_db_1.query(ua_sdfm_blacklist_addresses))
+
      .then( rows=> db_db_1.query(kg_fiu_national_birth_dates), console.log("Info1 start"))
       .then( rows => {return db_db_1.close()}, err => {
         return database.close().then( () => { throw err; } ) })
@@ -692,8 +695,8 @@
        db = new Database(db_config); 
        db.query(ua_sdfm_blacklist_aliases)
    
-      .then( rows => db.query(insert_sanction_info_table))
-     // .then( rows => db.query(ua_sdfm_blacklist_addresses))
+     
+      .then( rows => db.query(ua_sdfm_blacklist_addresses))
       .then( rows => db.query(ua_sdfm_blacklist_aliases))
       .then( rows => db.query(ua_sdfm_blacklist_birth_dates))
       .then( rows => db.query(ua_sdfm_blacklist_birth_places))
