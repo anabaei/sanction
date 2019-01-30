@@ -614,6 +614,9 @@
       + " select t.id, b.id from aml_pro_dev.sanction_list t inner join aml_pro_dev.info b on  b.source = t.source";
 
 
+      let updateInfo_id = "UPDATE aml_pro_dev.info ,(SELECT id, source FROM aml_pro_dev.info) AS src "
+      + " SET aml_pro_dev.address.info_id = src.id "
+      + " WHERE aml_pro.dev.address.source = src.source "; 
 
       let db_db = new Database(db_config); 
       db_db.query(update_alias_im)
@@ -706,12 +709,12 @@
     //  .then( rows => db.query(worldbank_debarred_cluster))
      // .then( rows => db.query(worldbank_debarred_addresses))
      // .then( rows => db.query(worldbank_debarred_aliases))
-     // .then( rows => db.query(worldbank_debarred_nationalities))
       
-      .then( rows=> db.query(update_alias), console.log("Info2 Start"))
-      .then( rows => {return db.close()}, err => {
+     .then( rows => db.query(updateInfo_id)) 
+     .then( rows=> db.query(update_alias), console.log("Info2 Start"))
+     .then( rows => {return db.close()}, err => {
         return database.close().then( () => { throw err; } ) })
-      .catch( err => {
+     .catch( err => {
            console.log("Err = "+ err);
        } )  
    
@@ -826,7 +829,7 @@
         dosql_sanction(drop_info_cluster, "drop info cluster");
         
         ///////// INFO ///////////
-        var create_info = " CREATE TABLE aml_pro_dev.info (ID int NOT NULL AUTO_INCREMENT, name Text, "
+        var create_info = " CREATE TABLE aml_pro_dev.info (id int NOT NULL AUTO_INCREMENT, list_id VARCHAR(255), name Text, "
         +"firstName VARCHAR(255), "
         +"lastName VARCHAR(255), "
         +"fatherName VARCHAR(255), "
@@ -852,12 +855,12 @@
         +", text VARCHAR(255)"
         +", gender VARCHAR(255)"
         +", alias boolean DEFAULT false"
-        +", parent VARCHAR(255), PRIMARY KEY (ID) )";
+        +", parent VARCHAR(255), PRIMARY KEY (id) )";
        //  dosql_sanction(create_info, "created info");
 
         
         ///////// Address ///////////
-        var create_address = " CREATE TABLE aml_pro_dev.address (ID int NOT NULL AUTO_INCREMENT, source VARCHAR(255) UNIQUE, info_id INT, "
+        var create_address = " CREATE TABLE aml_pro_dev.address (id int NOT NULL AUTO_INCREMENT, source VARCHAR(255) UNIQUE, info_id INT, "
         +"country VARCHAR(255), "
         +"city VARCHAR(255), "
         +"street VARCHAR(255), "
@@ -865,16 +868,16 @@
         +"country_code VARCHAR(255), "
         +"region VARCHAR(255), "
         +"note Text, "
-        +"street_2 VARCHAR(255), PRIMARY KEY (ID))";
+        +"street_2 VARCHAR(255), PRIMARY KEY (id))";
         // dosql_sanction(create_address, "created address");
       
         ///////// Info-Sanction ///////////
-        var create_info_sanction = " CREATE TABLE aml_pro_dev.info_sanction (ID int NOT NULL AUTO_INCREMENT, sanction_list_id INT, "
-        +"info_id INT, PRIMARY KEY (ID) )";
+        var create_info_sanction = " CREATE TABLE aml_pro_dev.info_sanction (id int NOT NULL AUTO_INCREMENT, sanction_list_id INT, "
+        +"info_id INT, PRIMARY KEY (id) )";
        // dosql_sanction(create_info_sanction, "created info sanction");
 
         ///////// sanction_list ///////////
-         var sanction_list = " CREATE TABLE aml_pro_dev.sanction_list (ID int NOT NULL AUTO_INCREMENT, name VARCHAR(255), source VARCHAR(255) unique, PRIMARY KEY (ID, source)) ";
+         var sanction_list = " CREATE TABLE aml_pro_dev.sanction_list (id int NOT NULL AUTO_INCREMENT, name VARCHAR(255), source VARCHAR(255) unique, PRIMARY KEY (id, source)) ";
       //  // dosql_sanction(sanction_list , " Created sanctionist");
       //   response.sendStatus(`created!`);
 
@@ -921,7 +924,7 @@
 
         ///// insert from sanction address into address table ///////
 
-        let au_dfat_address = "insert into aml_pro_dev.address (source,  note)"
+        let au_dfat_address = "insert into aml_pro_dev.address (source, note)"
         + " SELECT entity_id, text FROM aml.au_dfat_sanctions_addresses "
         + "ON DUPLICATE KEY UPDATE"
         + " aml_pro_dev.address.note = aml.au_dfat_sanctions_addresses.text";
