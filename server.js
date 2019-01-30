@@ -418,12 +418,12 @@
 
        // TODO change name type to TEXT in info table
        let ua_sdfm_blacklist_aliases =  "insert into aml_pro_dev.info (source, name, alias) "
-       + " SELECT entity_id, name, true  FROM aml.ua_sdfm_blacklist_aliases";
+       + " SELECT entity_id, name, true  FROM aml.ua_sdfm_blacklist_aliases ";
        //dosql(ua_sdfm_blacklist_aliases, "ua sdfm blacklist aliases");
       
       let ua_sdfm_blacklist_birth_dates = "UPDATE aml_pro_dev.info ,( SELECT entity_id, date FROM aml.ua_sdfm_blacklist_birth_dates ) AS src"
       +" SET aml_pro_dev.info.birth_date = src.date"
-      +" WHERE aml_pro_dev.info.source = src.entity_id  AND src.date IS NOT NULL"
+      +" WHERE aml_pro_dev.info.source = src.entity_id  AND src.date IS NOT NULL "
       //dosql(ua_sdfm_blacklist_birth_dates, "ua sdfm blacklist birth dates");
      
       let ua_sdfm_blacklist_birth_places = "UPDATE aml_pro_dev.info ,( SELECT entity_id, place FROM aml.ua_sdfm_blacklist_birth_places) AS src"
@@ -610,8 +610,8 @@
  
      let update_alias = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = src.source AND aml_pro_dev.info.alias = true ";
       
-      let insert_sanction_info_table = " insert into aml_pro_dev.info_sanction (sanction_list_id,info_id) "
-      + " select t.id, b.id from aml_pro_dev.sanction_list t inner join aml_pro_dev.info b on  b.source = t.source";
+     // let insert_sanction_info_table = " insert into aml_pro_dev.info_sanction (sanction_list_id,info_id) "
+     // + " select t.id, b.id from aml_pro_dev.sanction_list t inner join aml_pro_dev.info b on  b.source = t.source";
 
 
       let updateInfo_id = "UPDATE aml_pro_dev.info ,(SELECT id, source FROM aml_pro_dev.info) AS src "
@@ -731,33 +731,31 @@
 
  
 
-  app.get('/infosanction', (request, response) => { 
+  // app.get('/', (request, response) => { 
     
-    let insert_sanction_info_table = " insert into aml_pro_dev.info_sanction (sanction_list_id,info_id) "
-    + " select t.id, b.id from aml_pro_dev.sanction_list t inner join aml_pro_dev.info b on  b.source = t.source";
-    dosql_sl(insert_sanction_info_table , "insert_sanction_info_table ")
+  //   let insert_sanction_info_table = " insert into aml_pro_dev.info_sanction (sanction_list_id,info_id) "
+  //   + " select t.id, b.id from aml_pro_dev.sanction_list t inner join aml_pro_dev.info b on  b.source = t.source";
+  //   dosql_sl(insert_sanction_info_table , "insert_sanction_info_table ")
   
-    // .then( rows => db_a.query(info_table_cluster))
-  })
+  //   // .then( rows => db_a.query(info_table_cluster))
+  // })
  
-  app.get('/start', (req, res) => { 
+  // app.get('/start', (req, res) => { 
 
-    res.render('welcome');
+  //   res.render('welcome');
    
-  })
+  // })
 
   app.get('/truncate', (request, response) => { 
-    //var truncate_sanction = "TRUNCATE TABLE aml_pro_dev.sanction_list";
-    //var truncate_address = "TRUNCATE TABLE aml_pro_dev.address";
-    // var truncate_info_santion = "TRUNCATE TABLE aml_pro_dev.info_sanction";
-    var truncate_info_cluster = "TRUNCATE TABLE aml_pro_dev.info_cluster";
-    let set_var = ' SET @defualt := Null ';
-
+   // var truncate_sanction = "TRUNCATE TABLE aml_pro_dev.sanction_list";
+    var truncate_address = "TRUNCATE TABLE aml_pro_dev.address";
     var truncate_info = "TRUNCATE TABLE aml_pro_dev.info";
+    let set_var = ' SET @defualt := Null ';
     let db_a = new Database(db_config); 
     db_a.query(truncate_info_cluster)
     .then( rows => db_a.query(set_var))
-    .then( rows => db_a.query(truncate_info), console.log("truncated!"))
+    .then( rows => db_a.query(truncate_info))
+    .then( rows => db_a.query(truncate_address), console.log("truncated!"))
     .then( rows => {return db_a.close()}, err => {
       return database.close().then( () => { throw err; } ) })
     .catch( err => {
@@ -767,7 +765,7 @@
   })
 
 ////////////////////////////////// DISPLAY  JSON ////////////////////////////////////////////
-  app.get('/informations', (request, response) => { 
+  app.get('/', (request, response) => { 
     let update_sanction_info = " select * from aml_pro_dev.info "
       handleDisconnect(db_config);
       connection.query(update_sanction_info, function (err, result) 
@@ -789,17 +787,17 @@
         }
         });
   });
-  app.get('/info_sanction', (request, response) => { 
-    let update_sanction_info = " select * from aml_pro_dev.info_sanction "
-      handleDisconnect(db_config);
-      connection.query(update_sanction_info, function (err, result) 
-        {
-        if (err) console.log(err);
-        else {
-          response.json(result);
-        }
-        });
-  });
+  // app.get('/info_sanction', (request, response) => { 
+  //   let update_sanction_info = " select * from aml_pro_dev.info_sanction "
+  //     handleDisconnect(db_config);
+  //     connection.query(update_sanction_info, function (err, result) 
+  //       {
+  //       if (err) console.log(err);
+  //       else {
+  //         response.json(result);
+  //       }
+  //       });
+  // });
   app.get('/sanction_list', (request, response) => { 
     let update_sanction_info = " select * from aml_pro_dev.sanction_list "
       handleDisconnect(db_config);
@@ -873,8 +871,8 @@
         // dosql_sanction(create_address, "created address");
       
         ///////// Info-Sanction ///////////
-        var create_info_sanction = " CREATE TABLE aml_pro_dev.info_sanction (id int NOT NULL AUTO_INCREMENT, sanction_list_id INT, "
-        +"info_id INT, PRIMARY KEY (id) )";
+      //   var create_info_sanction = " CREATE TABLE aml_pro_dev.info_sanction (id int NOT NULL AUTO_INCREMENT, sanction_list_id INT, "
+      //  +"info_id INT, PRIMARY KEY (id) )";
        // dosql_sanction(create_info_sanction, "created info sanction");
 
         ///////// sanction_list ///////////
@@ -886,7 +884,6 @@
           dba.query(create_info)
         //  .then( rows => dba.query(create_info_cluster), console.log("1"))
          .then( rows => dba.query(create_address), console.log("1"))
-         .then( rows => dba.query(create_info_sanction), console.log("1"))
          .then( rows => dba.query(sanction_list ), console.log("1"))
          
          .then( rows => {return dba.close()}, err => {
