@@ -26,11 +26,11 @@ class Database
                 }
                     
                 else {
-                    console.log("------- "+cnt+" ---------");  
+                    console.log("------- "+this.cnt+" ---------");  
                     console.log(sql);
                   
                     resolve( rows );
-                }    cnt++;
+                }    this.cnt++;
                 
             });
         });
