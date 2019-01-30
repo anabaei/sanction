@@ -634,7 +634,9 @@
       
      // let insert_sanction_info_table = " insert into aml_pro_dev.info_sanction (sanction_list_id,info_id) "
      // + " select t.id, b.id from aml_pro_dev.sanction_list t inner join aml_pro_dev.info b on  b.source = t.source";
-
+     
+     
+     // UPDATE aml_pro_dev.address ,(select id, source from aml_pro_dev.info) AS src SET aml_pro_dev.address.info_id = src.id  WHERE aml_pro.dev.address.source = src.source;
 
       let update_info_id = "UPDATE aml_pro_dev.address ,(SELECT id, source FROM aml_pro_dev.info) AS src "
       + " SET aml_pro_dev.address.info_id = src.id "
