@@ -112,9 +112,11 @@
   var truncate_address = "TRUNCATE TABLE aml_pro_dev.address";
   var truncate_info = "TRUNCATE TABLE aml_pro_dev.info";
   let set_var = ' SET @defualt := Null ';
+  let err_handler = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN name Text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ';
   let db_a = new Database(db_config); 
   db_a.query(truncate_info)
   .then( rows => db_a.query(set_var))
+  .then( rows => db_a.query(err_handler))
   .then( rows => db_a.query(truncate_address), console.log("truncated!"))
   .then( rows => {return db_a.close()}, err => {
     return database.close().then( () => { throw err; } ) })
@@ -476,7 +478,7 @@
    //   + "Select first_name, second_name, third_name ,id, type, summary, program, listed_at,   name, title  FROM aml.un_sc_sanctions  ";
       //dosql(un_sc_sanctions_cluster, "un sc sanctions_cluster")
 
-     let un_sc_sanctions_addresses = "insert into aml_pro_dev.address (source,  country, country_code, note, street, city, region  )  "
+     let un_sc_sanctions_addresses = " insert into aml_pro_dev.address (source,  country, country_code, note, street, city, region  )  "
      + " SELECT entity_id, country_name, country_code, note, street, city, region  FROM aml.un_sc_sanctions_addresses "
      + " ON DUPLICATE KEY update"
      + " aml_pro_dev.address.country  = aml_pro_dev.address.country ";
