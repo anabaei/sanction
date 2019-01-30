@@ -7,9 +7,11 @@ const mysql = require('mysql');
 
 class Database 
 {
+    
     constructor( config ) 
     {
         this.connection = mysql.createConnection( config );
+        cont=0;
     }
     query( sql, args ) 
     {
@@ -24,9 +26,11 @@ class Database
                 }
                     
                 else {
+                    console.log("------- "+cnt+" ---------");  
                     console.log(sql);
+                  
                     resolve( rows );
-                }    
+                }    cnt++;
                 
             });
         });

@@ -764,7 +764,7 @@
   })
 
 ////////////////////////////////// DISPLAY  JSON ////////////////////////////////////////////
-  app.get('/', (request, response) => { 
+  app.get('/info', (request, response) => { 
     let update_sanction_info = " select * from aml_pro_dev.info "
       handleDisconnect(db_config);
       connection.query(update_sanction_info, function (err, result) 
@@ -775,7 +775,7 @@
         }
         });
   });
-  app.get('/address', (request, response) => { 
+  app.get('/', (request, response) => { 
     let update_sanction_info = " select * from aml_pro_dev.address "
       handleDisconnect(db_config);
       connection.query(update_sanction_info, function (err, result) 
