@@ -693,7 +693,7 @@
        db.query(ua_sdfm_blacklist_aliases)
    
       .then( rows => db.query(insert_sanction_info_table))
-      .then( rows => db.query(ua_sdfm_blacklist_addresses))
+     // .then( rows => db.query(ua_sdfm_blacklist_addresses))
       .then( rows => db.query(ua_sdfm_blacklist_aliases))
       .then( rows => db.query(ua_sdfm_blacklist_birth_dates))
       .then( rows => db.query(ua_sdfm_blacklist_birth_places))
