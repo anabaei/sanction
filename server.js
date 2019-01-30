@@ -105,6 +105,27 @@
     });
   }
 
+  /////////////////////////////////////////////////////////////////
+ ////////////////////////  Truncate TABKES //////////////////////////
+ /////////////////////////////////////////////////////////////////
+
+  var truncate_address = "TRUNCATE TABLE aml_pro_dev.address";
+  var truncate_info = "TRUNCATE TABLE aml_pro_dev.info";
+  let set_var = ' SET @defualt := Null ';
+  let err_handler_name = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN name Text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ';
+  let err_handler_des = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN description VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci ';
+  let db_a = new Database(db_config); 
+  db_a.query(truncate_info)
+  .then( rows => db_a.query(set_var))
+  .then( rows => db_a.query(err_handler_name))
+  .then( rows => db_a.query(err_handler_des))
+  .then( rows => db_a.query(truncate_address), console.log("truncated!"))
+  .then( rows => {return db_a.close()}, err => {
+    return database.close().then( () => { throw err; } ) })
+  .catch( err => {
+       console.log("Err = "+ err);
+   } )
+
 
   /////////////////////////////////////////////////////////////////
  ////////////////////////  CREATE TABKES //////////////////////////
@@ -459,7 +480,7 @@
    //   + "Select first_name, second_name, third_name ,id, type, summary, program, listed_at,   name, title  FROM aml.un_sc_sanctions  ";
       //dosql(un_sc_sanctions_cluster, "un sc sanctions_cluster")
 
-     let un_sc_sanctions_addresses = "insert into aml_pro_dev.address (source,  country, country_code, note, street, city, region  )  "
+     let un_sc_sanctions_addresses = " insert into aml_pro_dev.address (source,  country, country_code, note, street, city, region  )  "
      + " SELECT entity_id, country_name, country_code, note, street, city, region  FROM aml.un_sc_sanctions_addresses "
      + " ON DUPLICATE KEY update"
      + " aml_pro_dev.address.country  = aml_pro_dev.address.country ";
@@ -495,7 +516,8 @@
      let un_sc_sanctions_nationalities =  "UPDATE aml_pro_dev.info ,(SELECT entity_id, country_name, country_code FROM aml.un_sc_sanctions_nationalities) AS src"
      +" SET aml_pro_dev.info.nationality = src.country_name"
      +" , aml_pro_dev.info.nationality_code = src.country_code"
-     +" WHERE aml_pro_dev.info.source = src.entity_id AND src.country_name IS NOT NULL";
+     +" WHERE aml_pro_dev.info.source = src.entity_id AND src.country_name IS NOT NULL"
+     
       //dosql(un_sc_sanctions_nationalities, "un sc sanctions nationalities");
 
       //////////////////////////////
@@ -569,8 +591,8 @@
       +" , aml_pro_dev.info.quality = src.quality"
       +" WHERE aml_pro_dev.info.source = src.entity_id AND src.place IS NOT NULL"
       //dosql(us_ofac_birth_places, "us ofac birth places")
-
-      let us_ofac_identifiers = "UPDATE aml_pro_dev.info ,( SELECT entity_id, description, country_name, country_code, type, number FROM aml.us_ofac_identifiers) AS src"
+ 
+      let us_ofac_identifiers= "UPDATE aml_pro_dev.info ,( SELECT entity_id, description, country_name, country_code, type, number FROM aml.us_ofac_identifiers) AS src"
       +" SET aml_pro_dev.info.nationality = src.country_name"
       +" , aml_pro_dev.info.nationality_code = src.country_code"
       +" , aml_pro_dev.info.type = src.type"
@@ -612,9 +634,11 @@
       
      // let insert_sanction_info_table = " insert into aml_pro_dev.info_sanction (sanction_list_id,info_id) "
      // + " select t.id, b.id from aml_pro_dev.sanction_list t inner join aml_pro_dev.info b on  b.source = t.source";
+     
+     
+     // UPDATE aml_pro_dev.address ,(select id, source from aml_pro_dev.info) AS src SET aml_pro_dev.address.info_id = src.id  WHERE aml_pro.dev.address.source = src.source;
 
-
-      let updateInfo_id = "UPDATE aml_pro_dev.info ,(SELECT id, source FROM aml_pro_dev.info) AS src "
+      let update_info_id = "UPDATE aml_pro_dev.address ,(SELECT id, source FROM aml_pro_dev.info) AS src "
       + " SET aml_pro_dev.address.info_id = src.id "
       + " WHERE aml_pro.dev.address.source = src.source "; 
 
@@ -663,7 +687,38 @@
      //  .then( rows => db_db_1.query(kg_fiu_national_aliases))   
        .then (rows => db_db_1.query(update_alias))
        
-     .then( rows=> db_db_1.query(kg_fiu_national_birth_dates), console.log("Info1 start"))
+   
+      .then( rows => db_db_1.query(ua_sdfm_blacklist_addresses))
+      .then( rows => db_db_1.query(ua_sdfm_blacklist_aliases))
+      .then( rows => db_db_1.query(ua_sdfm_blacklist_birth_dates))
+      .then( rows => db_db_1.query(ua_sdfm_blacklist_birth_places))
+      .then( rows => db_db_1.query(ua_sdfm_blacklist_identifiers))
+      .then( rows => db_db_1.query(ua_sdfm_blacklist_nationalities))
+      .then( rows => db_db_1.query(un_sc_sanctions_addresses))
+      .then( rows => db_db_1.query(un_sc_sanctions_aliases))
+      .then( rows => db_db_1.query(un_sc_sanctions_birth_dates))
+      .then( rows => db_db_1.query(un_sc_sanctions_birth_places))
+      .then( rows => db_db_1.query(un_sc_sanctions_identifiers))
+      .then( rows => db_db_1.query(un_sc_sanctions_nationalities))
+      
+      .then( rows => db_db_1.query(us_bis_denied_addresses)) //TODO has issue about duplicate keys 
+      .catch( err => {
+        console.log("Err = "+ err);
+      }) //TODO 
+      .then( rows => db_db_1.query(us_cia_world_leaders))
+      .then( rows => db_db_1.query(us_cia_world_leaders_nationalities))
+      .then( rows => db_db_1.query(us_ofac_addresses))
+      .then( rows => db_db_1.query(us_ofac_aliases))
+      .then( rows => db_db_1.query(us_ofac_birth_dates))
+      .then( rows => db_db_1.query(us_ofac_birth_places))
+      .then( rows => db_db_1.query(us_ofac_identifiers))
+
+      .then( rows => db_db_1.query(update_info_id)) 
+      
+      .then( rows => db_db_1.query(ua_sdfm_blacklist_aliases)) 
+      .then( rows => db_db_1.query(update_alias))
+    
+     .then( rows=> db_db_1.query(kg_fiu_national_birth_dates), console.log(" Completed! "))
       .then( rows => {return db_db_1.close()}, err => {
         return database.close().then( () => { throw err; } ) })
       .catch( err => {
@@ -672,52 +727,27 @@
 
 
        // some not running ! 
-       db = new Database(db_config); 
-       db.query(ua_sdfm_blacklist_aliases)
    
-      .then( rows => db.query(insert_sanction_info_table))
-      .then( rows => db.query(ua_sdfm_blacklist_addresses))
-      .then( rows => db.query(ua_sdfm_blacklist_aliases))
-      .then( rows => db.query(ua_sdfm_blacklist_birth_dates))
-      .then( rows => db.query(ua_sdfm_blacklist_birth_places))
-      .then( rows => db.query(ua_sdfm_blacklist_identifiers))
-      .then( rows => db.query(ua_sdfm_blacklist_nationalities))
-    
+   
      // .then( rows => db.query(un_sc_sanctions))
      // .then( rows => db.query(un_sc_sanctions_cluster))
-      .then( rows => db.query(un_sc_sanctions_addresses))
-      .then( rows => db.query(un_sc_sanctions_aliases))
-      .then( rows => db.query(un_sc_sanctions_birth_dates))
-      .then( rows => db.query(un_sc_sanctions_birth_places))
-      .then( rows => db.query(un_sc_sanctions_identifiers))
-      .then( rows => db.query(un_sc_sanctions_nationalities))
+    
    
      // .then( rows => db.query(us_bis_denied))
      // .then( rows => db.query(us_bis_denied_cluster))
-      .then( rows => db.query(us_bis_denied_addresses)) // has issue about duplicate keys 
-      .then( rows => db.query(us_cia_world_leaders))
-      .then( rows => db.query(us_cia_world_leaders_nationalities))
+   
     
     //  .then( rows => db.query(us_ofac))
     //  .then( rows => db.query(us_ofac_cluster))
-      .then( rows => db.query(us_ofac_addresses))
-      .then( rows => db.query(us_ofac_aliases))
-      .then( rows => db.query(us_ofac_birth_dates))
-      .then( rows => db.query(us_ofac_birth_places))
-      .then( rows => db.query(us_ofac_identifiers))
+   
    
      // .then( rows => db.query(worldbank_debarred))
     //  .then( rows => db.query(worldbank_debarred_cluster))
      // .then( rows => db.query(worldbank_debarred_addresses))
      // .then( rows => db.query(worldbank_debarred_aliases))
       
-     .then( rows => db.query(updateInfo_id)) 
-     .then( rows=> db.query(update_alias), console.log("Info2 Start"))
-     .then( rows => {return db.close()}, err => {
-        return database.close().then( () => { throw err; } ) })
-     .catch( err => {
-           console.log("Err = "+ err);
-       } )  
+    
+  
    
 
       
@@ -752,9 +782,8 @@
     var truncate_info = "TRUNCATE TABLE aml_pro_dev.info";
     let set_var = ' SET @defualt := Null ';
     let db_a = new Database(db_config); 
-    db_a.query(truncate_info_cluster)
+    db_a.query(truncate_info)
     .then( rows => db_a.query(set_var))
-    .then( rows => db_a.query(truncate_info))
     .then( rows => db_a.query(truncate_address), console.log("truncated!"))
     .then( rows => {return db_a.close()}, err => {
       return database.close().then( () => { throw err; } ) })
@@ -765,7 +794,7 @@
   })
 
 ////////////////////////////////// DISPLAY  JSON ////////////////////////////////////////////
-  app.get('/', (request, response) => { 
+  app.get('/info', (request, response) => { 
     let update_sanction_info = " select * from aml_pro_dev.info "
       handleDisconnect(db_config);
       connection.query(update_sanction_info, function (err, result) 
@@ -776,7 +805,7 @@
         }
         });
   });
-  app.get('/address', (request, response) => { 
+  app.get('/', (request, response) => { 
     let update_sanction_info = " select * from aml_pro_dev.address "
       handleDisconnect(db_config);
       connection.query(update_sanction_info, function (err, result) 
