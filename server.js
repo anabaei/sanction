@@ -630,7 +630,8 @@
       +" WHERE aml_pro_dev.info.source = src.entity_id AND src.country_name IS NOT NULL";
       //dosql(worldbank_debarred_nationalities, "worldbank debarred nationalities")
  
-     let update_alias = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = src.source AND aml_pro_dev.info.alias = true ";
+     let update_alias = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true) as src set aml_pro_dev.info.parent = src.id "
+     + " where aml_pro_dev.info.source = src.source AND aml_pro_dev.info.alias = true ";
       
      // let insert_sanction_info_table = " insert into aml_pro_dev.info_sanction (sanction_list_id,info_id) "
      // + " select t.id, b.id from aml_pro_dev.sanction_list t inner join aml_pro_dev.info b on  b.source = t.source";
@@ -685,7 +686,7 @@
        .then( rows => db_db_1.query(interpol_red_notices_birth_dates))
        .then( rows => db_db_1.query(interpol_red_notices_nationalities)) 
      //  .then( rows => db_db_1.query(kg_fiu_national_aliases))   
-       .then (rows => db_db_1.query(update_alias))
+     //  .then (rows => db_db_1.query(update_alias))
        
    
       .then( rows => db_db_1.query(ua_sdfm_blacklist_addresses))
