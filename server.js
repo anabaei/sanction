@@ -234,7 +234,7 @@
      +" WHERE aml_pro_dev.info.source = src.entity_id AND src.country_name IS NOT NULL"
 
 
-     let update_alias_im = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true ) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = src.source AND aml_pro_dev.info.alias = true ";
+     //let update_alias_im = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true ) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = src.source AND aml_pro_dev.info.alias = true ";
 
      let updateSanctionList = " insert into aml_pro_dev.sanction_list (name,source) SELECT source as name,id as source FROM aml.au_dfat_sanctions union "
     +" SELECT source as name,id as source FROM aml.ch_seco_sanctions union"
@@ -644,8 +644,8 @@
       + " WHERE aml_pro.dev.address.source = src.source "; 
 
       let db_db = new Database(db_config); 
-      db_db.query(update_alias_im)
-     .then(rows => db_db.query(info_table))
+      db_db.query(info_table)
+   // .then(rows => db_db.query(info_table))
     // .then( rows=> db_db.query(update_alias_im))
      
      .then( rows => db_db.query(au_dfat_address)) 
