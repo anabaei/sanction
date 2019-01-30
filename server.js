@@ -752,9 +752,8 @@
     var truncate_info = "TRUNCATE TABLE aml_pro_dev.info";
     let set_var = ' SET @defualt := Null ';
     let db_a = new Database(db_config); 
-    db_a.query(truncate_info_cluster)
+    db_a.query(truncate_info)
     .then( rows => db_a.query(set_var))
-    .then( rows => db_a.query(truncate_info))
     .then( rows => db_a.query(truncate_address), console.log("truncated!"))
     .then( rows => {return db_a.close()}, err => {
       return database.close().then( () => { throw err; } ) })
