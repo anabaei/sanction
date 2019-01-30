@@ -636,7 +636,7 @@
      // + " select t.id, b.id from aml_pro_dev.sanction_list t inner join aml_pro_dev.info b on  b.source = t.source";
 
 
-      let updateInfo_id = "UPDATE aml_pro_dev.info ,(SELECT id, source FROM aml_pro_dev.info) AS src "
+      let update_info_id = "UPDATE aml_pro_dev.address ,(SELECT id, source FROM aml_pro_dev.info) AS src "
       + " SET aml_pro_dev.address.info_id = src.id "
       + " WHERE aml_pro.dev.address.source = src.source "; 
 
@@ -711,7 +711,7 @@
       .then( rows => db_db_1.query(us_ofac_birth_places))
       .then( rows => db_db_1.query(us_ofac_identifiers))
 
-     // .then( rows => db_db_1.query(updateInfo_id)) 
+      .then( rows => db_db_1.query(update_info_id)) 
       
       .then( rows => db_db_1.query(ua_sdfm_blacklist_aliases)) 
       .then( rows => db_db_1.query(update_alias))
