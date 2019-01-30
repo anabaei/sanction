@@ -682,8 +682,30 @@
        
    
       .then( rows => db_db_1.query(ua_sdfm_blacklist_addresses))
-
-     .then( rows=> db_db_1.query(kg_fiu_national_birth_dates), console.log("Info1 start"))
+      .then( rows => db_db_1.query(ua_sdfm_blacklist_aliases))
+      .then( rows => db_db_1.query(ua_sdfm_blacklist_birth_dates))
+      .then( rows => db_db_1.query(ua_sdfm_blacklist_birth_places))
+      .then( rows => db_db_1.query(ua_sdfm_blacklist_identifiers))
+      .then( rows => db_db_1.query(ua_sdfm_blacklist_nationalities))
+      .then( rows => db_db_1.query(un_sc_sanctions_addresses))
+      .then( rows => db_db_1.query(un_sc_sanctions_aliases))
+      .then( rows => db_db_1.query(un_sc_sanctions_birth_dates))
+      .then( rows => db_db_1.query(un_sc_sanctions_birth_places))
+      .then( rows => db_db_1.query(un_sc_sanctions_identifiers))
+      .then( rows => db_db_1.query(un_sc_sanctions_nationalities))
+      .then( rows => db_db_1.query(us_bis_denied_addresses)) // has issue about duplicate keys 
+      .then( rows => db_db_1.query(us_cia_world_leaders))
+      .then( rows => db_db_1.query(us_cia_world_leaders_nationalities))
+      .then( rows => db_db_1.query(us_ofac_addresses))
+      .then( rows => db_db_1.query(us_ofac_aliases))
+      .then( rows => db_db_1.query(us_ofac_birth_dates))
+      .then( rows => db_db_1.query(us_ofac_birth_places))
+      .then( rows => db_db_1.query(us_ofac_identifiers))
+      .then( rows => db_db_1.query(updateInfo_id)) 
+      .then( rows => db_db_1.query(ua_sdfm_blacklist_aliases)) 
+      .then( rows => db_db_1.query(update_alias))
+    
+     .then( rows=> db_db_1.query(kg_fiu_national_birth_dates), console.log(" Completed! "))
       .then( rows => {return db_db_1.close()}, err => {
         return database.close().then( () => { throw err; } ) })
       .catch( err => {
@@ -692,52 +714,27 @@
 
 
        // some not running ! 
-       db = new Database(db_config); 
-       db.query(ua_sdfm_blacklist_aliases)
    
-     
-      .then( rows => db.query(ua_sdfm_blacklist_addresses))
-      .then( rows => db.query(ua_sdfm_blacklist_aliases))
-      .then( rows => db.query(ua_sdfm_blacklist_birth_dates))
-      .then( rows => db.query(ua_sdfm_blacklist_birth_places))
-      .then( rows => db.query(ua_sdfm_blacklist_identifiers))
-      .then( rows => db.query(ua_sdfm_blacklist_nationalities))
-    
+   
      // .then( rows => db.query(un_sc_sanctions))
      // .then( rows => db.query(un_sc_sanctions_cluster))
-      .then( rows => db.query(un_sc_sanctions_addresses))
-      .then( rows => db.query(un_sc_sanctions_aliases))
-      .then( rows => db.query(un_sc_sanctions_birth_dates))
-      .then( rows => db.query(un_sc_sanctions_birth_places))
-      .then( rows => db.query(un_sc_sanctions_identifiers))
-      .then( rows => db.query(un_sc_sanctions_nationalities))
+    
    
      // .then( rows => db.query(us_bis_denied))
      // .then( rows => db.query(us_bis_denied_cluster))
-      .then( rows => db.query(us_bis_denied_addresses)) // has issue about duplicate keys 
-      .then( rows => db.query(us_cia_world_leaders))
-      .then( rows => db.query(us_cia_world_leaders_nationalities))
+   
     
     //  .then( rows => db.query(us_ofac))
     //  .then( rows => db.query(us_ofac_cluster))
-      .then( rows => db.query(us_ofac_addresses))
-      .then( rows => db.query(us_ofac_aliases))
-      .then( rows => db.query(us_ofac_birth_dates))
-      .then( rows => db.query(us_ofac_birth_places))
-      .then( rows => db.query(us_ofac_identifiers))
+   
    
      // .then( rows => db.query(worldbank_debarred))
     //  .then( rows => db.query(worldbank_debarred_cluster))
      // .then( rows => db.query(worldbank_debarred_addresses))
      // .then( rows => db.query(worldbank_debarred_aliases))
       
-     .then( rows => db.query(updateInfo_id)) 
-     .then( rows=> db.query(update_alias), console.log("Info2 Start"))
-     .then( rows => {return db.close()}, err => {
-        return database.close().then( () => { throw err; } ) })
-     .catch( err => {
-           console.log("Err = "+ err);
-       } )  
+    
+  
    
 
       
