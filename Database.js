@@ -11,7 +11,7 @@ class Database
     constructor( config ) 
     {
         this.connection = mysql.createConnection( config );
-        cnt=0;
+        this.cnt = 0;
     }
     query( sql, args ) 
     {
