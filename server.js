@@ -113,7 +113,7 @@
   var truncate_info = "TRUNCATE TABLE aml_pro_dev.info";
   let set_var = ' SET @defualt := Null ';
   let err_handler_name = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN name Text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ';
-  let err_handler_des = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN description VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ';
+  let err_handler_des = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN description VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci ';
   let db_a = new Database(db_config); 
   db_a.query(truncate_info)
   .then( rows => db_a.query(set_var))
