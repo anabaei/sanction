@@ -516,7 +516,9 @@
      let un_sc_sanctions_nationalities =  "UPDATE aml_pro_dev.info ,(SELECT entity_id, country_name, country_code FROM aml.un_sc_sanctions_nationalities) AS src"
      +" SET aml_pro_dev.info.nationality = src.country_name"
      +" , aml_pro_dev.info.nationality_code = src.country_code"
-     +" WHERE aml_pro_dev.info.source = src.entity_id AND src.country_name IS NOT NULL";
+     +" WHERE aml_pro_dev.info.source = src.entity_id AND src.country_name IS NOT NULL "
+     + " ON DUPLICATE KEY update "
+     + " aml_pro_dev.info.country_name = aml_pro_dev.info.country_name ";
       //dosql(un_sc_sanctions_nationalities, "un sc sanctions nationalities");
 
       //////////////////////////////
