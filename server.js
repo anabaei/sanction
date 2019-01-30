@@ -697,7 +697,7 @@
       .then( rows => db_db_1.query(un_sc_sanctions_birth_dates))
       .then( rows => db_db_1.query(un_sc_sanctions_birth_places))
       .then( rows => db_db_1.query(un_sc_sanctions_identifiers))
-      .then( rows => db_db_1.query(un_sc_sanctions_nationalities))
+     // .then( rows => db_db_1.query(un_sc_sanctions_nationalities)) TODO 
       .then( rows => db_db_1.query(us_bis_denied_addresses)) // has issue about duplicate keys 
       .then( rows => db_db_1.query(us_cia_world_leaders))
       .then( rows => db_db_1.query(us_cia_world_leaders_nationalities))
