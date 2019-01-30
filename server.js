@@ -595,9 +595,9 @@
       let us_ofac_identifiers = "UPDATE aml_pro_dev.info ,( SELECT entity_id, description, country_name, country_code, type, number FROM aml.us_ofac_identifiers) AS src"
       +" SET aml_pro_dev.info.nationality = src.country_name"
       +" , aml_pro_dev.info.nationality_code = src.country_code"
-      +" , aml_pro_dev.info.type = src.type"
-      +" , aml_pro_dev.info.number = src.number"
-      +" , aml_pro_dev.info.description = src.description"
+    //  +" , aml_pro_dev.info.type = src.type"
+    //  +" , aml_pro_dev.info.number = src.number"
+   //   +" , aml_pro_dev.info.description = src.description"
       +" WHERE aml_pro_dev.info.source = src.entity_id AND src.country_name IS NOT NULL";
       //dosql(us_ofac_identifiers, "us ofac identifiers")
 
@@ -699,7 +699,7 @@
       .then( rows => db_db_1.query(un_sc_sanctions_identifiers))
       .then( rows => db_db_1.query(un_sc_sanctions_nationalities))
       
-      .then( rows => db_db_1.query(us_bis_denied_addresses)) // has issue about duplicate keys 
+      .then( rows => db_db_1.query(us_bis_denied_addresses)) //TODO has issue about duplicate keys 
       .catch( err => {
         console.log("Err = "+ err);
       }) //TODO 
