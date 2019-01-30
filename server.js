@@ -615,7 +615,6 @@
 
 
 
-
       let db_db = new Database(db_config); 
       db_db.query(update_alias_im)
      .then(rows => db_db.query(info_table))
