@@ -714,7 +714,7 @@
       .then( rows => db_db_1.query(us_ofac_birth_places))
       .then( rows => db_db_1.query(us_ofac_identifiers))
 
-      .then( rows => db_db_1.query(update_info_id)) 
+      //.then( rows => db_db_1.query(update_info_id)) TODO fix it
       
       .then( rows => db_db_1.query(ua_sdfm_blacklist_aliases)) 
       .then( rows => db_db_1.query(update_alias))
