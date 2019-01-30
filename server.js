@@ -513,7 +513,7 @@
      +" WHERE aml_pro_dev.info.source = src.entity_id AND src.country_name IS NOT NULL";
      //dosql(un_sc_sanctions_identifiers, "un_sc_sanctions_identifiers")
 
-     let un_sc_sanctions_nationalities =  "UPDATE aml_pro_dev.info ,(SELECT entity_id, country_name, country_code FROM aml.un_sc_sanctions_nationalities limit 1) AS src"
+     let un_sc_sanctions_nationalities =  "UPDATE aml_pro_dev.info ,(SELECT entity_id, country_name, country_code FROM aml.un_sc_sanctions_nationalities) AS src"
      +" SET aml_pro_dev.info.nationality = src.country_name"
      +" , aml_pro_dev.info.nationality_code = src.country_code"
      +" WHERE aml_pro_dev.info.source = src.entity_id AND src.country_name IS NOT NULL"
@@ -697,7 +697,10 @@
       .then( rows => db_db_1.query(un_sc_sanctions_birth_dates))
       .then( rows => db_db_1.query(un_sc_sanctions_birth_places))
       .then( rows => db_db_1.query(un_sc_sanctions_identifiers))
-     // .then( rows => db_db_1.query(un_sc_sanctions_nationalities)) TODO 
+      .then( rows => db_db_1.query(un_sc_sanctions_nationalities))
+      .catch( err => {
+        console.log("Err = "+ err);
+      }) //TODO 
       .then( rows => db_db_1.query(us_bis_denied_addresses)) // has issue about duplicate keys 
       .then( rows => db_db_1.query(us_cia_world_leaders))
       .then( rows => db_db_1.query(us_cia_world_leaders_nationalities))
