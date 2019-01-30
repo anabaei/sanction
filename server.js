@@ -112,7 +112,8 @@
   var truncate_address = "TRUNCATE TABLE aml_pro_dev.address";
   var truncate_info = "TRUNCATE TABLE aml_pro_dev.info";
   let set_var = ' SET @defualt := Null ';
-  let err_handler = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN name Text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ';
+  let err_handler = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN name Text, description VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ';
+  
   let db_a = new Database(db_config); 
   db_a.query(truncate_info)
   .then( rows => db_a.query(set_var))
