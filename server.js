@@ -116,6 +116,8 @@
   let err_handler_des = ' ALTER TABLE aml_pro_dev.info MODIFY COLUMN description Text CHARACTER SET utf8 COLLATE utf8_general_ci ';
   let err_handler_street = ' ALTER TABLE aml_pro_dev.address MODIFY COLUMN street VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci ';
   let err_handler_note = ' ALTER TABLE aml_pro_dev.address MODIFY COLUMN note Text CHARACTER SET utf8 COLLATE utf8_general_ci ';
+  let err_handler_fn = ' ALTER TABLE aml_pro_dev.info MODIFY COLUMN firstName Text CHARACTER SET utf8 COLLATE utf8_general_ci ';
+  let err_handler_ln = ' ALTER TABLE aml_pro_dev.info MODIFY COLUMN lasstName Text CHARACTER SET utf8 COLLATE utf8_general_ci ';
   let db_a = new Database(db_config); 
   db_a.query(truncate_info)
   .then( rows => db_a.query(set_var))
@@ -651,6 +653,8 @@
       .then(rows => db_db.query(err_handler_des))
       .then(rows => db_db.query(err_handler_street))
       .then(rows => db_db.query(err_handler_note))
+      .then( rows => dn_db.query( err_handler_fn))
+      .then( rows => dn_db.query( err_handler_ln))
     .then(rows => db_db.query(info_table))
     // .then( rows=> db_db.query(update_alias_im))
      
