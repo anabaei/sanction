@@ -867,9 +867,9 @@
         +", quality VARCHAR(255)"
         +", title VARCHAR(255)"
         +", source text"
-        +", description VARCHAR(255)"
+        +", description Text CHARACTER SET utf8 COLLATE utf8_general_ci"
         +", issued_at VARCHAR(255)"
-        +", number Text"
+        +", number Text CHARACTER SET utf8 COLLATE utf8_general_ci"
         +", url VARCHAR(255)"
         +", type VARCHAR(255)"
         +", second_name VARCHAR(255)"
@@ -906,15 +906,15 @@
          var sanction_list = " CREATE TABLE aml_pro_dev.sanction_list (id int NOT NULL AUTO_INCREMENT, name VARCHAR(255), source Text, PRIMARY KEY (id)) ";
       //  // dosql_sanction(sanction_list , " Created sanctionist");
       //   response.sendStatus(`created!`);
-      let err_handler_name = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN name Text CHARACTER SET utf8 COLLATE utf8_general_ci';
-      let err_handler_des = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN description VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci ';
+      // let err_handler_name = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN name Text CHARACTER SET utf8 COLLATE utf8_general_ci';
+      // let err_handler_des = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN description VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci ';
 
          let dba = new Database(db_config ); 
           dba.query(create_info)
           .then( rows => dba.query(create_address))
           //.then( rows => dba.query(sanction_list ))
-         .then( rows => dba.query(err_handler_name))
-         .then( rows => dba.query(err_handler_des))  
+        //  .then( rows => dba.query(err_handler_name))
+        //  .then( rows => dba.query(err_handler_des))  
          .then( rows => dba.query(sanction_list )) 
          .then( rows => {return dba.close()}, err => {
           return database.close().then( () => { throw err; } ) })
