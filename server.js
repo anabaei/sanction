@@ -17,34 +17,34 @@
   //////////////////////// DB  //////////////////////
   ///////////////////////////////////////////////////
   // -u root -h 192.168.2.10 -P 3030 -p
-  let db_config = {
-    host: "localhost",
-    user: "root",
-    password: "password"//,
-   // database: "aml"
-  }
-  let db_config_sanction = {
-    host: "localhost",
-    user: "root",
-    password: "password",
-    database: "aml_pro_dev"
-  }
-
   // let db_config = {
-  //   host: "192.168.2.10",
-  //   port: "3030",
+  //   host: "localhost",
   //   user: "root",
-  //   password: "Glsys2015!"//,
+  //   password: "password"//,
   //  // database: "aml"
   // }
-
   // let db_config_sanction = {
-  //   host: "192.168.2.10",
-  //   port: "3030",
+  //   host: "localhost",
   //   user: "root",
-  //   password: "Glsys2015!",
+  //   password: "password",
   //   database: "aml_pro_dev"
   // }
+
+  let db_config = {
+    host: "192.168.2.10",
+    port: "3030",
+    user: "root",
+    password: "Glsys2015!"//,
+   // database: "aml"
+  }
+
+  let db_config_sanction = {
+    host: "192.168.2.10",
+    port: "3030",
+    user: "root",
+    password: "Glsys2015!",
+    database: "aml_pro_dev"
+  }
   
   var connection;
   function handleDisconnect(db_config) {
