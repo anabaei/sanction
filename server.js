@@ -653,7 +653,7 @@
       .then(rows => db_db.query(err_handler_des))
       .then(rows => db_db.query(err_handler_street))
       .then(rows => db_db.query(err_handler_note))
-      .then( rows => dn_db.query( err_handler_fn))
+    //  .then( rows => dn_db.query( err_handler_fn))
       .then( rows => dn_db.query( err_handler_ln))
     .then(rows => db_db.query(info_table))
     // .then( rows=> db_db.query(update_alias_im))
