@@ -674,51 +674,51 @@
       // let db2 = new Database(db_config); 
       //  db_db_1.query(coe_assembly_nationalitiescountry)
         db_db_1.query(updateSanctionList)
-      // .then (rows => db_db_1.query(coe_assembly_nationalitiescountry)) // this table if comes at first query back error database not defined! 
-       .then( rows => db_db_1.query(everypolitician_nationalities))
-       .then( rows => db_db_1.query(eu_meps_nationalities)) // nt wrk
-       .then( rows => db_db_1.query(gb_hmt_sanctions_addresses))
-       .then( rows => db_db_1.query(gb_hmt_sanctions_aliases))
-       .then( rows => db_db_1.query(gb_hmt_sanctions_birth_dates))
-       .then( rows => db_db_1.query(gb_hmt_sanctions_birth_places))
-       .then( rows => db_db_1.query(gb_hmt_sanctions_identifiers))
-       .then( rows => db_db_1.query(gb_hmt_sanctions_nationalities))
-       .then( rows => db_db_1.query(interpol_red_notices_aliases))
-       .then( rows => db_db_1.query(interpol_red_notices_birth_dates))
-       .then( rows => db_db_1.query(interpol_red_notices_nationalities)) 
-     //  .then( rows => db_db_1.query(kg_fiu_national_aliases))   
-     //  .then (rows => db_db_1.query(update_alias))
+    //   // .then (rows => db_db_1.query(coe_assembly_nationalitiescountry)) // this table if comes at first query back error database not defined! 
+    //    .then( rows => db_db_1.query(everypolitician_nationalities))
+    //    .then( rows => db_db_1.query(eu_meps_nationalities)) // nt wrk
+    //    .then( rows => db_db_1.query(gb_hmt_sanctions_addresses))
+    //    .then( rows => db_db_1.query(gb_hmt_sanctions_aliases))
+    //    .then( rows => db_db_1.query(gb_hmt_sanctions_birth_dates))
+    //    .then( rows => db_db_1.query(gb_hmt_sanctions_birth_places))
+    //    .then( rows => db_db_1.query(gb_hmt_sanctions_identifiers))
+    //    .then( rows => db_db_1.query(gb_hmt_sanctions_nationalities))
+    //    .then( rows => db_db_1.query(interpol_red_notices_aliases))
+    //    .then( rows => db_db_1.query(interpol_red_notices_birth_dates))
+    //    .then( rows => db_db_1.query(interpol_red_notices_nationalities)) 
+    //  //  .then( rows => db_db_1.query(kg_fiu_national_aliases))   
+    //  //  .then (rows => db_db_1.query(update_alias))
        
    
-      .then( rows => db_db_1.query(ua_sdfm_blacklist_addresses))
-      .then( rows => db_db_1.query(ua_sdfm_blacklist_aliases))
-      .then( rows => db_db_1.query(ua_sdfm_blacklist_birth_dates))
-      .then( rows => db_db_1.query(ua_sdfm_blacklist_birth_places))
-      .then( rows => db_db_1.query(ua_sdfm_blacklist_identifiers))
-      .then( rows => db_db_1.query(ua_sdfm_blacklist_nationalities))
-      .then( rows => db_db_1.query(un_sc_sanctions_addresses))
-      .then( rows => db_db_1.query(un_sc_sanctions_aliases))
-      .then( rows => db_db_1.query(un_sc_sanctions_birth_dates))
-      .then( rows => db_db_1.query(un_sc_sanctions_birth_places))
-      .then( rows => db_db_1.query(un_sc_sanctions_identifiers))
-      .then( rows => db_db_1.query(un_sc_sanctions_nationalities))
+    //   .then( rows => db_db_1.query(ua_sdfm_blacklist_addresses))
+    //   .then( rows => db_db_1.query(ua_sdfm_blacklist_aliases))
+    //   .then( rows => db_db_1.query(ua_sdfm_blacklist_birth_dates))
+    //   .then( rows => db_db_1.query(ua_sdfm_blacklist_birth_places))
+    //   .then( rows => db_db_1.query(ua_sdfm_blacklist_identifiers))
+    //   .then( rows => db_db_1.query(ua_sdfm_blacklist_nationalities))
+    //   .then( rows => db_db_1.query(un_sc_sanctions_addresses))
+    //   .then( rows => db_db_1.query(un_sc_sanctions_aliases))
+    //   .then( rows => db_db_1.query(un_sc_sanctions_birth_dates))
+    //   .then( rows => db_db_1.query(un_sc_sanctions_birth_places))
+    //   .then( rows => db_db_1.query(un_sc_sanctions_identifiers))
+    //   .then( rows => db_db_1.query(un_sc_sanctions_nationalities))
       
-      .then( rows => db_db_1.query(us_bis_denied_addresses)) //TODO has issue about duplicate keys 
-      .catch( err => {
-        console.log("Err = "+ err);
-      }) //TODO 
-      .then( rows => db_db_1.query(us_cia_world_leaders))
-      .then( rows => db_db_1.query(us_cia_world_leaders_nationalities))
-      .then( rows => db_db_1.query(us_ofac_addresses))
-      .then( rows => db_db_1.query(us_ofac_aliases))
-      .then( rows => db_db_1.query(us_ofac_birth_dates))
-      .then( rows => db_db_1.query(us_ofac_birth_places))
-      .then( rows => db_db_1.query(us_ofac_identifiers))
+    //   .then( rows => db_db_1.query(us_bis_denied_addresses)) //TODO has issue about duplicate keys 
+    //   .catch( err => {
+    //     console.log("Err = "+ err);
+    //   }) //TODO 
+    //   .then( rows => db_db_1.query(us_cia_world_leaders))
+    //   .then( rows => db_db_1.query(us_cia_world_leaders_nationalities))
+    //   .then( rows => db_db_1.query(us_ofac_addresses))
+    //   .then( rows => db_db_1.query(us_ofac_aliases))
+    //   .then( rows => db_db_1.query(us_ofac_birth_dates))
+    //   .then( rows => db_db_1.query(us_ofac_birth_places))
+    //   .then( rows => db_db_1.query(us_ofac_identifiers))
 
-      .then( rows => db_db_1.query(update_info_id)) //TODO fix it
+    //   .then( rows => db_db_1.query(update_info_id)) //TODO fix it
       
-      .then( rows => db_db_1.query(ua_sdfm_blacklist_aliases)) 
-      .then( rows => db_db_1.query(update_alias))
+    //   .then( rows => db_db_1.query(ua_sdfm_blacklist_aliases)) 
+    //   .then( rows => db_db_1.query(update_alias))
     
      .then( rows=> db_db_1.query(kg_fiu_national_birth_dates), console.log(" Completed! "))
       .then( rows => {return db_db_1.close()}, err => {
