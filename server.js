@@ -117,8 +117,7 @@
   let db_a = new Database(db_config); 
   db_a.query(truncate_info)
   .then( rows => db_a.query(set_var))
-  .then( rows => db_a.query(err_handler_name))
-  .then( rows => db_a.query(err_handler_des))
+  
   .then( rows => db_a.query(truncate_address), console.log("truncated!"))
   .then( rows => {return db_a.close()}, err => {
     return database.close().then( () => { throw err; } ) })
@@ -645,8 +644,10 @@
       // + " WHERE aml_pro.dev.address.source = src.source "; 
 
       let db_db = new Database(db_config); 
-      db_db.query(info_table)
-   // .then(rows => db_db.query(info_table))
+  
+      db_db.query(err_handler_name)
+      .then(rows => db_db.query(err_handler_des))
+    .then(rows => db_db.query(info_table))
     // .then( rows=> db_db.query(update_alias_im))
      
      .then( rows => db_db.query(au_dfat_address)) 
