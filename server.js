@@ -844,17 +844,15 @@
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
       app.get('/create', (request, response) => { 
        
-        var drop_sanction = "DROP TABLE IF EXISTS aml_pro_dev.sanction_list";
+       // var drop_sanction = "DROP TABLE IF EXISTS aml_pro_dev.sanction_list";
         var drop_address = "DROP TABLE IF EXISTS aml_pro_dev.address";
-        var drop_info_santion = "DROP TABLE IF EXISTS aml_pro_dev.info_sanction";
-        var drop_info_cluster = "DROP TABLE IF EXISTS aml_pro_dev.info_cluster";
         var drop_info = "DROP TABLE IF EXISTS aml_pro_dev.info";
         
         dosql_sanction(drop_info, "drop info");
         dosql_sanction(drop_address, "drop address");
-        dosql_sanction(drop_info_santion, "drop info santion");
-        dosql_sanction(drop_sanction, "drop sanction");
-        dosql_sanction(drop_info_cluster, "drop info cluster");
+    
+      //  dosql_sanction(drop_sanction, "drop sanction");
+       // dosql_sanction(drop_info_cluster, "drop info cluster");
         
         ///////// INFO ///////////
         var create_info = " CREATE TABLE aml_pro_dev.info (id int NOT NULL AUTO_INCREMENT, list_id VARCHAR(255), name Text, "
@@ -868,7 +866,7 @@
         +", nationality_code VARCHAR(255)"
         +", quality VARCHAR(255)"
         +", title VARCHAR(255)"
-        +", source VARCHAR(255)"
+        +", source text"
         +", description VARCHAR(255)"
         +", issued_at VARCHAR(255)"
         +", number Text"
@@ -888,7 +886,7 @@
 
         
         ///////// Address ///////////
-        var create_address = " CREATE TABLE aml_pro_dev.address (id int NOT NULL AUTO_INCREMENT, source text UNIQUE, info_id INT, "
+        var create_address = " CREATE TABLE aml_pro_dev.address (id int NOT NULL AUTO_INCREMENT, source Text, info_id INT, "
         +"country VARCHAR(255), "
         +"city VARCHAR(255), "
         +"street VARCHAR(255), "
@@ -905,7 +903,7 @@
        // dosql_sanction(create_info_sanction, "created info sanction");
 
         ///////// sanction_list ///////////
-         var sanction_list = " CREATE TABLE aml_pro_dev.sanction_list (id int NOT NULL AUTO_INCREMENT, name VARCHAR(255), source VARCHAR(255) unique, PRIMARY KEY (id, source)) ";
+         var sanction_list = " CREATE TABLE aml_pro_dev.sanction_list (id int NOT NULL AUTO_INCREMENT, name VARCHAR(255), source Text, PRIMARY KEY (id)) ";
       //  // dosql_sanction(sanction_list , " Created sanctionist");
       //   response.sendStatus(`created!`);
       let err_handler_name = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN name Text CHARACTER SET utf8 COLLATE utf8_general_ci';
@@ -913,12 +911,11 @@
 
          let dba = new Database(db_config ); 
           dba.query(create_info)
-        //  .then( rows => dba.query(create_info_cluster), console.log("1"))
-      
-         .then( rows => dba.query(create_address))
-         .then( rows => dba.query(sanction_list ))
+          .then( rows => dba.query(create_address))
+          //.then( rows => dba.query(sanction_list ))
          .then( rows => dba.query(err_handler_name))
-         .then( rows => dba.query(err_handler_des))   
+         .then( rows => dba.query(err_handler_des))  
+         //.then( rows => dba.query(sanction_list )) 
          .then( rows => {return dba.close()}, err => {
           return database.close().then( () => { throw err; } ) })
         .catch( err => {
