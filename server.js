@@ -890,7 +890,7 @@
 
         
         ///////// Address ///////////
-        var create_address = " CREATE TABLE aml_pro_dev.address (id int NOT NULL AUTO_INCREMENT, source VARCHAR(255) UNIQUE, info_id INT, "
+        var create_address = " CREATE TABLE aml_pro_dev.address (id int NOT NULL AUTO_INCREMENT, source text UNIQUE, info_id INT, "
         +"country VARCHAR(255), "
         +"city VARCHAR(255), "
         +"street VARCHAR(255), "
