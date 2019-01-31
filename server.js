@@ -234,7 +234,7 @@
      +" WHERE aml_pro_dev.info.source = src.entity_id AND src.country_name IS NOT NULL"
 
 
-     let update_alias_im = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true ) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = src.source AND aml_pro_dev.info.alias = true ";
+     //let update_alias_im = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true ) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = src.source AND aml_pro_dev.info.alias = true ";
 
      let updateSanctionList = " insert into aml_pro_dev.sanction_list (name,source) SELECT source as name,id as source FROM aml.au_dfat_sanctions union "
     +" SELECT source as name,id as source FROM aml.ch_seco_sanctions union"
@@ -630,21 +630,23 @@
       +" WHERE aml_pro_dev.info.source = src.entity_id AND src.country_name IS NOT NULL";
       //dosql(worldbank_debarred_nationalities, "worldbank debarred nationalities")
  
-     let update_alias = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = src.source AND aml_pro_dev.info.alias = true ";
+     let update_alias = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true) as src set aml_pro_dev.info.parent = src.id "
+     + " where aml_pro_dev.info.source = src.source AND aml_pro_dev.info.alias = true ";
       
      // let insert_sanction_info_table = " insert into aml_pro_dev.info_sanction (sanction_list_id,info_id) "
      // + " select t.id, b.id from aml_pro_dev.sanction_list t inner join aml_pro_dev.info b on  b.source = t.source";
      
      
-     // UPDATE aml_pro_dev.address ,(select id, source from aml_pro_dev.info) AS src SET aml_pro_dev.address.info_id = src.id  WHERE aml_pro.dev.address.source = src.source;
 
-      let update_info_id = "UPDATE aml_pro_dev.address ,(SELECT id, source FROM aml_pro_dev.info) AS src "
-      + " SET aml_pro_dev.address.info_id = src.id "
-      + " WHERE aml_pro.dev.address.source = src.source "; 
+
+     let update_info_id =  " UPDATE aml_pro_dev.address ,(select id, source from aml_pro_dev.info) AS src SET aml_pro_dev.address.info_id = src.id WHERE aml_pro_dev.address.source = src.source ";
+      // let update_info_id = "UPDATE aml_pro_dev.address ,(SELECT id, source FROM aml_pro_dev.info) AS src "
+      // + " SET aml_pro_dev.address.info_id = src.id "
+      // + " WHERE aml_pro.dev.address.source = src.source "; 
 
       let db_db = new Database(db_config); 
-      db_db.query(update_alias_im)
-     .then(rows => db_db.query(info_table))
+      db_db.query(info_table)
+   // .then(rows => db_db.query(info_table))
     // .then( rows=> db_db.query(update_alias_im))
      
      .then( rows => db_db.query(au_dfat_address)) 
@@ -685,7 +687,7 @@
        .then( rows => db_db_1.query(interpol_red_notices_birth_dates))
        .then( rows => db_db_1.query(interpol_red_notices_nationalities)) 
      //  .then( rows => db_db_1.query(kg_fiu_national_aliases))   
-       .then (rows => db_db_1.query(update_alias))
+     //  .then (rows => db_db_1.query(update_alias))
        
    
       .then( rows => db_db_1.query(ua_sdfm_blacklist_addresses))
@@ -713,7 +715,7 @@
       .then( rows => db_db_1.query(us_ofac_birth_places))
       .then( rows => db_db_1.query(us_ofac_identifiers))
 
-      .then( rows => db_db_1.query(update_info_id)) 
+      .then( rows => db_db_1.query(update_info_id)) //TODO fix it
       
       .then( rows => db_db_1.query(ua_sdfm_blacklist_aliases)) 
       .then( rows => db_db_1.query(update_alias))
