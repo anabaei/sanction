@@ -17,34 +17,34 @@
   //////////////////////// DB  //////////////////////
   ///////////////////////////////////////////////////
   // -u root -h 192.168.2.10 -P 3030 -p
-  // let db_config = {
-  //   host: "localhost",
-  //   user: "root",
-  //   password: "password"//,
-  //  // database: "aml"
-  // }
-  // let db_config_sanction = {
-  //   host: "localhost",
-  //   user: "root",
-  //   password: "password",
-  //   database: "aml_pro_dev"
-  // }
-
   let db_config = {
-    host: "192.168.2.10",
-    port: "3030",
+    host: "localhost",
     user: "root",
-    password: "Glsys2015!"//,
+    password: "password"//,
    // database: "aml"
   }
-
   let db_config_sanction = {
-    host: "192.168.2.10",
-    port: "3030",
+    host: "localhost",
     user: "root",
-    password: "Glsys2015!",
+    password: "password",
     database: "aml_pro_dev"
   }
+
+  // let db_config = {
+  //   host: "192.168.2.10",
+  //   port: "3030",
+  //   user: "root",
+  //   password: "Glsys2015!"//,
+  //  // database: "aml"
+  // }
+
+  // let db_config_sanction = {
+  //   host: "192.168.2.10",
+  //   port: "3030",
+  //   user: "root",
+  //   password: "Glsys2015!",
+  //   database: "aml_pro_dev"
+  // }
   
   var connection;
   function handleDisconnect(db_config) {
@@ -112,7 +112,7 @@
   var truncate_address = "TRUNCATE TABLE aml_pro_dev.address";
   var truncate_info = "TRUNCATE TABLE aml_pro_dev.info";
   let set_var = ' SET @defualt := Null ';
-  let err_handler_name = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN name Text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ';
+  let err_handler_name = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN name Text CHARACTER SET utf8 COLLATE utf8_general_ci';
   let err_handler_des = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN description VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci ';
   let db_a = new Database(db_config); 
   db_a.query(truncate_info)
@@ -630,8 +630,8 @@
       +" WHERE aml_pro_dev.info.source = src.entity_id AND src.country_name IS NOT NULL";
       //dosql(worldbank_debarred_nationalities, "worldbank debarred nationalities")
  
-     let update_alias = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true) as src set aml_pro_dev.info.parent = src.id "
-     + " where aml_pro_dev.info.source = src.source AND aml_pro_dev.info.alias = true ";
+     let update_alias = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info) as src set aml_pro_dev.info.parent = src.id "
+     + " where aml_pro_dev.info.source = src.source  AND aml_pro_dev.info.id != src.id AND aml_pro_dev.info.alias = true ";
       
      // let insert_sanction_info_table = " insert into aml_pro_dev.info_sanction (sanction_list_id,info_id) "
      // + " select t.id, b.id from aml_pro_dev.sanction_list t inner join aml_pro_dev.info b on  b.source = t.source";
@@ -730,7 +730,7 @@
 
        // some not running ! 
    
-   
+   ////////////////
      // .then( rows => db.query(un_sc_sanctions))
      // .then( rows => db.query(un_sc_sanctions_cluster))
     
