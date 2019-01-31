@@ -239,17 +239,18 @@
 
      //let update_alias_im = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true ) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = src.source AND aml_pro_dev.info.alias = true ";
 
-     let updateSanctionList = " insert into aml_pro_dev.sanction_list (name,source) SELECT source as name,id as source FROM aml.au_dfat_sanctions union "
-    +" SELECT source as name,id as source FROM aml.ch_seco_sanctions union"
-    +" SELECT source as name,id as source FROM aml.everypolitician  union"
-    +" SELECT source as name,id as source FROM aml.interpol_red_notices union"
-    +" SELECT source as name,id as source FROM aml.eu_meps union"
-    +" SELECT source as name,id as source FROM aml.gb_hmt_sanctions union"
-    +" SELECT source as name,id as source FROM aml.us_ofac union"
-    +" SELECT source as name,id as source FROM aml.kg_fiu_national union"
-    +" SELECT source as name,id as source FROM aml.ua_sdfm_blacklist union"
-    +" SELECT source as name,id as source FROM aml.un_sc_sanctions union"
-    +" SELECT source as name,id as source FROM aml.us_bis_denied "
+     let updateSanctionList = " insert into aml_pro_dev.sanction_list (name,source) SELECT source as name,id as source FROM aml.au_dfat_sanctions limit 1 union "
+   
+    +" SELECT source as name,id as source FROM aml.ch_seco_sanctions limit 1 union"
+    +" SELECT source as name,id as source FROM aml.everypolitician  limit 1 union"
+    +" SELECT source as name,id as source FROM aml.interpol_red_notices limit 1 union"
+    +" SELECT source as name,id as source FROM aml.eu_meps limit 1 union"
+    +" SELECT source as name,id as source FROM aml.gb_hmt_sanctions  limit 1 union"
+    +" SELECT source as name,id as source FROM aml.us_ofac limit 1 union"
+    +" SELECT source as name,id as source FROM aml.kg_fiu_national limit 1 union"
+    +" SELECT source as name,id as source FROM aml.ua_sdfm_blacklist limit 1 union"
+    +" SELECT source as name,id as source FROM aml.un_sc_sanctions limit 1 union"
+    +" SELECT source as name,id as source FROM aml.us_bis_denied limit 1"
     //+" SELECT source as name,id as source FROM aml.worldbank_debarred"  
     +" ON DUPLICATE KEY update"
     + " aml_pro_dev.sanction_list.source = aml_pro_dev.sanction_list.source"; 
