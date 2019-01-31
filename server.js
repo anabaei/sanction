@@ -915,7 +915,7 @@
           //.then( rows => dba.query(sanction_list ))
          .then( rows => dba.query(err_handler_name))
          .then( rows => dba.query(err_handler_des))  
-         //.then( rows => dba.query(sanction_list )) 
+         .then( rows => dba.query(sanction_list )) 
          .then( rows => {return dba.close()}, err => {
           return database.close().then( () => { throw err; } ) })
         .catch( err => {
