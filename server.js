@@ -666,7 +666,10 @@
      .then( rows => db_db.query(birth_place)) 
   
    //  .then( rows => db.query(ch_seco_sanctions_cluster)) 
-     .then( rows => db_db.query(ch_seco_sanctions_addresses))
+     .then( rows => db_db.query(ch_seco_sanctions_addresses)) // HERE WE GET ERRORc= about utf8 fristName TODO
+     .catch( err => {
+      console.log("Err = "+ err);
+  } )
      .then( rows => db_db.query(ch_seco_sanctions_aliases))
    //  .then( rows => db.query(ch_seco_sanctions_aliases_cluster))
      .then( rows => db_db.query(ch_seco_birth_date))
