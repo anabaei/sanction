@@ -644,42 +644,62 @@
       // + " SET aml_pro_dev.address.info_id = src.id "
       // + " WHERE aml_pro.dev.address.source = src.source "; 
 
-      let db_db = new Database(db_config); 
+  //     let db_db = new Database(db_config); 
   
-      db_db.query(err_handler_name)
+  //     db_db.query(err_handler_name)
      
 
-    .then(rows => db_db.query(info_table))
-    // .then( rows=> db_db.query(update_alias_im))
+  //   .then(rows => db_db.query(info_table))
+  //   // .then( rows=> db_db.query(update_alias_im))
      
-     .then( rows => db_db.query(au_dfat_address)) 
-   //   .then( rows => db.query(everypolitician_aliases)) 
-     .then( rows => db_db.query(au_dfat_sanctions_aliases)) 
-     .then( rows => db_db.query(update_alias)) 
-     .then( rows => db_db.query(birth_date)) 
-     .then( rows => db_db.query(birth_place)) 
+  //    .then( rows => db_db.query(au_dfat_address)) 
+  //  //   .then( rows => db.query(everypolitician_aliases)) 
+  //    .then( rows => db_db.query(au_dfat_sanctions_aliases)) 
+  //    .then( rows => db_db.query(update_alias)) 
+  //    .then( rows => db_db.query(birth_date)) 
+  //    .then( rows => db_db.query(birth_place)) 
   
  
-   //  .then( rows => db_db.query(ch_seco_sanctions_addresses)) // HERE WE GET ERRORc= about utf8 fristName TODO
-     .catch( err => {
-      console.log("Err = "+ err);
-  } )
-     .then( rows => db_db.query(ch_seco_sanctions_aliases))
-   //  .then( rows => db.query(ch_seco_sanctions_aliases_cluster))
-     .then( rows => db_db.query(ch_seco_birth_date))
-     .then( rows => db_db.query(ch_seco_sanctions_birth_places))
-     .then( rows => db_db.query(ch_seco_sanctions_identifiers), console.log("Ino0 Start"))
+  //  //  .then( rows => db_db.query(ch_seco_sanctions_addresses)) // HERE WE GET ERRORc= about utf8 fristName TODO
+  //    .catch( err => {
+  //     console.log("Err = "+ err);
+  // } )
+  //    .then( rows => db_db.query(ch_seco_sanctions_aliases))
+  //  //  .then( rows => db.query(ch_seco_sanctions_aliases_cluster))
+  //    .then( rows => db_db.query(ch_seco_birth_date))
+  //    .then( rows => db_db.query(ch_seco_sanctions_birth_places))
+  //    .then( rows => db_db.query(ch_seco_sanctions_identifiers), console.log("Ino0 Start"))
      
-     .then( rows => {return db_db.close()}, err => {
-       return database.close().then( () => { throw err; } ) })
-     .catch( err => {
-          console.log("Err = "+ err);
-      } )
+  //    .then( rows => {return db_db.close()}, err => {
+  //      return database.close().then( () => { throw err; } ) })
+  //    .catch( err => {
+  //         console.log("Err = "+ err);
+  //     } )
 
       let db_db_1 = new Database(db_config); 
       // let db2 = new Database(db_config); 
       //  db_db_1.query(coe_assembly_nationalitiescountry)
-        db_db_1.query(updateSanctionList)
+        db_db_1.query(err_handler_name)
+        .then(rows => db_db_1.query(info_table))
+        .then( rows=> db_db.query(updateSanctionList))
+         
+         .then( rows => db_db_1.query(au_dfat_address)) 
+       //   .then( rows => db.query(everypolitician_aliases)) 
+         .then( rows => db_db_1.query(au_dfat_sanctions_aliases)) 
+         .then( rows => db_db_1.query(update_alias)) 
+         .then( rows => db_db_1.query(birth_date)) 
+         .then( rows => db_db_1.query(birth_place)) 
+      
+     
+       //  .then( rows => db_db.query(ch_seco_sanctions_addresses)) // HERE WE GET ERRORc= about utf8 fristName TODO
+         .catch( err => {
+          console.log("Err = "+ err);
+      } )
+         .then( rows => db_db_1.query(ch_seco_sanctions_aliases))
+       //  .then( rows => db.query(ch_seco_sanctions_aliases_cluster))
+         .then( rows => db_db_1.query(ch_seco_birth_date))
+         .then( rows => db_db_1.query(ch_seco_sanctions_birth_places))
+         .then( rows => db_db_1.query(ch_seco_sanctions_identifiers), console.log("Ino0 Start"))
       // .then (rows => db_db_1.query(coe_assembly_nationalitiescountry)) // this table if comes at first query back error database not defined! 
        .then( rows => db_db_1.query(everypolitician_nationalities))
        .then( rows => db_db_1.query(eu_meps_nationalities)) // nt wrk
@@ -913,16 +933,20 @@
          var list = " CREATE TABLE aml_pro_dev.list (id int NOT NULL AUTO_INCREMENT, name VARCHAR(255) unique, source Text, PRIMARY KEY (id)) ";
       //  // dosql_sanction(sanction_list , " Created sanctionist");
       //   response.sendStatus(`created!`);
-      // let err_handler_name = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN name Text CHARACTER SET utf8 COLLATE utf8_general_ci';
-      // let err_handler_des = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN description VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci ';
+      let errInfo = ' ALTER table  aml_pro_dev.info convert to CHARACTER SET utf8 COLLATE utf8_unicode_ci ';
+      let errAddress = ' ALTER table  aml_pro_dev.address convert to CHARACTER SET utf8 COLLATE utf8_unicode_ci ';
 
+
+      
+         
          let dba = new Database(db_config ); 
           dba.query(create_info)
           .then( rows => dba.query(create_address))
           //.then( rows => dba.query(sanction_list ))
-        //  .then( rows => dba.query(err_handler_name))
-        //  .then( rows => dba.query(err_handler_des))  
-         .then( rows => dba.query(list )) 
+          .then( rows => dba.query(list)) 
+          .then( rows => dba.query(errAddress))
+      
+         .then( rows => dba.query(errInfo)) 
          .then( rows => {return dba.close()}, err => {
           return database.close().then( () => { throw err; } ) })
         .catch( err => {
