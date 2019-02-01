@@ -116,7 +116,7 @@
   let err_handler_des = ' ALTER TABLE aml_pro_dev.info MODIFY COLUMN description Text CHARACTER SET utf8 COLLATE utf8_general_ci ';
   let err_handler_street = ' ALTER TABLE aml_pro_dev.address MODIFY COLUMN street VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci ';
   let err_handler_note = ' ALTER TABLE aml_pro_dev.address MODIFY COLUMN note Text CHARACTER SET utf8 COLLATE utf8_general_ci ';
-  let err_handler_fn = ' ALTER TABLE aml_pro_dev.info MODIFY COLUMN firstName VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci ';
+  let err_handler_firstName = ' ALTER TABLE aml_pro_dev.info MODIFY COLUMN firstName VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci ';
   let err_handler_ln = ' ALTER TABLE aml_pro_dev.info MODIFY COLUMN lastName VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci ';
   let db_a = new Database(db_config); 
   db_a.query(truncate_info)
@@ -239,7 +239,7 @@
 
      //let update_alias_im = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true ) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = src.source AND aml_pro_dev.info.alias = true ";
 
-     let updateSanctionList = " insert into aml_pro_dev.sanction_list (name,source) SELECT source as name,id as source FROM aml.au_dfat_sanctions limit 1 union "
+     let updateSanctionList = " insert into aml_pro_dev.list (name,source) SELECT source as name,id as source FROM aml.au_dfat_sanctions limit 1 union "
    
     +" SELECT source as name,id as source FROM aml.ch_seco_sanctions limit 1 union"
     +" SELECT source as name,id as source FROM aml.everypolitician  limit 1 union"
@@ -253,7 +253,7 @@
     +" SELECT source as name,id as source FROM aml.us_bis_denied limit 1"
     //+" SELECT source as name,id as source FROM aml.worldbank_debarred"  
     +" ON DUPLICATE KEY update"
-    + " aml_pro_dev.sanction_list.source = aml_pro_dev.sanction_list.source"; 
+    + " aml_pro_dev.list.name = aml_pro_dev.list.name"; 
 
 
 
@@ -654,8 +654,8 @@
       .then(rows => db_db.query(err_handler_des))
       .then(rows => db_db.query(err_handler_street))
       .then(rows => db_db.query(err_handler_note))
-    //  .then( rows => dn_db.query( err_handler_fn))
-    //  .then( rows => dn_db.query( err_handler_ln))
+      .then( rows => dn_db.query(err_handler_firstName))
+      //.then( rows => dn_db.query(err_handler_ln))
     .then(rows => db_db.query(info_table))
     // .then( rows=> db_db.query(update_alias_im))
      
@@ -918,7 +918,7 @@
        // dosql_sanction(create_info_sanction, "created info sanction");
 
         ///////// sanction_list ///////////
-         var sanction_list = " CREATE TABLE aml_pro_dev.sanction_list (id int NOT NULL AUTO_INCREMENT, name VARCHAR(255), source Text, PRIMARY KEY (id)) ";
+         var list = " CREATE TABLE aml_pro_dev.list (id int NOT NULL AUTO_INCREMENT, name VARCHAR(255) unique, source Text, PRIMARY KEY (id)) ";
       //  // dosql_sanction(sanction_list , " Created sanctionist");
       //   response.sendStatus(`created!`);
       // let err_handler_name = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN name Text CHARACTER SET utf8 COLLATE utf8_general_ci';
@@ -930,7 +930,7 @@
           //.then( rows => dba.query(sanction_list ))
         //  .then( rows => dba.query(err_handler_name))
         //  .then( rows => dba.query(err_handler_des))  
-         .then( rows => dba.query(sanction_list )) 
+         .then( rows => dba.query(list )) 
          .then( rows => {return dba.close()}, err => {
           return database.close().then( () => { throw err; } ) })
         .catch( err => {
