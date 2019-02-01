@@ -871,7 +871,7 @@
         
         ///////// INFO ///////////
         var create_info = " CREATE TABLE aml_pro_dev.info (id int NOT NULL AUTO_INCREMENT, list_id VARCHAR(255), name Text, "
-        +"firstName VARCHAR(255), "
+        +"firstName VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci , "
         +"lastName VARCHAR(255), "
         +"fatherName VARCHAR(255), "
         +"birth_date VARCHAR(255)"
