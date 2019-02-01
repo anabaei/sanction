@@ -113,13 +113,7 @@
   var truncate_info = "TRUNCATE TABLE aml_pro_dev.info";
   let set_var = ' SET @defualt := Null ';
   let err_handler_name = ' ALTER TABLE aml_pro_dev.info MODIFY COLUMN name Text CHARACTER SET utf8 COLLATE utf8_general_ci ';
-  let err_handler_des = ' ALTER TABLE aml_pro_dev.info MODIFY COLUMN description Text CHARACTER SET utf8 COLLATE utf8_general_ci ';
-  let err_handler_street = ' ALTER TABLE aml_pro_dev.address MODIFY COLUMN street VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci ';
-  let err_handler_note = ' ALTER TABLE aml_pro_dev.address MODIFY COLUMN note Text CHARACTER SET utf8 COLLATE utf8_general_ci ';
-  let err_handler_firstName = ' ALTER TABLE aml_pro_dev.info MODIFY COLUMN firstName VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci ';
-  let err_handler_lastName = ' ALTER TABLE aml_pro_dev.info MODIFY COLUMN lastName VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci ';
-  let err_second_name = ' ALTER TABLE aml_pro_dev.info MODIFY COLUMN second_name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci ';
-  let err_third_name = ' ALTER TABLE aml_pro_dev.info MODIFY COLUMN third_name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci ';
+ 
   let db_a = new Database(db_config); 
   db_a.query(truncate_info)
   .then( rows => db_a.query(set_var))
@@ -653,14 +647,7 @@
       let db_db = new Database(db_config); 
   
       db_db.query(err_handler_name)
-      .then(rows => db_db.query(err_handler_des))
-      .then(rows => db_db.query(err_handler_street))
-      .then(rows => db_db.query(err_handler_note))
-      .then( rows => dn_db.query(err_handler_firstName))
-      .then( rows => dn_db.query(err_handler_lastName))
-      .then( rows => dn_db.query(err_second_name))
-      .then( rows => dn_db.query(err_third_name))
-    
+     
 
     .then(rows => db_db.query(info_table))
     // .then( rows=> db_db.query(update_alias_im))
@@ -876,9 +863,9 @@
         
         ///////// INFO ///////////
         var create_info = " CREATE TABLE aml_pro_dev.info (id int NOT NULL AUTO_INCREMENT, list_id VARCHAR(255), name Text, "
-        +"firstName VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci , "
-        +"lastName VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci , "
-        +"fatherName VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci , "
+        +"firstName VARCHAR(255), "
+        +"lastName VARCHAR(255), "
+        +"fatherName VARCHAR(255), "
         +"birth_date VARCHAR(255)"
         +", birth_place Text"
         +", place VARCHAR(255)"
@@ -887,9 +874,9 @@
         +", quality VARCHAR(255)"
         +", title VARCHAR(255)"
         +", source text"
-        +", description Text CHARACTER SET utf8 COLLATE utf8_general_ci"
+        +", description Text "
         +", issued_at VARCHAR(255)"
-        +", number Text CHARACTER SET utf8 COLLATE utf8_general_ci"
+        +", number Text "
         +", url VARCHAR(255)"
         +", type VARCHAR(255)"
         +", second_name VARCHAR(255)"
