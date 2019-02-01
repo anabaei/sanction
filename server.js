@@ -655,7 +655,7 @@
       .then(rows => db_db.query(err_handler_street))
       .then(rows => db_db.query(err_handler_note))
       .then( rows => dn_db.query(err_handler_firstName))
-      //.then( rows => dn_db.query(err_handler_ln))
+      .then( rows => dn_db.query(err_handler_ln))
     .then(rows => db_db.query(info_table))
     // .then( rows=> db_db.query(update_alias_im))
      
@@ -872,8 +872,8 @@
         ///////// INFO ///////////
         var create_info = " CREATE TABLE aml_pro_dev.info (id int NOT NULL AUTO_INCREMENT, list_id VARCHAR(255), name Text, "
         +"firstName VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci , "
-        +"lastName VARCHAR(255), "
-        +"fatherName VARCHAR(255), "
+        +"lastName VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci , "
+        +"fatherName VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci , "
         +"birth_date VARCHAR(255)"
         +", birth_place Text"
         +", place VARCHAR(255)"
