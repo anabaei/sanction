@@ -30,21 +30,21 @@
   //   database: "aml_pro_dev"
   // }
 
-  let db_config = {
-    host: "192.168.2.10",
-    port: "3030",
-    user: "root",
-    password: "Glsys2015!"//,
-   // database: "aml"
-  }
+      let db_config = {
+        host: "192.168.2.10",
+        port: "3030",
+        user: "root",
+        password: "Glsys2015!"//,
+      // database: "aml"
+      }
 
-  let db_config_sanction = {
-    host: "192.168.2.10",
-    port: "3030",
-    user: "root",
-    password: "Glsys2015!",
-    database: "aml_pro_dev"
-  }
+      let db_config_sanction = {
+        host: "192.168.2.10",
+        port: "3030",
+        user: "root",
+        password: "Glsys2015!",
+        database: "aml_pro_dev"
+      }
   
   var connection;
   function handleDisconnect(db_config) {
@@ -112,13 +112,12 @@
   var truncate_address = "TRUNCATE TABLE aml_pro_dev.address";
   var truncate_info = "TRUNCATE TABLE aml_pro_dev.info";
   let set_var = ' SET @defualt := Null ';
-  let err_handler_name = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN name Text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ';
-  let err_handler_des = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN description VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci ';
+  let err_handler_name = ' ALTER TABLE aml_pro_dev.info MODIFY COLUMN name Text CHARACTER SET utf8 COLLATE utf8_general_ci ';
+ 
   let db_a = new Database(db_config); 
   db_a.query(truncate_info)
   .then( rows => db_a.query(set_var))
-  .then( rows => db_a.query(err_handler_name))
-  .then( rows => db_a.query(err_handler_des))
+  
   .then( rows => db_a.query(truncate_address), console.log("truncated!"))
   .then( rows => {return db_a.close()}, err => {
     return database.close().then( () => { throw err; } ) })
@@ -139,9 +138,9 @@
  + " SELECT  @defualt as firstName,  @defualt as lastName,  @defualt as fatherName,  name as name, id as source, type as type , @defualt as summary, program as program, @defualt as url,  gender as gender, @defualt as title,   @defualt as second_name, @defualt as third_name, @defualt  as listed_at FROM aml.everypolitician union "             
  + " SelECT first_name as first_name, last_name as lastName,@defualt as fatherName,  name as name, id as source, type as type, @defualt as summary, program as program, @defualt as url, @defualt as gender, title as title,     second_name as second_name, third_name as third_name, @defualt as listed_at  FROM aml.gb_hmt_sanctions  union"                                                                                                               
  + " SeLECT first_name  as firstName, last_name as lastName, @defualt as fatherName, name as name, id as source, type as type, summary as summary, program as program, url as url,     gender as gender,    @defualt as title,   @defualt as second_name, @defualt as third_name, @defualt  as listed_at  FROM aml.interpol_red_notices  union" 
- + " SELECT first_name as first_name, last_name as lastName,@defualt as fatherName, name as name, id as source, type as type, summary as summary, program as program, @defualt as url,  @defualt as gender, @defualt as title, second_name as second_name, @defualt as third_name, listed_at as listed_at FROM aml.kg_fiu_national union"
+ + " SELECT first_name as first_name, last_name as lastName,@defualt as fatherName,  name as name, id as source, type as type, summary as summary, program as program, @defualt as url,  @defualt as gender, @defualt as title, second_name as second_name, @defualt as third_name, listed_at as listed_at FROM aml.kg_fiu_national union"
  + " SELECT first_name as firstName, last_name as lastName, @defualt as fatherName,  name as name, id as source, type as type, summary as summary, program as program, url as url,      @defualt as gender, @defualt as title, second_name as second_name,third_name as third_name,  @defualt as listed_at FROM aml.ua_sdfm_blacklist union" 
- + " SELECT first_name as firstName, @defualt as lastName, @defualt as fatherName,  name as name, id as source, type as type, summary as summary, program as program, @defualt as url, @defualt as gender,  title as title , second_name as second_name,third_name as third_name,listed_at as listed_at  FROM aml.un_sc_sanctions union" 
+ + " SELECT first_name as firstName, @defualt as lastName,  @defualt as fatherName,  name as name, id as source, type as type, summary as summary, program as program, @defualt as url, @defualt as gender,  title as title , second_name as second_name,third_name as third_name,listed_at as listed_at  FROM aml.un_sc_sanctions union" 
  + " Select @defualt as firstName, @defualt as LastName,    @defualt as fatherName,  name as name, id as source, type as type ,summary as summary, program as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.us_bis_denied union "
 
  + " Select @defualt as firstName, @defualt as LastName,    @defualt as fatherName,  name as name, id as source, type as type , @defualt as summary, program as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.us_ofac "
@@ -236,20 +235,21 @@
 
      //let update_alias_im = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true ) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = src.source AND aml_pro_dev.info.alias = true ";
 
-     let updateSanctionList = " insert into aml_pro_dev.sanction_list (name,source) SELECT source as name,id as source FROM aml.au_dfat_sanctions union "
-    +" SELECT source as name,id as source FROM aml.ch_seco_sanctions union"
-    +" SELECT source as name,id as source FROM aml.everypolitician  union"
-    +" SELECT source as name,id as source FROM aml.interpol_red_notices union"
-    +" SELECT source as name,id as source FROM aml.eu_meps union"
-    +" SELECT source as name,id as source FROM aml.gb_hmt_sanctions union"
-    +" SELECT source as name,id as source FROM aml.us_ofac union"
-    +" SELECT source as name,id as source FROM aml.kg_fiu_national union"
-    +" SELECT source as name,id as source FROM aml.ua_sdfm_blacklist union"
-    +" SELECT source as name,id as source FROM aml.un_sc_sanctions union"
-    +" SELECT source as name,id as source FROM aml.us_bis_denied "
+     let updateSanctionList = " insert into aml_pro_dev.list (name,source) SELECT source as name,id as source FROM aml.au_dfat_sanctions limit 1 union "
+   
+    +" SELECT source as name,id as source FROM aml.ch_seco_sanctions limit 1 union"
+    +" SELECT source as name,id as source FROM aml.everypolitician  limit 1 union"
+    +" SELECT source as name,id as source FROM aml.interpol_red_notices limit 1 union"
+    +" SELECT source as name,id as source FROM aml.eu_meps limit 1 union"
+    +" SELECT source as name,id as source FROM aml.gb_hmt_sanctions  limit 1 union"
+    +" SELECT source as name,id as source FROM aml.us_ofac limit 1 union"
+    +" SELECT source as name,id as source FROM aml.kg_fiu_national limit 1 union"
+    +" SELECT source as name,id as source FROM aml.ua_sdfm_blacklist limit 1 union"
+    +" SELECT source as name,id as source FROM aml.un_sc_sanctions limit 1 union"
+    +" SELECT source as name,id as source FROM aml.us_bis_denied limit 1"
     //+" SELECT source as name,id as source FROM aml.worldbank_debarred"  
     +" ON DUPLICATE KEY update"
-    + " aml_pro_dev.sanction_list.source = aml_pro_dev.sanction_list.source"; 
+    + " aml_pro_dev.list.name = aml_pro_dev.list.name"; 
 
 
 
@@ -630,8 +630,8 @@
       +" WHERE aml_pro_dev.info.source = src.entity_id AND src.country_name IS NOT NULL";
       //dosql(worldbank_debarred_nationalities, "worldbank debarred nationalities")
  
-     let update_alias = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true) as src set aml_pro_dev.info.parent = src.id "
-     + " where aml_pro_dev.info.source = src.source AND aml_pro_dev.info.alias = true ";
+     let update_alias = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info) as src set aml_pro_dev.info.parent = src.id "
+     + " where aml_pro_dev.info.source = src.source  AND aml_pro_dev.info.id != src.id AND aml_pro_dev.info.alias = true ";
       
      // let insert_sanction_info_table = " insert into aml_pro_dev.info_sanction (sanction_list_id,info_id) "
      // + " select t.id, b.id from aml_pro_dev.sanction_list t inner join aml_pro_dev.info b on  b.source = t.source";
@@ -645,8 +645,11 @@
       // + " WHERE aml_pro.dev.address.source = src.source "; 
 
       let db_db = new Database(db_config); 
-      db_db.query(info_table)
-   // .then(rows => db_db.query(info_table))
+  
+      db_db.query(err_handler_name)
+     
+
+    .then(rows => db_db.query(info_table))
     // .then( rows=> db_db.query(update_alias_im))
      
      .then( rows => db_db.query(au_dfat_address)) 
@@ -656,8 +659,11 @@
      .then( rows => db_db.query(birth_date)) 
      .then( rows => db_db.query(birth_place)) 
   
-   //  .then( rows => db.query(ch_seco_sanctions_cluster)) 
-     .then( rows => db_db.query(ch_seco_sanctions_addresses))
+ 
+   //  .then( rows => db_db.query(ch_seco_sanctions_addresses)) // HERE WE GET ERRORc= about utf8 fristName TODO
+     .catch( err => {
+      console.log("Err = "+ err);
+  } )
      .then( rows => db_db.query(ch_seco_sanctions_aliases))
    //  .then( rows => db.query(ch_seco_sanctions_aliases_cluster))
      .then( rows => db_db.query(ch_seco_birth_date))
@@ -730,7 +736,7 @@
 
        // some not running ! 
    
-   
+   ////////////////
      // .then( rows => db.query(un_sc_sanctions))
      // .then( rows => db.query(un_sc_sanctions_cluster))
     
@@ -846,17 +852,14 @@
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
       app.get('/create', (request, response) => { 
        
-        var drop_sanction = "DROP TABLE IF EXISTS aml_pro_dev.sanction_list";
+        var drop_sanction = "DROP TABLE IF EXISTS aml_pro_dev.list";
         var drop_address = "DROP TABLE IF EXISTS aml_pro_dev.address";
-        var drop_info_santion = "DROP TABLE IF EXISTS aml_pro_dev.info_sanction";
-        var drop_info_cluster = "DROP TABLE IF EXISTS aml_pro_dev.info_cluster";
         var drop_info = "DROP TABLE IF EXISTS aml_pro_dev.info";
         
         dosql_sanction(drop_info, "drop info");
         dosql_sanction(drop_address, "drop address");
-        dosql_sanction(drop_info_santion, "drop info santion");
-        dosql_sanction(drop_sanction, "drop sanction");
-        dosql_sanction(drop_info_cluster, "drop info cluster");
+        dosql_sanction(drop_sanction, "drop list");
+       // dosql_sanction(drop_info_cluster, "drop info cluster");
         
         ///////// INFO ///////////
         var create_info = " CREATE TABLE aml_pro_dev.info (id int NOT NULL AUTO_INCREMENT, list_id VARCHAR(255), name Text, "
@@ -870,10 +873,10 @@
         +", nationality_code VARCHAR(255)"
         +", quality VARCHAR(255)"
         +", title VARCHAR(255)"
-        +", source VARCHAR(255)"
-        +", description VARCHAR(255)"
+        +", source text"
+        +", description Text "
         +", issued_at VARCHAR(255)"
-        +", number Text"
+        +", number Text "
         +", url VARCHAR(255)"
         +", type VARCHAR(255)"
         +", second_name VARCHAR(255)"
@@ -890,7 +893,7 @@
 
         
         ///////// Address ///////////
-        var create_address = " CREATE TABLE aml_pro_dev.address (id int NOT NULL AUTO_INCREMENT, source VARCHAR(255) UNIQUE, info_id INT, "
+        var create_address = " CREATE TABLE aml_pro_dev.address (id int NOT NULL AUTO_INCREMENT, source Text, info_id INT, "
         +"country VARCHAR(255), "
         +"city VARCHAR(255), "
         +"street VARCHAR(255), "
@@ -907,16 +910,19 @@
        // dosql_sanction(create_info_sanction, "created info sanction");
 
         ///////// sanction_list ///////////
-         var sanction_list = " CREATE TABLE aml_pro_dev.sanction_list (id int NOT NULL AUTO_INCREMENT, name VARCHAR(255), source VARCHAR(255) unique, PRIMARY KEY (id, source)) ";
+         var list = " CREATE TABLE aml_pro_dev.list (id int NOT NULL AUTO_INCREMENT, name VARCHAR(255) unique, source Text, PRIMARY KEY (id)) ";
       //  // dosql_sanction(sanction_list , " Created sanctionist");
       //   response.sendStatus(`created!`);
+      // let err_handler_name = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN name Text CHARACTER SET utf8 COLLATE utf8_general_ci';
+      // let err_handler_des = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN description VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci ';
 
          let dba = new Database(db_config ); 
           dba.query(create_info)
-        //  .then( rows => dba.query(create_info_cluster), console.log("1"))
-         .then( rows => dba.query(create_address), console.log("1"))
-         .then( rows => dba.query(sanction_list ), console.log("1"))
-         
+          .then( rows => dba.query(create_address))
+          //.then( rows => dba.query(sanction_list ))
+        //  .then( rows => dba.query(err_handler_name))
+        //  .then( rows => dba.query(err_handler_des))  
+         .then( rows => dba.query(list )) 
          .then( rows => {return dba.close()}, err => {
           return database.close().then( () => { throw err; } ) })
         .catch( err => {
