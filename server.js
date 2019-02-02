@@ -351,7 +351,7 @@
         /////////////// eu_eeas_sanctions ////////////
         //////////////////////////////////////////////
 
-        let eu_eeas_sanctions_aliases = "INSERT INTO aml_pro_dev.info( source, name, alias, title, firstName, lastName, secondName) "
+        let eu_eeas_sanctions_aliases = "INSERT INTO aml_pro_dev.info( source, name, alias, title, firstName, lastName, second_name) "
         + " SELECT entity_id, name, true, title, first_name, last_name, second_name FROM aml.eu_eeas_sanctions_aliases ";
 
         let eu_eeas_sanctions_birth_dates = " UPDATE  aml_pro_dev.info ,( SELECT entity_id, date FROM aml.eu_eeas_sanctions_birth_dates ) AS src"
