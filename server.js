@@ -680,7 +680,7 @@
       //  db_db_1.query(coe_assembly_nationalitiescountry)
         db_db_1.query(err_handler_name)
         .then(rows => db_db_1.query(info_table))
-        .then( rows=> db_db_1.query(updateSanctionList))
+      
          
          .then( rows => db_db_1.query(au_dfat_address)) 
        //   .then( rows => db.query(everypolitician_aliases)) 
@@ -727,7 +727,8 @@
       .then( rows => db_db_1.query(un_sc_sanctions_birth_places))
       .then( rows => db_db_1.query(un_sc_sanctions_identifiers))
       .then( rows => db_db_1.query(un_sc_sanctions_nationalities))
-      
+      .then( rows=> db_db_1.query(updateSanctionList))
+
       .then( rows => db_db_1.query(us_bis_denied_addresses)) //TODO has issue about duplicate keys 
       .catch( err => {
         console.log("Err = "+ err);
