@@ -656,6 +656,11 @@
       
         .then( rows=> db_db_1.query(updateSanctionList))
 
+        .then( rows => db_db_1.query(ca_dfatd_sema_sanctions_aliases))
+        .then( rows => db_db_1.query(ca_dfatd_sema_sanctions_birth_dates))
+        .then( rows => db_db_1.query(ca_dfatd_sema_sanctions_nationalities))
+        .then( rows => db_db_1.query(eu_eeas_sanctions_identifiers))
+
          .then( rows => db_db_1.query(au_dfat_address)) 
        //   .then( rows => db.query(everypolitician_aliases)) 
          .then( rows => db_db_1.query(au_dfat_sanctions_aliases)) 
@@ -670,10 +675,7 @@
       } )
 
       
-      .then( rows => db_db_1.query(ca_dfatd_sema_sanctions_aliases))
-      .then( rows => db_db_1.query(ca_dfatd_sema_sanctions_birth_dates))
-      .then( rows => db_db_1.query(ca_dfatd_sema_sanctions_nationalities))
-      .then( rows => db_db_1.query(eu_eeas_sanctions_identifiers))
+     
       
       // .then( rows => db_db_1.query(eu_eeas_sanctions_aliases))
       // .then( rows => db_db_1.query(eu_eeas_sanctions_birth_dates))
