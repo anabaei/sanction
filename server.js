@@ -141,11 +141,12 @@
  + " SELECT first_name as first_name, last_name as lastName,@defualt as fatherName,  name as name, id as source, type as type, summary as summary, program as program, @defualt as url,  @defualt as gender, @defualt as title, second_name as second_name, @defualt as third_name, listed_at as listed_at FROM aml.kg_fiu_national union"
  + " SELECT first_name as firstName, last_name as lastName, @defualt as fatherName,  name as name, id as source, type as type, summary as summary, program as program, url as url,      @defualt as gender, @defualt as title, second_name as second_name,third_name as third_name,  @defualt as listed_at FROM aml.ua_sdfm_blacklist union" 
  + " SELECT first_name as firstName, @defualt as lastName,  @defualt as fatherName,  name as name, id as source, type as type, summary as summary, program as program, @defualt as url, @defualt as gender,  title as title , second_name as second_name,third_name as third_name,listed_at as listed_at  FROM aml.un_sc_sanctions union" 
- + " Select @defualt as firstName, @defualt as LastName,    @defualt as fatherName,  name as name, id as source, type as type ,summary as summary, program as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.us_bis_denied union "
+ + " SELECT @defualt as firstName, @defualt as LastName,    @defualt as fatherName,  name as name, id as source, type as type ,summary as summary, program as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.us_bis_denied union "
 
- + " Select @defualt as firstName, @defualt as LastName,    @defualt as fatherName,  name as name, id as source, type as type , @defualt as summary, program as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.us_ofac union "
- + " Select first_name as firstName, last_name as LastName, @defualt as fatherName,  name as name, id as source, type as type , summary as summary, program as program, url as url, gender as gender, title as title, second_name as second_name, @defualt as third_name, updated_at as listed_at FROM aml.eu_eeas_sanctions union "
- + " Select @defualt as firstName, @defualt as LastName, @defualt as fatherName, name as name, id as source, @defualt as type ,@defualt as summary, program as program, url as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.worldbank_debarred ";
+ + " SELECT @defualt as firstName, @defualt as LastName,    @defualt as fatherName,  name as name, id as source, type as type , @defualt as summary, program as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.us_ofac union "
+ + " SELECT first_name as firstName, last_name as LastName, @defualt as fatherName,  name as name, id as source, type as type , summary as summary, program as program, url as url, gender as gender, title as title, second_name as second_name, @defualt as third_name, updated_at as listed_at FROM aml.eu_eeas_sanctions union "
+ + " SELECT first_name as firstName, last_name as LastName, @defualt as fatherName,  name as name, id as source, type as type , summary as summary, @defualt as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, @defualt as listed_at FROM aml.ca_dfatd_sema_sanctions  union "
+ + " SELECT @defualt as firstName, @defualt as LastName, @defualt as fatherName, name as name, id as source, @defualt as type ,@defualt as summary, program as program, url as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.worldbank_debarred ";
 
 // let info_table_cluster = "insert into aml_pro_dev.info_cluster (firstName, lastName, fatherName, name,  source, type, summary, program, url, gender, title, second_name, third_name, listed_at) "
 // + "SELECT  firstName, lastName, fatherName, name,  source, type, summary, program, url, gender, title, second_name, third_name, listed_at FROM  aml_pro_dev.info ";
@@ -248,6 +249,7 @@
     +" SELECT source as name, id as source FROM aml.worldbank_debarred union"
     +" SELECT source as name, id as source FROM aml.us_ofac_aliases union"
     +" SELECT source as name, id as source FROM aml.eu_eeas_sanctions union"
+    +" SELECT source as name, id as source FROM aml.ca_dfatd_sema_sanctions union "
     +" SELECT source as name, id as source FROM aml.us_bis_denied"
    
     //+" SELECT source as name,id as source FROM aml.worldbank_debarred"  
@@ -363,7 +365,23 @@
         +" WHERE aml_pro_dev.info.source = src.entity_id AND src.country_name IS NOT NULL";
        // dosql(gb_hmt_sanctions_nationalities, "gb_hmt_sanctions_nationalities");
 
-      
+
+       ////////////////////////////////////////////
+       ////////// ca_dfatd_sema_sanctions /////////
+       ////////////////////////////////////////////
+
+       let ca_dfatd_sema_sanctions_aliases = "INSERT INTO aml_pro_dev.info( source, name, alias) "
+       + " SELECT entity_id, name, trueFROM aml.ca_dfatd_sema_sanctions_aliases ";
+       
+       let ca_dfatd_sema_sanctions_birth_dates = " UPDATE  aml_pro_dev.info ,( SELECT entity_id, date, quality FROM aml.ca_dfatd_sema_sanctions_birth_dates) AS src"
+       +" SET aml_pro_dev.info.birth_date = src.date"
+       +" , aml_pro_dev.info.quality = src.quality"
+       +" WHERE aml_pro_dev.info.source = src.entity_id AND src.date IS NOT NULL"
+
+      let  ca_dfatd_sema_sanctions_nationalities = "UPDATE aml_pro_dev.info ,(SELECT entity_id, country_name, country_code FROM  aml.ca_dfatd_sema_sanctions_nationalities) AS src"
+      +" SET aml_pro_dev.info.nationality = src.country_name"
+      +" , aml_pro_dev.info.nationality_code = src.country_code"
+      +" WHERE aml_pro_dev.info.source = src.entity_id AND src.country_name IS NOT NULL ";
         //////////////////////////////////////////////
         /////////////// eu_eeas_sanctions ////////////
         //////////////////////////////////////////////
@@ -380,7 +398,23 @@
         +" , aml_pro_dev.info.country_code = src.country_code"
         +" , aml_pro_dev.info.country_name = src.country_name"
         +" WHERE aml_pro_dev.info.source = src.entity_id AND src.place IS NOT NULL"
+        
+        let eu_eeas_sanctions_identifiers = "UPDATE aml_pro_dev.info ,( SELECT entity_id, country_name, country_code, type, number FROM aml.eu_eeas_sanctions_identifiers) AS src"
+        +" SET aml_pro_dev.info.nationality = src.country_name"
+        +" , aml_pro_dev.info.nationality_code = src.country_code"
+        +" , aml_pro_dev.info.type = src.type"
+        +" , aml_pro_dev.info.number = src.number"
+        +" WHERE aml_pro_dev.info.source = src.entity_id AND src.country_name IS NOT NULL AND src.country_code IS NOT NULL ";
 
+        let eu_eeas_sanctions_nationalities = "UPDATE aml_pro_dev.info ,(SELECT entity_id, country_name, country_code FROM  aml.eu_eeas_sanctions_nationalities) AS src"
+        +" SET aml_pro_dev.info.nationality = src.country_name"
+        +" , aml_pro_dev.info.nationality_code = src.country_code"
+        +" WHERE aml_pro_dev.info.source = src.entity_id AND src.country_name IS NOT NULL ";
+
+        let eu_eeas_sanctions_addresses = "INSERT INTO aml_pro_dev.address (source, country, country_code, postal_code, city, street, street_2) "
+        + " SELECT entity_id, country_name, country_code, postal_code, city, street, street_2 FROM aml.eu_eeas_sanctions_addresses "
+        + " ON DUPLICATE KEY update"
+        + " aml_pro_dev.address.city = aml_pro_dev.address.city ";
         // let eu_eeas_sanctions_identifiers = ""
         /////////////////////////////////////////////
         ////////////   Ineterpol ///////////////////
@@ -719,10 +753,20 @@
          .catch( err => {
           console.log("Err = "+ err);
       } )
+
+      
+      .then( rows => db_db_1.query(ca_dfatd_sema_sanctions_aliases))
+      .then( rows => db_db_1.query(ca_dfatd_sema_sanctions_birth_dates))
+      .then( rows => db_db_1.query(ca_dfatd_sema_sanctions_nationalities))
+      .then( rows => db_db_1.query(eu_eeas_sanctions_identifiers))
       
       .then( rows => db_db_1.query(eu_eeas_sanctions_aliases))
       .then( rows => db_db_1.query(eu_eeas_sanctions_birth_dates))
       .then( rows => db_db_1.query(eu_eeas_sanctions_birth_places))
+      .then( rows => db_db_1.query(eu_eeas_sanctions_nationalities))
+      .then( rows => db_db_1.query(eu_eeas_sanctions_addresses))
+     
+
          .then( rows => db_db_1.query(ch_seco_sanctions_aliases))
        //  .then( rows => db.query(ch_seco_sanctions_aliases_cluster))
          .then( rows => db_db_1.query(ch_seco_birth_date))
