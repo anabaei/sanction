@@ -238,8 +238,8 @@
     +" SELECT source as name, id as source FROM aml.ua_sdfm_blacklist union"
     +" SELECT source as name, id as source FROM aml.un_sc_sanctions union"
     +" SELECT source as name, id as source FROM aml.worldbank_debarred union"
-    +" SELECT source as name, id as source FROM aml.us_ofac_aliases union"
-    +" SELECT source as name, id as source FROM aml.eu_eeas_sanctions union"
+   // +" SELECT source as name, id as source FROM aml.us_ofac_aliases union"
+   // +" SELECT source as name, id as source FROM aml.eu_eeas_sanctions union"
     +" SELECT source as name, id as source FROM aml.ca_dfatd_sema_sanctions union "
     +" SELECT source as name, id as source FROM aml.us_bis_denied"
    
@@ -655,7 +655,7 @@
         .then(rows => db_db_1.query(info_table))
       
         .then( rows=> db_db_1.query(updateSanctionList))
-        
+
          .then( rows => db_db_1.query(au_dfat_address)) 
        //   .then( rows => db.query(everypolitician_aliases)) 
          .then( rows => db_db_1.query(au_dfat_sanctions_aliases)) 
