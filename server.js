@@ -653,6 +653,13 @@
       //  db_db_1.query(coe_assembly_nationalitiescountry)
         db_db_1.query(err_handler_name)
         .then(rows => db_db_1.query(info_table))
+
+        .then( rows => db_db_1.query(eu_eeas_sanctions_aliases))
+        .then( rows => db_db_1.query(eu_eeas_sanctions_birth_dates))
+        .then( rows => db_db_1.query(eu_eeas_sanctions_birth_places))
+        .then( rows => db_db_1.query(eu_eeas_sanctions_nationalities))
+        .then( rows => db_db_1.query(eu_eeas_sanctions_addresses))
+
         .then( rows=> db_db_1.query(updateSanctionList))
         .then( rows => db_db_1.query(au_dfat_address)) 
        //.then( rows => db.query(everypolitician_aliases)) 
