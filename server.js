@@ -235,8 +235,7 @@
 
      //let update_alias_im = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true ) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = src.source AND aml_pro_dev.info.alias = true ";
 
-     let updateSanctionList = " insert into aml_pro_dev.list (name,source) SELECT source as name,id as source FROM aml.au_dfat_sanctions limit 1 union "
-   
+     let updateSanctionList = "insert into aml_pro_dev.list (name,source) SELECT source as name,id as source FROM aml.au_dfat_sanctions limit 1 union "
     +" SELECT source as name,id as source FROM aml.ch_seco_sanctions limit 1 union"
     +" SELECT source as name,id as source FROM aml.everypolitician  limit 1 union"
     +" SELECT source as name,id as source FROM aml.interpol_red_notices limit 1 union"
@@ -681,7 +680,7 @@
       //  db_db_1.query(coe_assembly_nationalitiescountry)
         db_db_1.query(err_handler_name)
         .then(rows => db_db_1.query(info_table))
-        .then( rows=> db_db.query(updateSanctionList))
+        .then( rows=> db_db_1.query(updateSanctionList))
          
          .then( rows => db_db_1.query(au_dfat_address)) 
        //   .then( rows => db.query(everypolitician_aliases)) 
