@@ -360,7 +360,7 @@
 
         let eu_eeas_sanctions_birth_places = "UPDATE aml_pro_dev.info ,( SELECT entity_id, country_name, country_code, place FROM aml.eu_eeas_sanctions_birth_places ) AS src"
         +" SET aml_pro_dev.info.birth_place = src.place "
-        +" , aml_pro_dev.info.country_code = src.country_code"
+        +" , aml_pro_dev.info.nationality_code = src.country_code"
         +" , aml_pro_dev.info.country_name = src.country_name"
         +" WHERE aml_pro_dev.info.source = src.entity_id AND src.place IS NOT NULL"
         
