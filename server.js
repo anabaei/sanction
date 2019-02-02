@@ -651,22 +651,22 @@
       let db_db_1 = new Database(db_config); 
       // let db2 = new Database(db_config); 
       //  db_db_1.query(coe_assembly_nationalitiescountry)
-        db_db_1.query(err_handler_name)
-        .then(rows => db_db_1.query(info_table))
+      db_db_1.query(err_handler_name)
+      .then(rows => db_db_1.query(info_table))
 
-        .then( rows => db_db_1.query(eu_eeas_sanctions_aliases))
-        .then( rows => db_db_1.query(eu_eeas_sanctions_birth_dates))
-        .then( rows => db_db_1.query(eu_eeas_sanctions_birth_places))
-        .then( rows => db_db_1.query(eu_eeas_sanctions_nationalities))
-        .then( rows => db_db_1.query(eu_eeas_sanctions_addresses))
+      .then( rows => db_db_1.query(eu_eeas_sanctions_aliases))
+      // .then( rows => db_db_1.query(eu_eeas_sanctions_birth_dates))
+      // .then( rows => db_db_1.query(eu_eeas_sanctions_birth_places))
+      // .then( rows => db_db_1.query(eu_eeas_sanctions_nationalities))
+      // .then( rows => db_db_1.query(eu_eeas_sanctions_addresses))
 
-        .then( rows=> db_db_1.query(updateSanctionList))
-        .then( rows => db_db_1.query(au_dfat_address)) 
-       //.then( rows => db.query(everypolitician_aliases)) 
-         .then( rows => db_db_1.query(au_dfat_sanctions_aliases)) 
-         .then( rows => db_db_1.query(update_alias)) 
-         .then( rows => db_db_1.query(birth_date)) 
-         .then( rows => db_db_1.query(birth_place)) 
+      .then( rows=> db_db_1.query(updateSanctionList))
+      .then( rows => db_db_1.query(au_dfat_address)) 
+      //.then( rows => db.query(everypolitician_aliases)) 
+      .then( rows => db_db_1.query(au_dfat_sanctions_aliases)) 
+      .then( rows => db_db_1.query(update_alias)) 
+      .then( rows => db_db_1.query(birth_date)) 
+      .then( rows => db_db_1.query(birth_place)) 
      
        //  .then( rows => db_db.query(ch_seco_sanctions_addresses)) // HERE WE GET ERRORc= about utf8 fristName TODO
          .catch( err => {
@@ -684,12 +684,11 @@
       .then( rows => db_db_1.query(eu_eeas_sanctions_nationalities))
       .then( rows => db_db_1.query(eu_eeas_sanctions_addresses))
      
+      .then( rows => db_db_1.query(ch_seco_sanctions_aliases))
 
-         .then( rows => db_db_1.query(ch_seco_sanctions_aliases))
-    
-         .then( rows => db_db_1.query(ch_seco_birth_date))
-         .then( rows => db_db_1.query(ch_seco_sanctions_birth_places))
-         .then( rows => db_db_1.query(ch_seco_sanctions_identifiers), console.log("Ino0 Start"))
+      .then( rows => db_db_1.query(ch_seco_birth_date))
+      .then( rows => db_db_1.query(ch_seco_sanctions_birth_places))
+      .then( rows => db_db_1.query(ch_seco_sanctions_identifiers), console.log("Ino0 Start"))
       // .then (rows => db_db_1.query(coe_assembly_nationalitiescountry)) // this table if comes at first query back error database not defined! 
        .then( rows => db_db_1.query(everypolitician_nationalities))
        .then( rows => db_db_1.query(eu_meps_nationalities)) // nt wrk
