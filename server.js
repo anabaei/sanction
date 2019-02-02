@@ -245,7 +245,7 @@
     +" SELECT source as name,id as source FROM aml.kg_fiu_national union"
     +" SELECT source as name,id as source FROM aml.ua_sdfm_blacklist union"
     +" SELECT source as name,id as source FROM aml.un_sc_sanctions union"
-    +" SELECT source as name,id as source FROM aml.us_bis_denied limit 1"
+    +" SELECT source as name,id as source FROM aml.us_bis_denied"
     //+" SELECT source as name,id as source FROM aml.worldbank_debarred"  
     +" ON DUPLICATE KEY update"
     + " aml_pro_dev.list.name = aml_pro_dev.list.name"; 
