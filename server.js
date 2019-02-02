@@ -642,7 +642,9 @@
 
 
      let update_info_id =  " UPDATE aml_pro_dev.address ,(select id, source from aml_pro_dev.info) AS src SET aml_pro_dev.address.info_id = src.id WHERE aml_pro_dev.address.source = src.source ";
-      // let update_info_id = "UPDATE aml_pro_dev.address ,(SELECT id, source FROM aml_pro_dev.info) AS src "
+     let update_list_id = "  UPDATE aml_pro_dev.info ,( Select id, name from aml_pro_dev.list) AS src SET aml_pro_dev.info.list_id = src.id WHERE aml_pro_dev.info.source LIKE  CONCAT('%',src.name,'%');" 
+     
+     // let update_info_id = "UPDATE aml_pro_dev.address ,(SELECT id, source FROM aml_pro_dev.info) AS src "
       // + " SET aml_pro_dev.address.info_id = src.id "
       // + " WHERE aml_pro.dev.address.source = src.source "; 
 
@@ -748,7 +750,7 @@
       
       .then( rows => db_db_1.query(ua_sdfm_blacklist_aliases)) 
       .then( rows => db_db_1.query(update_alias))
-    
+     .then( rows => db_db_1.query(update_list_id))
      .then( rows=> db_db_1.query(kg_fiu_national_birth_dates), console.log(" Completed! "))
       .then( rows => {return db_db_1.close()}, err => {
         return database.close().then( () => { throw err; } ) })
