@@ -757,20 +757,20 @@
       } )
 
       
-      .then( rows => db_db_1.query(ca_dfatd_sema_sanctions_aliases))
-      .then( rows => db_db_1.query(ca_dfatd_sema_sanctions_birth_dates))
-      .then( rows => db_db_1.query(ca_dfatd_sema_sanctions_nationalities))
-      .then( rows => db_db_1.query(eu_eeas_sanctions_identifiers))
+      // .then( rows => db_db_1.query(ca_dfatd_sema_sanctions_aliases))
+      // .then( rows => db_db_1.query(ca_dfatd_sema_sanctions_birth_dates))
+      // .then( rows => db_db_1.query(ca_dfatd_sema_sanctions_nationalities))
+      // .then( rows => db_db_1.query(eu_eeas_sanctions_identifiers))
       
-      .then( rows => db_db_1.query(eu_eeas_sanctions_aliases))
-      .then( rows => db_db_1.query(eu_eeas_sanctions_birth_dates))
-      .then( rows => db_db_1.query(eu_eeas_sanctions_birth_places))
-      .then( rows => db_db_1.query(eu_eeas_sanctions_nationalities))
-      .then( rows => db_db_1.query(eu_eeas_sanctions_addresses))
+      // .then( rows => db_db_1.query(eu_eeas_sanctions_aliases))
+      // .then( rows => db_db_1.query(eu_eeas_sanctions_birth_dates))
+      // .then( rows => db_db_1.query(eu_eeas_sanctions_birth_places))
+      // .then( rows => db_db_1.query(eu_eeas_sanctions_nationalities))
+      // .then( rows => db_db_1.query(eu_eeas_sanctions_addresses))
      
 
          .then( rows => db_db_1.query(ch_seco_sanctions_aliases))
-       //  .then( rows => db.query(ch_seco_sanctions_aliases_cluster))
+    
          .then( rows => db_db_1.query(ch_seco_birth_date))
          .then( rows => db_db_1.query(ch_seco_sanctions_birth_places))
          .then( rows => db_db_1.query(ch_seco_sanctions_identifiers), console.log("Ino0 Start"))
