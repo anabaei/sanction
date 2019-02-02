@@ -235,22 +235,24 @@
 
      //let update_alias_im = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true ) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = src.source AND aml_pro_dev.info.alias = true ";
 
-     let updateSanctionList = " insert into aml_pro_dev.list (name,source) SELECT source as name,id as source FROM aml.au_dfat_sanctions limit 1 union "
-   
-    +" SELECT source as name,id as source FROM aml.ch_seco_sanctions limit 1 union"
-    +" SELECT source as name,id as source FROM aml.everypolitician  limit 1 union"
-    +" SELECT source as name,id as source FROM aml.interpol_red_notices limit 1 union"
-    +" SELECT source as name,id as source FROM aml.eu_meps limit 1 union"
-    +" SELECT source as name,id as source FROM aml.gb_hmt_sanctions  limit 1 union"
-    +" SELECT source as name,id as source FROM aml.us_ofac limit 1 union"
-    +" SELECT source as name,id as source FROM aml.kg_fiu_national limit 1 union"
-    +" SELECT source as name,id as source FROM aml.ua_sdfm_blacklist limit 1 union"
-    +" SELECT source as name,id as source FROM aml.un_sc_sanctions limit 1 union"
-    +" SELECT source as name,id as source FROM aml.us_bis_denied limit 1"
+     let updateSanctionList = "insert into aml_pro_dev.list (name,source) SELECT source as name,id as source FROM aml.au_dfat_sanctions  union "
+    +" SELECT source as name,id as source FROM aml.ch_seco_sanctions union"
+    +" SELECT source as name,id as source FROM aml.everypolitician union"
+    +" SELECT source as name,id as source FROM aml.interpol_red_notices union"
+    +" SELECT source as name,id as source FROM aml.eu_meps union"
+    +" SELECT source as name,id as source FROM aml.gb_hmt_sanctions union"
+    +" SELECT source as name,id as source FROM aml.us_ofac union"
+    +" SELECT source as name,id as source FROM aml.kg_fiu_national union"
+    +" SELECT source as name,id as source FROM aml.ua_sdfm_blacklist union"
+    +" SELECT source as name,id as source FROM aml.un_sc_sanctions union"
+    +" SELECT source as name,id as source FROM aml.us_bis_denied"
     //+" SELECT source as name,id as source FROM aml.worldbank_debarred"  
     +" ON DUPLICATE KEY update"
     + " aml_pro_dev.list.name = aml_pro_dev.list.name"; 
 
+
+
+    //insert into aml_pro_dev.list (name,source) SELECT source as name,id as source FROM aml.au_dfat_sanctions limit 1 union SELECT source as name,id as source FROM aml.ch_seco_sanctions limit 1 union  SELECT source as name,id as source FROM aml.everypolitician  limit 1 union  SELECT source as name,id as source FROM aml.interpol_red_notices limit 1 union SELECT source as name,id as source FROM aml.eu_meps limit 1 union SELECT source as name,id as source FROM aml.gb_hmt_sanctions  limit 1 union SELECT source as name,id as source FROM aml.us_ofac limit 1 union SELECT source as name,id as source FROM aml.kg_fiu_national limit 1 union SELECT source as name,id as source FROM aml.ua_sdfm_blacklist limit 1 union SELECT source as name,id as source FROM aml.un_sc_sanctions limit 1 union SELECT source as name,id as source FROM aml.us_bis_denied limit 1 ON DUPLICATE KEY update aml_pro_dev.list.name = aml_pro_dev.list.name; 
 
 
         //////////////////////////// 
@@ -640,46 +642,68 @@
 
 
      let update_info_id =  " UPDATE aml_pro_dev.address ,(select id, source from aml_pro_dev.info) AS src SET aml_pro_dev.address.info_id = src.id WHERE aml_pro_dev.address.source = src.source ";
-      // let update_info_id = "UPDATE aml_pro_dev.address ,(SELECT id, source FROM aml_pro_dev.info) AS src "
+     let update_list_id = "  UPDATE aml_pro_dev.info ,( Select id, name from aml_pro_dev.list) AS src SET aml_pro_dev.info.list_id = src.id WHERE aml_pro_dev.info.source LIKE  CONCAT('%',src.name,'%');" 
+     
+     // let update_info_id = "UPDATE aml_pro_dev.address ,(SELECT id, source FROM aml_pro_dev.info) AS src "
       // + " SET aml_pro_dev.address.info_id = src.id "
       // + " WHERE aml_pro.dev.address.source = src.source "; 
 
-      let db_db = new Database(db_config); 
+  //     let db_db = new Database(db_config); 
   
-      db_db.query(err_handler_name)
+  //     db_db.query(err_handler_name)
      
 
-    .then(rows => db_db.query(info_table))
-    // .then( rows=> db_db.query(update_alias_im))
+  //   .then(rows => db_db.query(info_table))
+  //   // .then( rows=> db_db.query(update_alias_im))
      
-     .then( rows => db_db.query(au_dfat_address)) 
-   //   .then( rows => db.query(everypolitician_aliases)) 
-     .then( rows => db_db.query(au_dfat_sanctions_aliases)) 
-     .then( rows => db_db.query(update_alias)) 
-     .then( rows => db_db.query(birth_date)) 
-     .then( rows => db_db.query(birth_place)) 
+  //    .then( rows => db_db.query(au_dfat_address)) 
+  //  //   .then( rows => db.query(everypolitician_aliases)) 
+  //    .then( rows => db_db.query(au_dfat_sanctions_aliases)) 
+  //    .then( rows => db_db.query(update_alias)) 
+  //    .then( rows => db_db.query(birth_date)) 
+  //    .then( rows => db_db.query(birth_place)) 
   
  
-   //  .then( rows => db_db.query(ch_seco_sanctions_addresses)) // HERE WE GET ERRORc= about utf8 fristName TODO
-     .catch( err => {
-      console.log("Err = "+ err);
-  } )
-     .then( rows => db_db.query(ch_seco_sanctions_aliases))
-   //  .then( rows => db.query(ch_seco_sanctions_aliases_cluster))
-     .then( rows => db_db.query(ch_seco_birth_date))
-     .then( rows => db_db.query(ch_seco_sanctions_birth_places))
-     .then( rows => db_db.query(ch_seco_sanctions_identifiers), console.log("Ino0 Start"))
+  //  //  .then( rows => db_db.query(ch_seco_sanctions_addresses)) // HERE WE GET ERRORc= about utf8 fristName TODO
+  //    .catch( err => {
+  //     console.log("Err = "+ err);
+  // } )
+  //    .then( rows => db_db.query(ch_seco_sanctions_aliases))
+  //  //  .then( rows => db.query(ch_seco_sanctions_aliases_cluster))
+  //    .then( rows => db_db.query(ch_seco_birth_date))
+  //    .then( rows => db_db.query(ch_seco_sanctions_birth_places))
+  //    .then( rows => db_db.query(ch_seco_sanctions_identifiers), console.log("Ino0 Start"))
      
-     .then( rows => {return db_db.close()}, err => {
-       return database.close().then( () => { throw err; } ) })
-     .catch( err => {
-          console.log("Err = "+ err);
-      } )
+  //    .then( rows => {return db_db.close()}, err => {
+  //      return database.close().then( () => { throw err; } ) })
+  //    .catch( err => {
+  //         console.log("Err = "+ err);
+  //     } )
 
       let db_db_1 = new Database(db_config); 
       // let db2 = new Database(db_config); 
       //  db_db_1.query(coe_assembly_nationalitiescountry)
-        db_db_1.query(updateSanctionList)
+        db_db_1.query(err_handler_name)
+        .then(rows => db_db_1.query(info_table))
+      
+         
+         .then( rows => db_db_1.query(au_dfat_address)) 
+       //   .then( rows => db.query(everypolitician_aliases)) 
+         .then( rows => db_db_1.query(au_dfat_sanctions_aliases)) 
+         .then( rows => db_db_1.query(update_alias)) 
+         .then( rows => db_db_1.query(birth_date)) 
+         .then( rows => db_db_1.query(birth_place)) 
+      
+     
+       //  .then( rows => db_db.query(ch_seco_sanctions_addresses)) // HERE WE GET ERRORc= about utf8 fristName TODO
+         .catch( err => {
+          console.log("Err = "+ err);
+      } )
+         .then( rows => db_db_1.query(ch_seco_sanctions_aliases))
+       //  .then( rows => db.query(ch_seco_sanctions_aliases_cluster))
+         .then( rows => db_db_1.query(ch_seco_birth_date))
+         .then( rows => db_db_1.query(ch_seco_sanctions_birth_places))
+         .then( rows => db_db_1.query(ch_seco_sanctions_identifiers), console.log("Ino0 Start"))
       // .then (rows => db_db_1.query(coe_assembly_nationalitiescountry)) // this table if comes at first query back error database not defined! 
        .then( rows => db_db_1.query(everypolitician_nationalities))
        .then( rows => db_db_1.query(eu_meps_nationalities)) // nt wrk
@@ -708,7 +732,8 @@
       .then( rows => db_db_1.query(un_sc_sanctions_birth_places))
       .then( rows => db_db_1.query(un_sc_sanctions_identifiers))
       .then( rows => db_db_1.query(un_sc_sanctions_nationalities))
-      
+      .then( rows=> db_db_1.query(updateSanctionList))
+
       .then( rows => db_db_1.query(us_bis_denied_addresses)) //TODO has issue about duplicate keys 
       .catch( err => {
         console.log("Err = "+ err);
@@ -725,7 +750,7 @@
       
       .then( rows => db_db_1.query(ua_sdfm_blacklist_aliases)) 
       .then( rows => db_db_1.query(update_alias))
-    
+     .then( rows => db_db_1.query(update_list_id))
      .then( rows=> db_db_1.query(kg_fiu_national_birth_dates), console.log(" Completed! "))
       .then( rows => {return db_db_1.close()}, err => {
         return database.close().then( () => { throw err; } ) })
@@ -913,16 +938,20 @@
          var list = " CREATE TABLE aml_pro_dev.list (id int NOT NULL AUTO_INCREMENT, name VARCHAR(255) unique, source Text, PRIMARY KEY (id)) ";
       //  // dosql_sanction(sanction_list , " Created sanctionist");
       //   response.sendStatus(`created!`);
-      // let err_handler_name = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN name Text CHARACTER SET utf8 COLLATE utf8_general_ci';
-      // let err_handler_des = 'ALTER TABLE aml_pro_dev.info MODIFY COLUMN description VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci ';
+      let errInfo = ' ALTER table  aml_pro_dev.info convert to CHARACTER SET utf8 COLLATE utf8_unicode_ci ';
+      let errAddress = ' ALTER table  aml_pro_dev.address convert to CHARACTER SET utf8 COLLATE utf8_unicode_ci ';
 
+
+      
+         
          let dba = new Database(db_config ); 
           dba.query(create_info)
           .then( rows => dba.query(create_address))
           //.then( rows => dba.query(sanction_list ))
-        //  .then( rows => dba.query(err_handler_name))
-        //  .then( rows => dba.query(err_handler_des))  
-         .then( rows => dba.query(list )) 
+          .then( rows => dba.query(list)) 
+          .then( rows => dba.query(errAddress))
+      
+         .then( rows => dba.query(errInfo)) 
          .then( rows => {return dba.close()}, err => {
           return database.close().then( () => { throw err; } ) })
         .catch( err => {
