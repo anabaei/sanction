@@ -336,7 +336,7 @@
        ////////////////////////////////////////////
 
        let ca_dfatd_sema_sanctions_aliases = "INSERT INTO aml_pro_dev.info( source, name, alias) "
-       + " SELECT entity_id, name, trueFROM aml.ca_dfatd_sema_sanctions_aliases ";
+       + " SELECT entity_id, name, true FROM aml.ca_dfatd_sema_sanctions_aliases ";
        
        let ca_dfatd_sema_sanctions_birth_dates = " UPDATE  aml_pro_dev.info ,( SELECT entity_id, date, quality FROM aml.ca_dfatd_sema_sanctions_birth_dates) AS src"
        +" SET aml_pro_dev.info.birth_date = src.date"
