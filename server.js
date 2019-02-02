@@ -143,9 +143,9 @@
  + " SELECT first_name as firstName, @defualt as lastName,  @defualt as fatherName,  name as name, id as source, type as type, summary as summary, program as program, @defualt as url, @defualt as gender,  title as title , second_name as second_name,third_name as third_name,listed_at as listed_at  FROM aml.un_sc_sanctions union" 
  + " Select @defualt as firstName, @defualt as LastName,    @defualt as fatherName,  name as name, id as source, type as type ,summary as summary, program as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.us_bis_denied union "
 
- + " Select @defualt as firstName, @defualt as LastName,    @defualt as fatherName,  name as name, id as source, type as type , @defualt as summary, program as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.us_ofac "
-
-// + " Select @defualt as firstName, @defualt as LastName, @defualt as fatherName, name as name, id as source, @defualt as type ,@defualt as summary, program as program, url as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.worldbank_debarred ";
+ + " Select @defualt as firstName, @defualt as LastName,    @defualt as fatherName,  name as name, id as source, type as type , @defualt as summary, program as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.us_ofac union "
+ + " Select first_name as firstName, last_name as LastName, @defualt as fatherName,  name as name, id as source, type as type , summary as summary, program as program, url as url, gender as gender, title as title, second_name as second_name, @defualt as third_name, updated_at as listed_at FROM aml.eu_eeas_sanctions union "
+ + " Select @defualt as firstName, @defualt as LastName, @defualt as fatherName, name as name, id as source, @defualt as type ,@defualt as summary, program as program, url as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.worldbank_debarred ";
 
 // let info_table_cluster = "insert into aml_pro_dev.info_cluster (firstName, lastName, fatherName, name,  source, type, summary, program, url, gender, title, second_name, third_name, listed_at) "
 // + "SELECT  firstName, lastName, fatherName, name,  source, type, summary, program, url, gender, title, second_name, third_name, listed_at FROM  aml_pro_dev.info ";
@@ -236,16 +236,20 @@
      //let update_alias_im = "update aml_pro_dev.info ,(select id, source from aml_pro_dev.info where alias = true ) as src set aml_pro_dev.info.parent = src.id where aml_pro_dev.info.source = src.source AND aml_pro_dev.info.alias = true ";
 
      let updateSanctionList = "insert into aml_pro_dev.list (name,source) SELECT source as name,id as source FROM aml.au_dfat_sanctions  union "
-    +" SELECT source as name,id as source FROM aml.ch_seco_sanctions union"
-    +" SELECT source as name,id as source FROM aml.everypolitician union"
-    +" SELECT source as name,id as source FROM aml.interpol_red_notices union"
-    +" SELECT source as name,id as source FROM aml.eu_meps union"
-    +" SELECT source as name,id as source FROM aml.gb_hmt_sanctions union"
-    +" SELECT source as name,id as source FROM aml.us_ofac union"
-    +" SELECT source as name,id as source FROM aml.kg_fiu_national union"
-    +" SELECT source as name,id as source FROM aml.ua_sdfm_blacklist union"
-    +" SELECT source as name,id as source FROM aml.un_sc_sanctions union"
-    +" SELECT source as name,id as source FROM aml.us_bis_denied"
+    +" SELECT source as name, id as source FROM aml.ch_seco_sanctions union"
+    +" SELECT source as name, id as source FROM aml.everypolitician union"
+    +" SELECT source as name, id as source FROM aml.interpol_red_notices union"
+    +" SELECT source as name, id as source FROM aml.eu_meps union"
+    +" SELECT source as name, id as source FROM aml.gb_hmt_sanctions union"
+    +" SELECT source as name, id as source FROM aml.us_ofac union"
+    +" SELECT source as name, id as source FROM aml.kg_fiu_national union"
+    +" SELECT source as name, id as source FROM aml.ua_sdfm_blacklist union"
+    +" SELECT source as name, id as source FROM aml.un_sc_sanctions union"
+    +" SELECT source as name, id as source FROM aml.worldbank_debarred union"
+    +" SELECT source as name, id as source FROM aml.us_ofac_aliases union"
+    +" SELECT source as name, id as source FROM aml.eu_eeas_sanctions union"
+    +" SELECT source as name, id as source FROM aml.us_bis_denied"
+   
     //+" SELECT source as name,id as source FROM aml.worldbank_debarred"  
     +" ON DUPLICATE KEY update"
     + " aml_pro_dev.list.name = aml_pro_dev.list.name"; 
@@ -360,11 +364,27 @@
        // dosql(gb_hmt_sanctions_nationalities, "gb_hmt_sanctions_nationalities");
 
       
+        //////////////////////////////////////////////
+        /////////////// eu_eeas_sanctions ////////////
+        //////////////////////////////////////////////
 
-       
-        ////////////////////////////////////// 
-        ////////////   Ineterpol /////////////
-        ///////////////////////////////////// 
+        let eu_eeas_sanctions_aliases = "INSERT INTO aml_pro_dev.info( source, name, alias, title, firstName, lastName, secondName) "
+        + " SELECT entity_id, name, true, title, first_name, last_name, second_name FROM aml.eu_eeas_sanctions_aliases ";
+
+        let eu_eeas_sanctions_birth_dates = " UPDATE  aml_pro_dev.info ,( SELECT entity_id, date FROM aml.eu_eeas_sanctions_birth_dates ) AS src"
+        +" SET aml_pro_dev.info.birth_date = src.date"
+        +" WHERE aml_pro_dev.info.source = src.entity_id AND src.date IS NOT NULL"
+
+        let eu_eeas_sanctions_birth_places = "UPDATE aml_pro_dev.info ,( SELECT entity_id, country_name, country_code, place FROM aml.eu_eeas_sanctions_birth_places ) AS src"
+        +" SET aml_pro_dev.info.birth_place = src.place "
+        +" , aml_pro_dev.info.country_code = src.country_code"
+        +" , aml_pro_dev.info.country_name = src.country_name"
+        +" WHERE aml_pro_dev.info.source = src.entity_id AND src.place IS NOT NULL"
+
+        // let eu_eeas_sanctions_identifiers = ""
+        /////////////////////////////////////////////
+        ////////////   Ineterpol ///////////////////
+        ////////////////////////////////////////////
 
 
         // let interpol_red_notices = " insert into aml_pro_dev.info ( firstName, lastName, source, type, summary,  program, url, gender, name) "
@@ -608,8 +628,8 @@
       /////// worldbank_debarred ///////////
       /////////////////////////////////////
       
-     // let worldbank_debarred = "insert into aml_pro_dev.info (source, program, listed_at, name, url)"
-    //  + "Select id, program, updated_at, name, url FROM aml.worldbank_debarred ";
+      let worldbank_debarred = "insert into aml_pro_dev.info (source, program, listed_at, name, url)"
+      + "Select id, program, updated_at, name, url FROM aml.worldbank_debarred ";
       //dosql(worldbank_debarred , "worldbank debarred ")
 
      // let worldbank_debarred_cluster = "insert into aml_pro_dev.info_cluster (source, program, listed_at, name, url)"
@@ -699,6 +719,10 @@
          .catch( err => {
           console.log("Err = "+ err);
       } )
+      
+      .then( rows => db_db_1.query(eu_eeas_sanctions_aliases))
+      .then( rows => db_db_1.query(eu_eeas_sanctions_birth_dates))
+      .then( rows => db_db_1.query(eu_eeas_sanctions_birth_places))
          .then( rows => db_db_1.query(ch_seco_sanctions_aliases))
        //  .then( rows => db.query(ch_seco_sanctions_aliases_cluster))
          .then( rows => db_db_1.query(ch_seco_birth_date))
@@ -717,7 +741,7 @@
        .then( rows => db_db_1.query(interpol_red_notices_birth_dates))
        .then( rows => db_db_1.query(interpol_red_notices_nationalities)) 
      //  .then( rows => db_db_1.query(kg_fiu_national_aliases))   
-     //  .then (rows => db_db_1.query(update_alias))
+       .then (rows => db_db_1.query(worldbank_debarred))
        
    
       .then( rows => db_db_1.query(ua_sdfm_blacklist_addresses))
