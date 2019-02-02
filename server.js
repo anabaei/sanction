@@ -146,7 +146,8 @@
  + " SELECT @defualt as firstName, @defualt as LastName,    @defualt as fatherName,  name as name, id as source, type as type ,summary as summary, program as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.us_bis_denied union "
  + " SELECT @defualt as firstName, @defualt as LastName,    @defualt as fatherName,  name as name, id as source, type as type , @defualt as summary, program as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.us_ofac union "
  + " SELECT first_name as firstName, last_name as LastName, @defualt as fatherName,  name as name, id as source, type as type , summary as summary, program as program, url as url, gender as gender, title as title, second_name as second_name, @defualt as third_name, updated_at as listed_at FROM aml.eu_eeas_sanctions union "
- + " SELECT first_name as firstName, last_name as LastName, @defualt as fatherName,  name as name, id as source, type as type , summary as summary, @defualt as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, @defualt as listed_at FROM aml.ca_dfatd_sema_sanctions  union "
+ + " SELECT first_name as firstName, last_name as LastName, @defualt as fatherName,  name as name, id as source, type as type , summary as summary, @defualt as program, @defualt as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, @defualt as listed_at FROM aml.ca_dfatd_sema_sanctions union "
+ + " SELECT @defualt as firstName, @defualt as LastName, @defualt as fatherName,  name as name, id as source, @defualt as type , @defualt as summary, program as program, url as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at FROM aml.worldbank_debarred union "
  + " SELECT @defualt as firstName, @defualt as LastName, @defualt as fatherName, name as name, id as source, @defualt as type ,@defualt as summary, program as program, url as url, @defualt as gender, @defualt as title, @defualt as second_name, @defualt as third_name, updated_at as listed_at from aml.worldbank_debarred ";
 
      ///// insert from sanction address into address table ///////
@@ -700,6 +701,9 @@
        .then( rows => db_db_1.query(interpol_red_notices_nationalities)) 
      //  .then( rows => db_db_1.query(kg_fiu_national_aliases))   
        .then (rows => db_db_1.query(worldbank_debarred))
+       .then (rows => db_db_1.query(worldbank_debarred_addresses))
+       .then (rows => db_db_1.query(worldbank_debarred_aliases))
+       .then (rows => db_db_1.query(worldbank_debarred_nationalities))
        
    
       .then( rows => db_db_1.query(ua_sdfm_blacklist_addresses))
