@@ -1,4 +1,15 @@
 
+# RUN NODE
+```javascript
+node server.js
+-bash: node: command not found
+```
+* At `RHEL` you can see the list of available packages to install by running
+```javascript
+sudo yum // to see list of available actions
+sudo yum install nodejs // to install nodejs 
+node server.js
+```
 
 # Run app
 
